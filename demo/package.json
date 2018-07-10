@@ -1,0 +1,11 @@
+{
+	"name": "ProtonDemo",
+	"main":"index.js",
+	"dependencies": {
+		"proton": "../"
+	},
+	"readmeFilename": "README.md",
+	"scripts": {
+		"start":"node index"
+	}
+}

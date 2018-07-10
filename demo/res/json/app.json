@@ -1,0 +1,15 @@
+{
+	"port": 9000,
+	"develop": true,
+	"routes": {
+		"/index": "/index",
+		"/next": "/next"
+	},
+	"config": {
+		"mail": {
+		},
+		"ban-client": [
+			"unknown", "torrent"
+		]
+	}
+}

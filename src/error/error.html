@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<link rel="shortcut icon" href="/favicon.ico"  />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>${errorcode} - ${errortitle}</title>
+<style type="text/css">
+.error{border:1px solid #999999; background:#FFFFFF; margin-bottom:15px;}
+#errorname{background:#E0E4FE;}
+#errortitle{margin:0px 7px; border-bottom:1px solid #0099FF; font-weight:bold;
+			color:#014387; text-align:center; padding:15px; font-size:20pt;}
+#errormsg{margin:10px; font-size:14pt;}
+?{isDevelopMode}p{padding:10px; margin:10px; color:#330033; border:1px solid #9e9e61; background:#F7F7F7}?{/isDevelopMode}
+</style>
+</head>
+<body>
+<div class="error">
+<div id="errorname">
+    <div id="errortitle">${errorcode} - ${errortitle}</div>
+</div>
+<div id="errormsg">${errormsg}</div>
+<?!-- 在开发模式下，将错误信息显示到错误页面上来 --?>
+?{isDevelopMode}<pre>${stack}</pre>?{/isDevelopMode}
+</div>
+</body>
+</html>
