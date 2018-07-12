@@ -24,7 +24,7 @@ var cookies = require("../server/cookies");
 var sessions = require("../server/sessions");
 let caches = require("../server/cache");
 
-let { split, developMode, getPresetRoute } = require("../config/app");
+let { split, developMode, getRoute } = require("../config/app");
 let { unsupportedOperation, unsupportedType } = Error;
 let errorCtrler = null;
 let MimeType = require("../util/constants").MimeType;
@@ -249,7 +249,7 @@ function controller() {
 
 				var lastUrl = url.last(),
 					lastName = name.route.last();
-				if (lastUrl === lastName || getPresetRoute("/" + lastUrl) === ("/" + lastName)) { // 所请求的不包含 action、para，只有 route
+				if (lastUrl === lastName || getRoute("/" + lastUrl) === ("/" + lastName)) { // 所请求的不包含 action、para，只有 route
 					actionName = INDEX;
 				} else {
 					if (actions[lastUrl]) { // 取得 [route..., action]

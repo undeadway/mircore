@@ -5,7 +5,9 @@
 <title>${pageName} : ${sitename}</title>
 </head>
 <body>
-Change to <a href="${linkVal}">${linkTtl}</a>
-?{isIndex}<p><a href="${errLinkVal}">${errLinkTtl}</a></p>?{/isIndex}
+Change to <a href="/${linkVal}">${linkTtl}</a>
+?{isIndex}<p><a href="/${errLinkVal}">${errLinkTtl}</a></p>
+?|{isIndex}<p><a href="/next/another/" target="_blank">Another</a></p>
+?{/isIndex}
 </body>
 </html>
