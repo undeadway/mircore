@@ -384,9 +384,29 @@ function controller() {
 			return Object.isEmpty(paras);
 		},
 		// 添加 action 用的函数
-		addAction: function (action, inspectors) {
+		addAction: function (name, action, inspectors) {
 
-			let name = action.getName().replace("Action", "");
+			switch (arguments.length) {
+				case 1:
+					// [action]
+					action = name;
+					name = action.getName().replace("Action", "");
+					break;
+				case 2:
+					// [name, action]
+					// [action, inspectors]
+					if (typeof name === "function") {
+						inspectors = action;
+						action = name;
+						name = action.getName().replace("Action", "");
+					}
+					break;
+				case 3:
+					break;
+				default :
+					break;
+			}
+
 			name = name || INDEX;
 
 			addAction(actions, name, action, inspectors);
@@ -446,7 +466,10 @@ function addAction(actions, name, instance, inspectors) {
 		inspectors = [inspectors];
 	}
 
+	let actionName = instance.getName();
+
 	actions[name] = {
+		isAction : instance.getName().contains("Action"),
 		instance: instance,
 		inspectors: inspectors || [],
 		getActionName: function () {
@@ -484,8 +507,12 @@ function invokeAction(actions, name, ctrler) {
 				if (index < count) { // 执行递归，进行下一轮检查
 					inspectors[index++].inspect(this);
 				} else if (index++ === count) { // 当inspector 都执行完毕后，执行 action
-					let instance = action.instance();
-					instance.invoke(ctrler);
+					if (action.isAction) {
+						let instance = action.instance();
+						instance.invoke(ctrler);
+					} else {
+						action.instance();
+					}
 					end();
 				}
 			},
