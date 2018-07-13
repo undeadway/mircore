@@ -1,7 +1,8 @@
+/*
+ * proton 的工具库
+ * 其中 exports 是外部可使用，privates是只供 proton 自己使用
+ */
 let exports = {}, privates = {};
-let that = module.exports = exports = {
-    exports : exports, privates : privates
-};
 
 const process = require('child_process');
 const nodemailer = require("nodemailer");
@@ -64,6 +65,8 @@ exports.getFileObject = function(fn) {
 	return result;
 
 };
+//////////////////////////// exports ////////////////////////////
+//////////////////////////// privates ////////////////////////////
 
 var GLOBAL_INSPECTOR_FOLDER = pathResolve("/src/inspector/global", true);
 var SYSTEM_INSPECTOR_FOLDER = "../inspectors";
@@ -84,9 +87,7 @@ if (INSPECOTRS.isEmpty()) {
 		}
 	}
 }
-//////////////////////////// exports ////////////////////////////
 
-//////////////////////////// privates ////////////////////////////
 privates.getGlobalInspectors = () => {
 
 	return INSPECOTRS;
@@ -120,3 +121,7 @@ privates.clientDisAccessable = function(input) {
 	return true;
 };
 //////////////////////////// privates ////////////////////////////
+
+module.exports = exports = {
+    exports : exports, privates : privates
+};
