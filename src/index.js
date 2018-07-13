@@ -30,7 +30,7 @@ that.start = () => {
 	that.baseAction = require("./core/base_action");
 	that.ajaxAction = require("./core/ajax_action");
 	that.config = require("./config/app");
-	that.util = require("./util/utils");
+	that.util = require("./util/utils").exports;
 	that.constants = require("./util/constants");
 
 	let fs = require("fs");

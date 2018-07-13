@@ -1,4 +1,7 @@
-let that = module.exports = exports = {};
+let exports = {}, privates = {};
+let that = module.exports = exports = {
+    exports : exports, privates : privates
+};
 
 const process = require('child_process');
 const nodemailer = require("nodemailer");
@@ -6,9 +9,10 @@ const fs = require("fs");
 
 const getConfig = require("../config/app").getConfig;
 
+//////////////////////////// exports ////////////////////////////
 let stdOutFile = pathResolve("/logs/std-out");
 
-that.runShell = (shellCmd) => {
+exports.runShell = (shellCmd) => {
     Eureka.logger.log(`run ${shellCmd} start.`);
     process.exec(shellCmd, (err, stdout, stderr) => {
       if (err) {
@@ -42,11 +46,55 @@ function sendMail(trgt, subject, html, callback) {
 	});
 }
 
-that.mail = sendMail;
+exports.mail = sendMail;
+
+var statuses = {}, fileObjects = {};
+
+exports.getFileObject = function(fn) {
+
+	var status = fs.statSync(fn), result;
+
+	if (!equals(status, statuses[fn])) {
+		statuses[fn] = status;
+		fileObjects[fn] = result = fs.readFileSync(fn, "utf-8");
+	} else {
+		result = fileObjects[fn];
+	}
+
+	return result;
+
+};
+
+var GLOBAL_INSPECTOR_FOLDER = pathResolve("/src/inspector/global", true);
+var SYSTEM_INSPECTOR_FOLDER = "../inspectors";
+
+var INSPECOTRS = [];
+
+if (INSPECOTRS.isEmpty()) {
+	if (fs.existsSync(GLOBAL_INSPECTOR_FOLDER)) {
+		var globalInspectors = fs.readdirSync(GLOBAL_INSPECTOR_FOLDER);
+		for ( let i = 0, len = globalInspectors.length; i < len; i++) {
+			INSPECOTRS.push(require(GLOBAL_INSPECTOR_FOLDER + globalInspectors[i]));
+		}
+	}
+	if (fs.existsSync(SYSTEM_INSPECTOR_FOLDER)) {
+		var systemInspecotrs = fs.readdirSync(SYSTEM_INSPECTOR_FOLDER);
+		for (let i = 0, len = systemInspecotrs.length; i < len; i++) {
+			INSPECOTRS.push(require(SYSTEM_INSPECTOR_FOLDER + systemInspecotrs[i]));
+		}
+	}
+}
+//////////////////////////// exports ////////////////////////////
+
+//////////////////////////// privates ////////////////////////////
+privates.getGlobalInspectors = () => {
+
+	return INSPECOTRS;
+};
 
 let clients = getConfig("limited-clients");
 
-that.clientDisAccessable = function(input) {
+privates.clientDisAccessable = function(input) {
 
 	input = input.toLowerCase();
 	let reject = clients.reject;
@@ -70,22 +118,5 @@ that.clientDisAccessable = function(input) {
 
 	Eureka.logger.log(`Client ${input} has banned.`);
 	return true;
-}
-
-
-var statuses = {}, fileObjects = {};
-
-that.getFileObject = function(fn) {
-
-	var status = fs.statSync(fn), result;
-
-	if (!equals(status, statuses[fn])) {
-		statuses[fn] = status;
-		fileObjects[fn] = result = fs.readFileSync(fn, "utf-8");
-	} else {
-		result = fileObjects[fn];
-	}
-
-	return result;
-
 };
+//////////////////////////// privates ////////////////////////////

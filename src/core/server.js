@@ -6,7 +6,7 @@
  * 更接近于服务器的设置
  */
 let {developMode, port, appName} = require("../config/app");
-let clientDisAccessable = require("../util/utils").clientDisAccessable;
+let clientDisAccessable = require("../util/utils").privates.clientDisAccessable;
 
 let url = require("url"),
 	qs = require("querystring"),

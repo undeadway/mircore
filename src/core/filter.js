@@ -13,7 +13,7 @@ var errorCast = Error.errorCast,
 	firstToUpperCase = Eureka.util.StringUtil.firstToUpperCase;
 var {getRoute, addRoute, delRoute} = require("../config/app");
 var fileExistsSync = require("fs").existsSync,
-	getGlobalInspectors = require("../util/get_global_inspector");
+	getGlobalInspectors = require("../util/utils").privates.getGlobalInspectors;
 var ERROR_CTRLER_INSTANCE = require("../error/controller");
 var ERROR_CTRLER_WRAPPER = {
 	instance: ERROR_CTRLER_INSTANCE,
