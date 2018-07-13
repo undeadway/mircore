@@ -11,23 +11,23 @@ const INDEX = 'index',
 	SLASH = "/",
 	QUESTION = "?",
 	INDEX_ROUTE = SLASH + INDEX;
-var isNumber = Number.isNumber,
-	htmlEscape = Eureka.util.ReplaceHolder.htmlEscape,
-	addAll = Object.addAll,
-	isEmpty = Object.isEmpty;
+
 var getError = require("../error/errorconfig").getError;
 var parseview = require("../util/parse_view");
-let JSONstringify = JSON.stringify;
-let EMPTY_STRING = String.BLANK;
-
 var cookies = require("../server/cookies");
 var sessions = require("../server/sessions");
 let caches = require("../server/cache");
-
 let { split, developMode, getRoute } = require("../config/app");
-let { unsupportedOperation, unsupportedType } = Error;
+
+let MimeType = Eureka.constants.MimeType,
+	htmlEscape = Eureka.util.ReplaceHolder.htmlEscape,
+	isNumber = Number.isNumber;
+let {addAll, isEmpty} = Object;
+let {unsupportedOperation, unsupportedType } = Error;
+let JSONstringify = JSON.stringify;
+let EMPTY_STRING = String.BLANK;
+
 let errorCtrler = null;
-let MimeType = require("../util/constants").MimeType;
 
 function controller() {
 
