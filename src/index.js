@@ -29,9 +29,8 @@ that.start = () => {
 	that.cookies = require("./server/cookies");
 	that.baseAction = require("./core/base_action");
 	that.ajaxAction = require("./core/ajax_action");
-	that.mail = require("./util/mail");
-	that.getFileObject = require("./util/get_file_object");
 	that.config = require("./config/app");
+	that.util = require("./util/utils");
 	that.constants = require("./util/constants");
 
 	let fs = require("fs");

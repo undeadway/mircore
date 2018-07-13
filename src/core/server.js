@@ -6,7 +6,7 @@
  * 更接近于服务器的设置
  */
 let {developMode, port, appName} = require("../config/app");
-let limitedClients = require("../util/limited_clients");
+let clientDisAccessable = require("../util/utils").clientDisAccessable;
 
 let url = require("url"),
 	qs = require("querystring"),
@@ -47,7 +47,7 @@ function router(req, res) {
 
 	setClientInfo(req);
 
-	if (limitedClients.disAccessable(req.client.USERAGENT)) { // 客户端被拒绝，返回403
+	if (clientDisAccessable(req.client.USERAGENT)) { // 客户端被拒绝，返回403
 		res.writeHead(403);
 		res.end();
 		return;
