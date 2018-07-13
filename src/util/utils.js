@@ -1,8 +1,8 @@
 /*
  * proton 的工具库
- * 其中 exports 是外部可使用，privates是只供 proton 自己使用
+ * 其中 externs 是外部可使用，privates是只供 proton 自己使用
  */
-let exports = {}, privates = {};
+let externs = {}, privates = {};
 
 const process = require('child_process');
 const nodemailer = require("nodemailer");
@@ -123,5 +123,5 @@ privates.clientDisAccessable = function(input) {
 //////////////////////////// privates ////////////////////////////
 
 module.exports = exports = {
-    exports : exports, privates : privates
+    externs : externs, privates : privates
 };
