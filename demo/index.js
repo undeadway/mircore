@@ -1,6 +1,6 @@
 let server = require("proton");
 
 server.requireConfigs([
-						"/lib/util/Eureka!"
+						"/lib/util/Coralian!"
 					]);
 server.start();

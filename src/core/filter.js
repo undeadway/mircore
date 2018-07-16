@@ -10,7 +10,7 @@ var INDEX = '/index',
 	CONTROLLER = "Controller",
 	INDEX_NAME = ['index'];
 var errorCast = Error.errorCast,
-	firstToUpperCase = Eureka.util.StringUtil.firstToUpperCase;
+	firstToUpperCase = Coralian.util.StringUtil.firstToUpperCase;
 var {getRoute, addRoute, delRoute} = require("../config/app");
 var fileExistsSync = require("fs").existsSync,
 	getGlobalInspectors = require("../util/utils").privates.getGlobalInspectors;
@@ -111,8 +111,8 @@ function invokeController(req, res, route) {
 
 	} catch(e) {
 		e.code = 500;
-		Eureka.logger.err(e.mesage);
-		Eureka.logger.err(e.stack);
+		Coralian.logger.err(e.mesage);
+		Coralian.logger.err(e.stack);
 		req.parse.error = e;
 		var exe = ERROR_CTRLER_INSTANCE();
 		if(exe.judgeExecute(req, res, ERROR_CTRLER_WRAPPER.name)) {

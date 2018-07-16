@@ -14,7 +14,7 @@ const getConfig = require("../config/app").getConfig;
 let stdOutFile = pathResolve("/logs/std-out");
 
 exports.runShell = (shellCmd) => {
-    Eureka.logger.log(`run ${shellCmd} start.`);
+    Coralian.logger.log(`run ${shellCmd} start.`);
     process.exec(shellCmd, (err, stdout, stderr) => {
       if (err) {
         fs.writeFileSync(pathResolve("/logs/err"), err);
@@ -22,7 +22,7 @@ exports.runShell = (shellCmd) => {
       } else {
         fs.writeFileSync(stdOutFile, stdout);
       }
-        Eureka.logger.log(`run ${shellCmd} end.`);
+        Coralian.logger.log(`run ${shellCmd} end.`);
     });
 }
 
@@ -38,10 +38,10 @@ function sendMail(trgt, subject, html, callback) {
 		html : html
 	}, function(err, res) {
 		if (err) {
-			Eureka.logger.err("Mail sent failed.");
+			Coralian.logger.err("Mail sent failed.");
 			callback(err);
 		} else {
-			Eureka.logger.err("Mail sent succeeed.");
+			Coralian.logger.err("Mail sent succeeed.");
 			callback(res);
 		}	
 	});
@@ -103,7 +103,7 @@ privates.clientDisAccessable = function(input) {
 	for(let i = 0, len = reject.length; i < len; i++) {
 		let client = reject[i];
 		if(input === client || input.contains(clients[i])) {
-			Eureka.logger.log(`Client ${input} has banned.`);
+			Coralian.logger.log(`Client ${input} has banned.`);
 			return true;
 		}
 	}
@@ -117,7 +117,7 @@ privates.clientDisAccessable = function(input) {
 		}
 	}
 
-	Eureka.logger.log(`Client ${input} has banned.`);
+	Coralian.logger.log(`Client ${input} has banned.`);
 	return true;
 };
 //////////////////////////// privates ////////////////////////////

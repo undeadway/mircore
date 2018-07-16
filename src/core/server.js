@@ -13,7 +13,7 @@ let url = require("url"),
 	cookieNewInstance = require("../server/cookies"),
 	filter = require("./filter"),
 	sessions = require("../server/sessions");
-let formatString = Eureka.util.Format.formatString;
+let formatString = Coralian.util.Format.formatString;
 let unsupportedOperation = Error.unsupportedOperation;
 let isStarted = false,
 	TIMEOUT = 20000,
@@ -29,7 +29,7 @@ let isStarted = false,
 function listen() {
 	let httpServer = require('http').createServer(router);
 	httpServer.listen(port);
-	Eureka.logger.log("Server started");
+	Coralian.logger.log("Server started");
 }
 
 /*
@@ -78,7 +78,7 @@ function router(req, res) {
 			}).setTimeout(TIMEOUT, function () {
 				// req 请求超时，网络不稳定
 				// 408 Request Timeout
-				Eureka.logger.err('request error code : ' + 408);
+				Coralian.logger.err('request error code : ' + 408);
 				req.url = formatString(ERROR_ROUTE_FORMAT, 408);
 				req.parse = url.parse(req.url, true);
 				request(req, res);
@@ -87,7 +87,7 @@ function router(req, res) {
 			.setTimeout(TIMEOUT, function () {
 				// res 响应超时，服务器无应答
 				// 504 Gateway Timeout
-				Eureka.logger.err('response error code : ' + 504);
+				Coralian.logger.err('response error code : ' + 504);
 				req.url = formatString(ERROR_ROUTE_FORMAT, 504);
 				parse = url.parse(req.url, true);
 				request(req, res);
@@ -102,9 +102,9 @@ function router(req, res) {
 	 */
 	function onError(err) {
 		// 请求（或响应）发生错误的时候，如果内部任何一层都未能捕获，则在最外层捕获
-		Eureka.logger.err("HTTP req error : ");
-		Eureka.logger.err(err.code);
-		Eureka.logger.err(err.stack);
+		Coralian.logger.err("HTTP req error : ");
+		Coralian.logger.err(err.code);
+		Coralian.logger.err(err.stack);
 
 		// 如果发生 write after end ，则只将错误信息记录到 log 中去
 		if (err.message.contains('write after end')) return;
@@ -193,8 +193,8 @@ function initUserAgendAndOS(headers, client) {
 	client.USERAGENT = userAgent;
 	client.OS = os;
 
-	Eureka.logger.log("A Request. OS : " + os);
-	Eureka.logger.log("           User Agnet : " + userAgent);
+	Coralian.logger.log("A Request. OS : " + os);
+	Coralian.logger.log("           User Agnet : " + userAgent);
 }
 
 function initClientIp(req, client) {
@@ -202,7 +202,7 @@ function initClientIp(req, client) {
 		req.connection.socket.remoteAddress;
 	client.IP = ip;
 
-	Eureka.logger.log("           IP : " + ip);
+	Coralian.logger.log("           IP : " + ip);
 };
 
 /*
@@ -233,7 +233,7 @@ module.exports =  exports = () => {
 
 		if (cluster.isMaster) {
 			process.title = appName + ' master';
-			Eureka.logger.log(process.title, '#' + process.pid, 'started');
+			Coralian.logger.log(process.title, '#' + process.pid, 'started');
 
 			// 根据 CPU 个数来启动相应数量的 worker
 			for (let i = 0, numCPUs = require('os').cpus().length; i < numCPUs; i++) {
@@ -245,14 +245,14 @@ module.exports =  exports = () => {
 			});
 
 			cluster.on('death', function (worker) {
-				Eureka.logger.log(appName, 'worker', '#' + worker.pid, 'died');
+				Coralian.logger.log(appName, 'worker', '#' + worker.pid, 'died');
 				cluster.fork();
 			}).on('error', function () {
-				Eureka.logger.log(arguments);
+				Coralian.logger.log(arguments);
 			});
 		} else {
 			process.title = appName + ' worker ' + process.env.NODE_WORKER_ID;
-			Eureka.logger.log(process.title, '#' + process.pid, 'started');
+			Coralian.logger.log(process.title, '#' + process.pid, 'started');
 
 			process.on('SIGHUP', function () {
 				// 接收到 SIGHUP 信号时，关闭 worker

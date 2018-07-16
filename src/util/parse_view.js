@@ -31,8 +31,8 @@ var USING_TAG_START_LEN = USING_TAG_START.length,
 var errorStatement = Error.errorStatement,
 	noSuchProperty = Error.noSuchProperty,
 	BLANK = String.BLANK;
-var replaceElement = Eureka.util.ReplaceHolder.replaceElement,
-	replaceLoop = Eureka.util.ReplaceHolder.replaceLoop;
+var replaceElement = Coralian.util.ReplaceHolder.replaceElement,
+	replaceLoop = Coralian.util.ReplaceHolder.replaceLoop;
 var HTML_FILE_MAP = {};
 var pageCache = require("../config/app").getCache('page');
 
@@ -112,8 +112,8 @@ function replaceEqual(str, obj, equalStart, equalEnd, equalElse) {
 		try {
 			result = tmpObj();
 		} catch(e) {
-			Eureka.logger.err(e.message);
-			Eureka.logger.err(e.stack);
+			Coralian.logger.err(e.message);
+			Coralian.logger.err(e.stack);
 			// 当指定 statement 所对应的那个函数在执行过程中抛出错误的时候，当作这个 statement 不存在处理
 		}
 	}
@@ -222,7 +222,7 @@ function getHTMLFile(path) {
 			try {
 				html = HTML_FILE_MAP[path] = readFileSync(path, "utf-8").split(SHAPE_INCLUDE);
 			} catch(e) {
-				Eureka.logger.err("errpath:" + path);
+				Coralian.logger.err("errpath:" + path);
 				throw e;
 			}
 		}
@@ -230,7 +230,7 @@ function getHTMLFile(path) {
 		try {
 			html = readFileSync(path, "utf-8").split(SHAPE_INCLUDE);
 		} catch(e) {
-			Eureka.logger.err("errpath:" + path);
+			Coralian.logger.err("errpath:" + path);
 			throw e;
 		}
 	}

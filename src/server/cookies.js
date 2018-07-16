@@ -7,7 +7,7 @@
  */
 var unsupportedType = Error.unsupportedType;
 var noReference = Error.noReference;
-var asUnicodeEndode = Eureka.util.CharUtil.asUnicodeEncode;
+var asUnicodeEndode = Coralian.util.CharUtil.asUnicodeEncode;
 
 function cookies() {
 

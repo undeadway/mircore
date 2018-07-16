@@ -22,7 +22,7 @@ function create(space) {
 
 	let cacheObj = CACHES[space];
 	if (!cacheObj) {
-		Eureka.logger.log("create " + space + " cache space.");
+		Coralian.logger.log("create " + space + " cache space.");
 		CACHES[space] = cacheObj = {};
 	} else {
 		Error.unsupportedOperation(space + " 的 cache 空间已经创建，请勿重复创建");
@@ -52,12 +52,12 @@ function getCache(routes, cacheObj) {
 	// routes 必须有值才算开启
 	let isUsed = (routes) ? (!routes.isEmpty()) : false;
 
-	Eureka.logger.log("routes : " + routes);
+	Coralian.logger.log("routes : " + routes);
 
 	return {
 		isUsed: function (route) {
 
-			Eureka.logger.log("Now route : " + route);
+			Coralian.logger.log("Now route : " + route);
 
 			if (isUsed) {
 				for (let i = 0; i < routes.length; i++) {

@@ -29,8 +29,8 @@ function indexAction() {
 		ctrler.setAttrs(getError(errorcode));
 		ctrler.setAttr('isDevelopMode', getDegelopMode);
 
-		Eureka.logger.err(getAttr('message'));
-		Eureka.logger.err(getAttr('stack'));
+		Coralian.logger.err(getAttr('message'));
+		Coralian.logger.err(getAttr('stack'));
 		ctrler.render(errorcode, ERROR_HTML_FILE, true);
 	}
 

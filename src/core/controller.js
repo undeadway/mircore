@@ -19,8 +19,8 @@ var sessions = require("../server/sessions");
 let caches = require("../server/cache");
 let { split, developMode, getRoute } = require("../config/app");
 
-let MimeType = Eureka.constants.MimeType,
-	htmlEscape = Eureka.util.ReplaceHolder.htmlEscape,
+let MimeType = Coralian.constants.MimeType,
+	htmlEscape = Coralian.util.ReplaceHolder.htmlEscape,
 	isNumber = Number.isNumber;
 let {addAll, isEmpty} = Object;
 let {unsupportedOperation, unsupportedType } = Error;
@@ -121,7 +121,7 @@ function controller() {
 						 * 3. cache 内必须有可对应的route
 						 */
 						if (pageCache !== null && pageCache.isUsed(reqRoute)) {
-							Eureka.logger.log(reqRoute + " use page cache.");
+							Coralian.logger.log(reqRoute + " use page cache.");
 							let cacheObj = pageCache.get(reqRoute);
 							if (!cacheObj) {
 								page = parseview(url, attrs);
@@ -210,7 +210,7 @@ function controller() {
 	 * 在这里暂时只做关闭 res 处理，之后再补充其他功能
 	 */
 	function end() {
-		Eureka.logger.log(typeName + ' request end');
+		Coralian.logger.log(typeName + ' request end');
 		res.end();
 	}
 
@@ -229,9 +229,9 @@ function controller() {
 			route = name.route.join(SLASH), typeName = name.type, pathName = name.path;
 
 			if (name.route === 'error' || parse.error) {
-				Eureka.logger.err("request route : " + name.route);
+				Coralian.logger.err("request route : " + name.route);
 			} else {
-				Eureka.logger.log("request route : " + name.route);
+				Coralian.logger.log("request route : " + name.route);
 			}
 
 			var notOnError = !parse.error;
@@ -486,7 +486,7 @@ function invokeAction(actions, name, ctrler) {
 	var action = actions[name];
 
 	if (!action) {
-		Eureka.logger.err(`Action ${name} not exists.`);
+		Coralian.logger.err(`Action ${name} not exists.`);
 		ctrler.renderOnError(404);
 		return;
 	}
