@@ -95,11 +95,14 @@ function controller() {
 				 * 数据类型是 字符串，则认为是一个 可被显示 的 HTML 文件路径
 				 * 解析HTML，并将 PARA 中的参数赋值到 页面中
 				 */
-				res.writeHead(code, {
-					'Location': location,
+				let header =  {
 					"Content-Type": MimeType.HTML,
 					"Set-Cookie": resCookie.print()
-				});
+				}
+				if (location !== undefined) {
+					header["Location"] = location;
+				}
+				res.writeHead(code, header);
 
 				if (!String.isEmpty(url)) {
 
