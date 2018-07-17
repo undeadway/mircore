@@ -31,7 +31,6 @@ that.start = () => {
 	that.ajaxAction = require("./core/ajax_action");
 	that.config = require("./config/app");
 	that.util = require("./util/utils").externs;
-	that.constants = require("./util/constants");
 
 	let fs = require("fs");
 	let siteappPath = pathResolve("/src/config/siteapp");

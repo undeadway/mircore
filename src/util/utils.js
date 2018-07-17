@@ -10,10 +10,10 @@ const fs = require("fs");
 
 const getConfig = require("../config/app").getConfig;
 
-//////////////////////////// exports ////////////////////////////
+//////////////////////////// externs ////////////////////////////
 let stdOutFile = pathResolve("/logs/std-out");
 
-exports.runShell = (shellCmd) => {
+externs.runShell = (shellCmd) => {
     Coralian.logger.log(`run ${shellCmd} start.`);
     process.exec(shellCmd, (err, stdout, stderr) => {
       if (err) {
@@ -47,11 +47,11 @@ function sendMail(trgt, subject, html, callback) {
 	});
 }
 
-exports.mail = sendMail;
+externs.mail = sendMail;
 
 var statuses = {}, fileObjects = {};
 
-exports.getFileObject = function(fn) {
+externs.getFileObject = function(fn) {
 
 	var status = fs.statSync(fn), result;
 
@@ -65,7 +65,21 @@ exports.getFileObject = function(fn) {
 	return result;
 
 };
-//////////////////////////// exports ////////////////////////////
+
+let constants = {};
+Object.defineProperty(constants, 'AjaxRenderType', {
+	value : {
+		//File : 'File',
+		JSON : 'JSON'
+	},
+	writeable : false
+});
+Object.defineProperty(externs, 'constants', {
+	value : constants,
+	writeable : false
+});
+
+//////////////////////////// externs ////////////////////////////
 //////////////////////////// privates ////////////////////////////
 
 var GLOBAL_INSPECTOR_FOLDER = pathResolve("/src/inspector/global", true);
