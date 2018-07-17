@@ -262,7 +262,6 @@ module.exports =  exports = () => {
 			listen();
 		}
 	} else {
-		// 开发模式下，简化所有配置，直接启动服务器
-		listen();
+		listen(); // 开发模式下，简化所有配置，直接启动服务器
 	}
 }

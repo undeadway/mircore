@@ -19,7 +19,6 @@ function baseAction() {
 			return this.controller.getTypeName().replace(CONTROLLER, String.BLANK);
 		}
 	};
-
 }
 
 module.exports = baseAction;

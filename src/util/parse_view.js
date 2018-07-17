@@ -43,12 +43,10 @@ function replaceComment(str) {
 
 	if(start < 0) {
 		if(end > 0) errorStatement();
-
 		return str;
 	}
 
 	if(end < start) errorStatement();
-
 	return replaceComment(str.slice(0, start) + str.slice(end + 4));
 }
 
@@ -91,8 +89,7 @@ function replaceEqual(str, obj, equalStart, equalEnd, equalElse) {
 	}
 
 	var statement = str.slice(tagStart + equalStart.length, tagStart + str.slice(tagStart).indexOf(END_BRACKES));
-	var result = false,
-		tmpObj;
+	var result = false, tmpObj;
 
 	// 多层级对应处理
 	if(statement.contains('.')) {
@@ -252,7 +249,6 @@ function parseUsing(str, obj) {
 	obj[usingName] = usingHtml;
 
 	return str.slice(0, start) + parseUsing(str.slice(usingEnd + endTag.length).trim(), obj);
-
 }
 
 function replaceUsing(str) {

@@ -50,13 +50,11 @@ function getController(req, res, route) {
 		if(ctrlerName === undefined) { // 非已注册的路径则判断非法路径，不做请求处理，进入下一轮循环
 			name.pop();
 		} else {
-
 			ctrlerWrapper = CONTROLLER_MAPPING[ctrlerName];
 
 			if(ctrlerWrapper) { // 若 CONTROLLER_MAPPING 中已包含请求路径，则直接返回所对应的 Controller
 				return ctrlerWrapper;
 			}
-
 			// 通过请求的 URL 来动态分析当前环境下所对应的 Controller 路径
 			var ctrlerPath = CONTROLLER_PATH.replace("{?}", ctrlerName);
 			if(fileExistsSync(ctrlerPath + ".js")) {
@@ -73,7 +71,6 @@ function getController(req, res, route) {
 		req.parse.error = 404;
 		return ERROR_CTRLER_WRAPPER;
 	}
-
 }
 
 function putController(ctrler, ctrlerName) {
@@ -108,7 +105,6 @@ function invokeController(req, res, route) {
 			// 全局 inspector 的执行
 			invokeGlobalInspectors(instance, getFilterInvocation(instance, req, res, ctrler.inspectors));
 		}
-
 	} catch(e) {
 		e.code = 500;
 		Coralian.logger.err(e.mesage);
@@ -130,10 +126,9 @@ function invokeGlobalInspectors(ctrler, fi) {
 	function end() {
 		index = count + 1;
 	}
-
-	// GlobalInvocation
+	
 	// 因为 所有 的 inspector 都要用得到 controller 所以将 GlobalInvocation 放在这里实现
-	({
+	({ // GlobalInvocation
 		getController: function() {
 			return ctrler;
 		},
@@ -141,8 +136,7 @@ function invokeGlobalInspectors(ctrler, fi) {
 			if(index < count) {
 				inspectors[index++].inspect(this);
 			} else if(index++ === count) {
-				// 当global  inspector 被执行完时，执行 filter inspector
-				fi.execute();
+				fi.execute(); // 当global  inspector 被执行完时，执行 filter inspector
 				end();
 			}
 		},
@@ -159,15 +153,13 @@ function getFilterInvocation(ctrler, req, res, inspectors) {
 		index = count + 1;
 	}
 
-	// 这里的对象就是 ControllerInvocation
-	var fi = {
+	
+	var fi = { // 这里的对象就是 ControllerInvocation
 		execute: function() {
 			if(index < count) {
-				// 执行递归，进行下一轮检查
-				inspectors[index++].inspect(this);
+				inspectors[index++].inspect(this); // 执行递归，进行下一轮检查
 			} else if(index++ === count) {
-				// 当inspector 被执行完时，执行 controller
-				ctrler.execute();
+				ctrler.execute(); // 当inspector 被执行完时，执行 controller
 				end();
 			}
 		},

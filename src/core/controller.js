@@ -135,7 +135,6 @@ function controller() {
 					} else {
 						page = parseview(url, attrs);
 					}
-
 					res.write(page);
 				}
 
@@ -149,7 +148,6 @@ function controller() {
 			default:
 				unsupportedType(url);
 		}
-
 		end();
 	}
 
@@ -236,7 +234,6 @@ function controller() {
 
 			var notOnError = !parse.error;
 
-
 			if (notOnError) { // 如果传入的 parse 对象中未包含 error 对象，则正常执行
 				var path = reqRoute.slice(1); // 去掉最前面的 “/”
 				if (path.isEmpty()) {
@@ -265,10 +262,7 @@ function controller() {
 						}
 					}
 				}
-
 				paras = paras.split(split);
-
-
 			} else {
 				actionName = INDEX;
 				let err = parse.error;
@@ -289,7 +283,6 @@ function controller() {
 						Error.unsupportedType(err);
 				}
 			}
-
 			return true;
 		},
 		/*
@@ -396,22 +389,18 @@ function controller() {
 					name = action.getName().replace("Action", "");
 					break;
 				case 2:
-					// [name, action]
-					// [action, inspectors]
-					if (typeof name === "function") {
+					if (typeof name === "function") { // [name, action]
 						inspectors = action;
 						action = name;
 						name = action.getName().replace("Action", "");
-					}
+					} // [action, inspectors]
 					break;
 				case 3:
 					break;
 				default :
 					break;
 			}
-
 			name = name || INDEX;
-
 			addAction(actions, name, action, inspectors);
 		},
 		getAction: function (name) {
@@ -500,8 +489,7 @@ function invokeAction(actions, name, ctrler) {
 	}
 
 	try {
-		// 这里的对象就是 ActionInvocation
-		({
+		({ // 这里的对象就是 ActionInvocation
 			/**
 			 * ActionInvocation的主执行逻辑
 			 * 外部接口就调用这个方法来执行 invocation
@@ -524,8 +512,7 @@ function invokeAction(actions, name, ctrler) {
 			 */
 			resetAction: function (actionName) {
 				if (!typeIs(actionName, 'string')) unsupportedType(actionName);
-				// 递归调用 invokeAction
-				invokeAction(actions, actionName, ctrler);
+				invokeAction(actions, actionName, ctrler); // 递归调用 invokeAction
 				end();
 			},
 			getController: function () {

@@ -68,7 +68,6 @@ function cookies() {
 	}
 
 	return {
-
 		getValues: function() {
 			var result = {};
 			addAll(instance, result);

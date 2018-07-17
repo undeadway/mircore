@@ -7,7 +7,6 @@ let externs = {}, privates = {};
 const process = require('child_process');
 const nodemailer = require("nodemailer");
 const fs = require("fs");
-
 const getConfig = require("../config/app").getConfig;
 
 //////////////////////////// externs ////////////////////////////
@@ -63,7 +62,6 @@ externs.getFileObject = function(fn) {
 	}
 
 	return result;
-
 };
 
 let constants = {};
@@ -82,8 +80,9 @@ Object.defineProperty(externs, 'constants', {
 //////////////////////////// externs ////////////////////////////
 //////////////////////////// privates ////////////////////////////
 
-var GLOBAL_INSPECTOR_FOLDER = pathResolve("/src/inspector/global", true);
-var SYSTEM_INSPECTOR_FOLDER = "../inspectors";
+const clients = getConfig("limited-clients");
+const GLOBAL_INSPECTOR_FOLDER = pathResolve("/src/inspector/global", true);
+const SYSTEM_INSPECTOR_FOLDER = "../inspectors";
 
 var INSPECOTRS = [];
 
@@ -103,11 +102,8 @@ if (INSPECOTRS.isEmpty()) {
 }
 
 privates.getGlobalInspectors = () => {
-
 	return INSPECOTRS;
 };
-
-let clients = getConfig("limited-clients");
 
 privates.clientDisAccessable = function(input) {
 
