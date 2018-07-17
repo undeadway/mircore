@@ -3,3 +3,4 @@ demo/.vscode
 demo/node_modules
 node_modules
 demo/.editorconfig
+npm-debug.log
