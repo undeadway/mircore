@@ -11,7 +11,7 @@ demo 文件夹下是服务器的一个简单案例。
 
 ## 启动
 ```
-var server = require("proton");
+var server = require("mircore");
 server.start();
 ```
 
@@ -31,7 +31,7 @@ Apache 2.0
 # English
 This is a toy server built by node.js.  
 This package is for study.  
-The demo folder holds a simple instance of proton.
+The demo folder holds a simple instance of mircore.
 
 ## Supported
 * Router control;
@@ -39,7 +39,7 @@ The demo folder holds a simple instance of proton.
 
 ## Start
 ```
-var server = require("proton");
+var server = require("mircore");
 server.start();
 ```
 

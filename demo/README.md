@@ -1,7 +1,7 @@
-# ProtonDemo
+# mircoreDemo
 
 ## Chinese
-proton 的简单示例
+mircore 的简单示例
 
 ### 启动
 ```
@@ -9,7 +9,7 @@ npm run start
 ```
 
 ## English
-This is a simple demo of proton.
+This is a simple demo of mircore.
 
 ### Start
 ```

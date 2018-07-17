@@ -1,11 +1,11 @@
 {
-	"name":"proton",
+	"name":"mircore",
 	"version":"0.0.1",
 	"description":"A toy server built by node.js",
 	"license":"UNLICENSED",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/undeadway/proton.git"
+		"url": "https://github.com/undeadway/mircore.git"
 	},
     "main":"./src/index.js",
 	"dependencies":{

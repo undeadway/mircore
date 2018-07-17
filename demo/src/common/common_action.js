@@ -1,4 +1,4 @@
-let baseAction = require("proton").baseAction;
+let baseAction = require("mircore").baseAction;
 let config = require(pathResolve("/src/config/siteapp"));
 let TEMPLATE_HTML = "/res/html/template.html";
 

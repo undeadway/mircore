@@ -1,8 +1,8 @@
 {
-	"name": "ProtonDemo",
+	"name": "MIRCoreDemo",
 	"main":"index.js",
 	"dependencies": {
-		"proton": "../"
+		"mircore": "../"
 	},
 	"readmeFilename": "README.md",
 	"scripts": {

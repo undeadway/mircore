@@ -1,4 +1,4 @@
-let base = require("proton").controller;
+let base = require("mircore").controller;
 
 function indexController() {
 	let ctrler = base();
