@@ -1,18 +1,31 @@
 {
-	"name":"mircore",
-	"version":"0.0.1",
-	"description":"A toy server built by node.js",
-	"license":"UNLICENSED",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/undeadway/mircore.git"
-	},
-    "main":"./src/index.js",
-	"dependencies":{
-		"nodemailer":"2.7.2"
-	},
-	"readmeFilename": "README.md",
-	"engines":{
-		"node": "6.10.0"
-	}
+  "name": "mircore",
+  "version": "0.0.2",
+  "description": "A toy server built by node.js",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/undeadway/mircore.git"
+  },
+  "main": "./src/index.js",
+  "dependencies": {
+    "nodemailer": "2.7.2"
+  },
+  "engines": {
+    "node": "6.10.0"
+  },
+  "bugs": {
+    "url": "https://github.com/undeadway/mircore/issues"
+  },
+  "homepage": "https://github.com/undeadway/mircore#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mircore",
+    "server",
+    "nodejs",
+    "router"
+  ],
+  "author": "hzwaygc@gmail.com"
 }
