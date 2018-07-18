@@ -11,8 +11,8 @@ const getConfig = require("../config/app").getConfig;
 
 //////////////////////////// externs ////////////////////////////
 externs.runShell = (shellCmd) => {
-		Coralian.logger.log(`run ${shellCmd} start.`);
-		process.exec(shellCmd, (err, stdout, stderr) => {
+	Coralian.logger.log(`run ${shellCmd} start.`);
+	process.exec(shellCmd, (err, stdout, stderr) => {
 		if (err) {
 			Coralian.logger.err(err);
 		} else {
