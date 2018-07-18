@@ -10,19 +10,16 @@ const fs = require("fs");
 const getConfig = require("../config/app").getConfig;
 
 //////////////////////////// externs ////////////////////////////
-let stdOutFile = pathResolve("/logs/std-out");
-
 externs.runShell = (shellCmd) => {
-    Coralian.logger.log(`run ${shellCmd} start.`);
-    process.exec(shellCmd, (err, stdout, stderr) => {
-      if (err) {
-        fs.writeFileSync(pathResolve("/logs/err"), err);
-        fs.writeFileSync(pathResolve("/logs/str-err"), stderr);
-      } else {
-        fs.writeFileSync(stdOutFile, stdout);
-      }
-        Coralian.logger.log(`run ${shellCmd} end.`);
-    });
+		Coralian.logger.log(`run ${shellCmd} start.`);
+		process.exec(shellCmd, (err, stdout, stderr) => {
+		if (err) {
+			Coralian.logger.err(err);
+		} else {
+			fs.writeFileSync(stdOutFile, stdout);
+		}
+		Coralian.logger.log(`run ${shellCmd} end.`);
+	});
 }
 
 const mailConfig = getConfig("mail");
