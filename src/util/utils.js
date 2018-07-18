@@ -15,8 +15,9 @@ externs.runShell = (shellCmd) => {
 	process.exec(shellCmd, (err, stdout, stderr) => {
 		if (err) {
 			Coralian.logger.err(err);
+			Coralian.logger.err(stderr);
 		} else {
-			fs.writeFileSync(stdOutFile, stdout);
+			Coralian.logger.log(stdout);
 		}
 		Coralian.logger.log(`run ${shellCmd} end.`);
 	});
