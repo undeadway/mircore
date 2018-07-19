@@ -8,13 +8,7 @@ var config = JSON.parse(require("fs").readFileSync(pathResolve("/res/json/app.js
 var cache = config.cache;
 var routes = config.routes;
 var routesName = Object.keys(routes);
-var database = (() => {
-	if (config.database) {
-		return require(config.database);
-	} else {
-		return null;
-	}
-})();
+var database = (!!config.database) ? require(config.database) : null;
 
 Object.defineProperty(exports, 'database', {
 	value: database,
