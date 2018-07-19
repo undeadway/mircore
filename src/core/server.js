@@ -58,19 +58,19 @@ function router(req, res) {
 				_postData += chunk;
 			}).on("end", function () {
 				switch (method) {
-					case 'PUT':
-					case 'POST':
+					case Coralian.constants.HttpRequestMethod.PUT:
+					case Coralian.constants.HttpRequestMethod.POST:
 						Object.addAll(qs.parse(_postData), parse.query);
 						// 因为都要调用 request 方法，所以这里 switch 贯穿掉
-					case 'GET':
+					case Coralian.constants.HttpRequestMethod.GET:
 						request(req, res);
 						break;
-					case 'DELETE':
-					case 'HEAD': // TODO 下面这些暂时不做实现
-					case 'CONNECT':
-					case 'OPTIONS':
-					case 'TRACE':
-					case 'PATCH':
+					case Coralian.constants.HttpRequestMethod.DELETE:
+					case Coralian.constants.HttpRequestMethod.HEAD: // TODO 下面这些暂时不做实现
+					case Coralian.constants.HttpRequestMethod.CONNECT:
+					case Coralian.constants.HttpRequestMethod.OPTIONS:
+					case Coralian.constants.HttpRequestMethod.TRACE:
+					case Coralian.constants.HttpRequestMethod.PATCH:
 						break;
 					default:
 						unsupportedOperation(method);
