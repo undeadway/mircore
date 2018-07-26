@@ -26,6 +26,7 @@ let {addAll, isEmpty} = Object;
 let {unsupportedOperation, unsupportedType } = Error;
 let JSONstringify = JSON.stringify;
 let EMPTY_STRING = String.BLANK;
+let HttpStatusCode = Coralian.constants.HttpStatusCode;
 
 let errorCtrler = null;
 
@@ -36,12 +37,12 @@ function controller() {
 	// 这些都是已经初始化好的值
 	var attrs = {},
 		actions = {},
-		httpStautsCode = 200,
+		httpStatusCode = HttpStatusCode.OK,
 		paras = EMPTY_STRING,
 		isLogged = false,
 		resCookie = cookies();
 
-	function renderOnError(error, code = 500) {
+	function renderOnError(error, code = HttpStatusCode.INTERNAL_SERVER_ERROR) {
 
 		if (errorCtrler === null) {
 			let instance = require("../error/controller")
@@ -75,7 +76,7 @@ function controller() {
 
 		if (arguments.length === 1) {
 			url = code;
-			code = httpStautsCode;
+			code = httpStatusCode;
 		}
 		if (arguments.length === 2 && typeIs(url, 'boolean')) {
 			renderType = url;
@@ -155,7 +156,7 @@ function controller() {
 	 * 页面直接打印的内容（现阶段基本用于 ajax）
 	 */
 	function plain(data, hsc, mime) {
-		hsc = hsc || httpStautsCode;
+		hsc = hsc || httpStatusCode;
 		// 从理论上来说，不管任何形式的 plain 的 mime 都是 text/plain
 		// 但 js、css 等有自己单独的 mime，所以 mime 类型可选择，不给就赋默认值的 text/plain
 		mime = mime || MimeType.TEXT;
@@ -190,7 +191,7 @@ function controller() {
 	 * 现在尚未实现
 	 */
 	function renderFile(data, hsc, mime) {
-		hsc = hsc || httpStautsCode;
+		hsc = hsc || httpStatusCode;
 		mime = mime || MimeType.OCTET_STREAM;
 		res.writeHead(hsc, {
 			"Content-Type": mime,
@@ -476,7 +477,7 @@ function invokeAction(actions, name, ctrler) {
 
 	if (!action) {
 		Coralian.logger.err(`Action ${name} not exists.`);
-		ctrler.renderOnError(404);
+		ctrler.renderOnError(HttpStatusCode.NOT_FOUND);
 		return;
 	}
 
@@ -528,7 +529,7 @@ function invokeAction(actions, name, ctrler) {
 			end: end
 		}).execute();
 	} catch (e) {
-		e.code = 500;
+		e.code = HttpStatusCode.INTERNAL_SERVER_ERROR;
 		ctrler.renderOnError(e);
 	}
 }

@@ -106,7 +106,7 @@ function invokeController(req, res, route) {
 			invokeGlobalInspectors(instance, getFilterInvocation(instance, req, res, ctrler.inspectors));
 		}
 	} catch(e) {
-		e.code = 500;
+		e.code = Coralian.constants.HttpStatusCode.INTERNAL_SERVER_ERROR;
 		Coralian.logger.err(e.mesage);
 		Coralian.logger.err(e.stack);
 		req.parse.error = e;
