@@ -1,7 +1,7 @@
 {
   "name": "mircore",
-  "version": "0.0.3",
-  "description": "A toy server built by node.js",
+  "version": "0.0.4",
+  "description": "A web server built by node.js",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
