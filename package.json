@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/undeadway/mircore/issues"
   },
-  "homepage": "https://github.com/undeadway/mircore#readme",
+  "homepage": "http://mircore.waygc.net",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
