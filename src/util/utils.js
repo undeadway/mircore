@@ -56,7 +56,7 @@ publics.getFileObject = function(fn) {
 
 	var status = fs.statSync(fn), result;
 
-	if (!equals(status, statuses[fn])) {
+	if (!Object.equals(status, statuses[fn])) {
 		statuses[fn] = status;
 		fileObjects[fn] = result = fs.readFileSync(fn, "utf-8");
 	} else {
