@@ -90,7 +90,7 @@ function replaceEqual(str, obj, equalStart, equalEnd, equalElse) {
 	var result = false, tmpObj;
 
 	// 多层级对应处理
-	if(statement.contains('.')) {
+	if(String.contains(statement, '.')) {
 		var tmpStmt = statement.split('.');
 		tmpObj = obj;
 
@@ -122,13 +122,13 @@ function replaceEqual(str, obj, equalStart, equalEnd, equalElse) {
 		out = str.slice(0, start);
 
 	if(result) {
-		if(str.contains(elseTag) && end > str.indexOf(elseTag)) {
+		if(String.contains(str, elseTag) && end > str.indexOf(elseTag)) {
 			out += str.slice(start + startTag.length, str.indexOf(elseTag));
 		} else {
 			out += str.slice(start + startTag.length, end);
 		}
 	} else {
-		if(str.contains(elseTag) && end > str.indexOf(elseTag)) {
+		if(String.contains(str, elseTag) && end > str.indexOf(elseTag)) {
 			out += str.slice(str.indexOf(elseTag) + elseTag.length, end);
 		}
 	}
@@ -193,7 +193,7 @@ function replaceAt(str, obj) {
 
 	var statement = str.slice(tagStart + 2, tagEnd);
 	var result = String.BLANK;
-	if(statement.contains(':')) {
+	if(String.contains(statement, ':')) {
 		statement = statement.split(':');
 		result = obj[statement[0]].apply(null, statement[1].split(','));
 	} else {
@@ -246,7 +246,7 @@ function parseUsing(str, obj) {
 
 	obj[usingName] = usingHtml;
 
-	return str.slice(0, start) + parseUsing(str.slice(usingEnd + endTag.length).trim(), obj);
+	return str.slice(0, start) + String.trim(parseUsing(str.slice(usingEnd + endTag.length)), obj);
 }
 
 function replaceUsing(str) {
@@ -256,7 +256,7 @@ function replaceUsing(str) {
 	str = parseUsing(str, obj);
 
 	// 循环替换，以保证内嵌的 using 也被替换掉
-	while(str.contains(USING_START)) {
+	while(String.contains(str, USING_START)) {
 		str = replaceElement(str, obj, USING_START);
 	}
 

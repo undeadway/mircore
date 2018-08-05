@@ -83,7 +83,7 @@ function putController(ctrler, ctrlerName) {
 		name: {
 			path: ctrlerName,
 			route: ctrlerName.split("/"), // 文件系统的物理路径
-			type: instance.getName()
+			type: Function.getName(instance)
 		}
 	};
 	return ctrlerWrapper;

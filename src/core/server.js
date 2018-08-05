@@ -153,39 +153,39 @@ function initUserAgendAndOS(headers, client) {
 	let input = getUserAgent(headers);
 	let userAgent, os;
 
-	if (input.contains('windows')) {
+	if (String.contains(input, 'windows')) {
 		os = 'Windows';
-	} else if (input.contains('linux')) {
+	} else if (String.contains(input, 'linux')) {
 		os = 'Linux';
-	} else if (input.contains("sun") || input.contains("solaris")) {
+	} else if (String.contains(input, "sun") || String.contains(input, "solaris")) {
 		os = 'Solaris'
-	} else if (input.contains('android')) {
+	} else if (String.contains(input, 'android')) {
 		os = 'Android';
-	} else if (input.contains('iphone') || input.contains('ipad') || input.contains("apple")) {
+	} else if (String.contains(input, 'iphone') || String.contains(input, 'ipad') || String.contains(input, "apple")) {
 		os = 'iOS';
 	} else {
 		os = 'Unknown';
 	}
 
-	if (input.contains("trident") || input.contains("microsoft") ||
-		(input.contains("ie") && os === 'Windows')) // 为避免 ua 中含有 “ie” 字符串造成的歧义，加上操作系统名限制
+	if (String.contains(input, "trident") || String.contains(input, "microsoft") ||
+		(String.contains(input, "ie") && os === 'Windows')) // 为避免 ua 中含有 “ie” 字符串造成的歧义，加上操作系统名限制
 	{
 		userAgent = 'IE';
-	} else if (input.contains('edge')) {
+	} else if (String.contains(input, 'edge')) {
 		userAgent = 'Edge';
-	} else if (input.contains('micromessenger') || input.contains('micromsg') || input.contains('weixin') || input.contains('wechat')) {
+	} else if (String.contains(input, 'micromessenger') || String.contains(input, 'micromsg') || String.contains(input, 'weixin') || String.contains(input, 'wechat')) {
 		userAgent = 'Wechat';
-	} else if (input.contains('opr')) {
+	} else if (String.contains(input, 'opr')) {
 		userAgent = 'Opera';
-	} else if (input.contains('chrome')) {
+	} else if (String.contains(input, 'chrome')) {
 		userAgent = 'Chrome';
-	} else if (input.contains('safari')) {
+	} else if (String.contains(input, 'safari')) {
 		userAgent = 'Safari';
-	} else if (input.contains("apple")) {
+	} else if (String.contains(input, "apple")) {
 		userAgent = "Safari";
-	} else if (input.contains('gekko') || input.contains('mozilla')) {
+	} else if (String.contains(input, 'gekko') || String.contains(input, 'mozilla')) {
 		userAgent = 'Firefox';
-	} else if (input.contains("curl")) {
+	} else if (String.contains(input, "curl")) {
 		userAgent = "curl";
 	} else {
 		userAgent = 'Unknown';

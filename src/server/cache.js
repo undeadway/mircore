@@ -61,7 +61,7 @@ function getCache(routes, cacheObj) {
 
 			if (isUsed) {
 				for (let i = 0; i < routes.length; i++) {
-					if (route.contains(routes[i])) {
+					if (String.contains(route, routes[i])) {
 						return true;
 					}
 				}

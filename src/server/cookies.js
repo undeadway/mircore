@@ -22,7 +22,7 @@ function cookies() {
 			value = (value).toString();
 		}
 
-		instance[key.trim()] = value.trim();
+		instance[String.trim(key)] = String.trim(value);
 	}
 
 	function addAll(input) {

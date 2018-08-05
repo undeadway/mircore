@@ -23,28 +23,32 @@ publics.runShell = (shellCmd) => {
 	});
 }
 
-const mailConfig = getConfig("mail");
-let transporter = nodemailer.createTransport(mailConfig);
+publics.mail = () => {
 
-function sendMail(trgt, subject, html, callback) {
+	let mailConfig = getConfig("mail");
+	let hasMainConfig = !!mailConfig;
+	let transporter = (hasMainConfig) ? nodemailer.createTransport(mailConfig) : null;
 
-	transporter.sendMail({
-		from : mailConfig.auth.user,
-		to : trgt.join(),
-		subject : subject,
-		html : html
-	}, function(err, res) {
-		if (err) {
-			Coralian.logger.err("Mail sent failed.");
-			callback(err);
-		} else {
-			Coralian.logger.err("Mail sent succeeed.");
-			callback(res);
-		}	
-	});
-}
+	return (trgt, subject, html, callback) => {
 
-publics.mail = sendMail;
+		if (!hasMainConfig) return;
+	
+		transporter.sendMail({
+			from : mailConfig.auth.user,
+			to : trgt.join(),
+			subject : subject,
+			html : html
+		}, function(err, res) {
+			if (err) {
+				Coralian.logger.err("Mail sent failed.");
+				callback(err);
+			} else {
+				Coralian.logger.err("Mail sent succeeed.");
+				callback(res);
+			}	
+		});
+	}
+};
 
 var statuses = {}, fileObjects = {};
 
@@ -111,7 +115,7 @@ privates.clientDisAccessable = function(input) {
 	if (!reject || Array.isEmpty(reject)) return false;
 	for(let i = 0, len = reject.length; i < len; i++) {
 		let client = reject[i];
-		if(input === client || input.contains(clients[i])) {
+		if(input === client || String.contains(input, clients[i])) {
 			Coralian.logger.log(`Client ${input} has banned.`);
 			return true;
 		}
@@ -121,7 +125,7 @@ privates.clientDisAccessable = function(input) {
 	if (!allow || Array.isEmpty(allow)) return false;
 	for(let i = 0, len = allow.length; i < len; i++) {
 		let client = allow[i];
-		if(input === client || input.contains(clients[i])) {
+		if(input === client || String.contains(input, clients[i])) {
 			return false;
 		}
 	}

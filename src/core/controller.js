@@ -48,7 +48,7 @@ function controller() {
 			errorCtrler = {
 				instance, name: {
 					route: ['error'],
-					type: instance.getName()
+					type: Function.getName(instance)
 				}
 			};
 		}
@@ -87,7 +87,7 @@ function controller() {
 			location = undefined;
 		}
 
-		url = url.trim();
+		url = String.trim(url);
 
 		switch (typeOf(url)) {
 			case 'string':
@@ -227,6 +227,7 @@ function controller() {
 			route = name.route.join(SLASH), typeName = name.type, pathName = name.path;
 
 			if (name.route === 'error' || parse.error) {
+				console.log(parse.error);
 				Coralian.logger.err("request route : " + name.route);
 			} else {
 				Coralian.logger.log("request route : " + name.route);
@@ -236,7 +237,7 @@ function controller() {
 
 			if (notOnError) { // 如果传入的 parse 对象中未包含 error 对象，则正常执行
 				var path = reqRoute.slice(1); // 去掉最前面的 “/”
-				if (path.isEmpty()) {
+				if (String.isEmpty(path)) {
 					path = INDEX;
 				}
 
@@ -247,15 +248,15 @@ function controller() {
 				// 到这里， path 就不含任何 和 路径无关的东西了
 				var url = path.split(SLASH);
 
-				var lastUrl = url.last(),
-					lastName = name.route.last();
+				var lastUrl = Array.last(url),
+					lastName = Array.last(name.route);
 				if (lastUrl === lastName || getRoute("/" + lastUrl) === ("/" + lastName)) { // 所请求的不包含 action、para，只有 route
 					actionName = INDEX;
 				} else {
 					if (actions[lastUrl]) { // 取得 [route..., action]
 						actionName = lastUrl;
 					} else { // 否则为 [route..., action, para]
-						actionName = url.last(2);
+						actionName = Array.last(url, 2);
 						paras = lastUrl;
 						if (!actions[actionName]) {	// 最后为[route..., para]
 							actionName = INDEX;
@@ -315,7 +316,7 @@ function controller() {
 
 			if ('function' === typeof k) {
 				v = k;
-				k = v.getName();
+				k = Function.getName(v);
 				if (k.isEmpty()) unsupportedOperation('函数名不能为空');
 
 			} else if (v === undefined) {
@@ -386,13 +387,13 @@ function controller() {
 				case 1:
 					// [action]
 					action = name;
-					name = action.getName().replace("Action", "");
+					name = Function.getName(action).replace("Action", "");
 					break;
 				case 2:
 					if (typeof name === "function") { // [name, action]
 						inspectors = action;
 						action = name;
-						name = action.getName().replace("Action", "");
+						name = Function.getName(action).replace("Action", "");
 					} // [action, inspectors]
 					break;
 				case 3:
@@ -458,10 +459,10 @@ function addAction(actions, name, instance, inspectors) {
 		inspectors = [inspectors];
 	}
 
-	let actionName = instance.getName();
+	let actionName = Function.getName(instance);
 
 	actions[name] = {
-		isAction : instance.getName().contains("Action"),
+		isAction : String.contains(actionName, "Action"),
 		instance: instance,
 		inspectors: inspectors || [],
 		getActionName: function () {
