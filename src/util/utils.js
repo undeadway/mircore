@@ -1,16 +1,16 @@
 /*
  * mircore 的工具库
- * 其中 externs 是外部可使用，privates是只供 mircore 自己使用
+ * 其中 publics 是外部可使用，privates是只供 mircore 自己使用
  */
-let externs = {}, privates = {};
+let publics = {}, privates = {};
 
 const process = require('child_process');
 const nodemailer = require("nodemailer");
 const fs = require("fs");
 const getConfig = require("../config/app").getConfig;
 
-//////////////////////////// externs ////////////////////////////
-externs.runShell = (shellCmd) => {
+//////////////////////////// publics ////////////////////////////
+publics.runShell = (shellCmd) => {
 	Coralian.logger.log(`run ${shellCmd} start.`);
 	process.exec(shellCmd, (err, stdout, stderr) => {
 		if (err) {
@@ -44,11 +44,11 @@ function sendMail(trgt, subject, html, callback) {
 	});
 }
 
-externs.mail = sendMail;
+publics.mail = sendMail;
 
 var statuses = {}, fileObjects = {};
 
-externs.getFileObject = function(fn) {
+publics.getFileObject = function(fn) {
 
 	var status = fs.statSync(fn), result;
 
@@ -70,12 +70,13 @@ Object.defineProperty(constants, 'AjaxRenderType', {
 	},
 	writeable : false
 });
-Object.defineProperty(externs, 'constants', {
+
+Object.defineProperty(publics, 'constants', {
 	value : constants,
 	writeable : false
 });
 
-//////////////////////////// externs ////////////////////////////
+//////////////////////////// publics ////////////////////////////
 //////////////////////////// privates ////////////////////////////
 
 const clients = getConfig("limited-clients");
@@ -130,6 +131,6 @@ privates.clientDisAccessable = function(input) {
 };
 //////////////////////////// privates ////////////////////////////
 
-module.exports = exports = {
-    externs : externs, privates : privates
+module.publics = {
+    publics : publics, privates : privates
 };

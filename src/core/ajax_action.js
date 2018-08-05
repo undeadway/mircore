@@ -7,7 +7,7 @@
  */
 
 var baseAction = require("./base_action");
-let AjaxRenderType_JSON = require("../util/utils").externs.constants.AjaxRenderType.JSON;
+let AjaxRenderType_JSON = require("../util/utils").publics.constants.AjaxRenderType.JSON;
 
 function ajaxAction() {
 

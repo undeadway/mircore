@@ -7,6 +7,7 @@
  */
 let {developMode, port, appName} = require("../config/app");
 let clientDisAccessable = require("../util/utils").privates.clientDisAccessable;
+let HttpStatusCode = Coralian.constants.HttpStatusCode;
 
 let url = require("url"),
 	qs = require("querystring"),
@@ -58,19 +59,19 @@ function router(req, res) {
 				_postData += chunk;
 			}).on("end", function () {
 				switch (method) {
-					case 'PUT':
-					case 'POST':
+					case Coralian.constants.HttpRequestMethod.PUT:
+					case Coralian.constants.HttpRequestMethod.POST:
 						Object.addAll(qs.parse(_postData), parse.query);
 						// 因为都要调用 request 方法，所以这里 switch 贯穿掉
-					case 'GET':
+					case Coralian.constants.HttpRequestMethod.GET:
 						request(req, res);
 						break;
-					case 'DELETE':
-					case 'HEAD': // TODO 下面这些暂时不做实现
-					case 'CONNECT':
-					case 'OPTIONS':
-					case 'TRACE':
-					case 'PATCH':
+					case Coralian.constants.HttpRequestMethod.DELETE:
+					case Coralian.constants.HttpRequestMethod.HEAD: // TODO 下面这些暂时不做实现
+					case Coralian.constants.HttpRequestMethod.CONNECT:
+					case Coralian.constants.HttpRequestMethod.OPTIONS:
+					case Coralian.constants.HttpRequestMethod.TRACE:
+					case Coralian.constants.HttpRequestMethod.PATCH:
 						break;
 					default:
 						unsupportedOperation(method);
@@ -78,8 +79,8 @@ function router(req, res) {
 			}).setTimeout(TIMEOUT, function () {
 				// req 请求超时，网络不稳定
 				// 408 Request Timeout
-				Coralian.logger.err('request error code : ' + 408);
-				req.url = formatString(ERROR_ROUTE_FORMAT, 408);
+				Coralian.logger.err('request error code : ' + HttpStatusCode.REQUEST_TIMEOUT);
+				req.url = formatString(ERROR_ROUTE_FORMAT, HttpStatusCode.REQUEST_TIMEOUT);
 				req.parse = url.parse(req.url, true);
 				request(req, res);
 			});
@@ -87,8 +88,8 @@ function router(req, res) {
 			.setTimeout(TIMEOUT, function () {
 				// res 响应超时，服务器无应答
 				// 504 Gateway Timeout
-				Coralian.logger.err('response error code : ' + 504);
-				req.url = formatString(ERROR_ROUTE_FORMAT, 504);
+				Coralian.logger.err('response error code : ' + HttpStatusCode.GATEWAY_TIMEOUT);
+				req.url = formatString(ERROR_ROUTE_FORMAT, HttpStatusCode.GATEWAY_TIMEOUT);
 				parse = url.parse(req.url, true);
 				request(req, res);
 			});
@@ -109,7 +110,7 @@ function router(req, res) {
 		// 如果发生 write after end ，则只将错误信息记录到 log 中去
 		if (err.message.contains('write after end')) return;
 
-		req.url = formatString(ERROR_ROUTE_FORMAT, (err.code || 500));
+		req.url = formatString(ERROR_ROUTE_FORMAT, (err.code || HttpStatusCode.INTERNAL_SERVER_ERROR));
 		req.parse = url.parse(req.url, true);
 		request(req, res);
 	}
@@ -128,8 +129,8 @@ function request(req, res) {
 	parse.cookies = cookies;
 
 	if (parse.pathname.indexOf(POINT) !== -1) {
-		parse.pathname = formatString(ERROR_ROUTE_FORMAT, 404);
-		parse.path = formatString(ERROR_ROUTE_FORMAT, 404);
+		parse.pathname = formatString(ERROR_ROUTE_FORMAT, HttpStatusCode.NOT_FOUND);
+		parse.path = formatString(ERROR_ROUTE_FORMAT, HttpStatusCode.NOT_FOUND);
 	}
 
 	filter(req, res);
@@ -226,9 +227,21 @@ module.exports =  exports = () => {
 	if (isStarted) return;
 	isStarted = true;
 
+	/*
+	* 这里用来捕获进程级错误，只将错误信息打印出来，但不具体解决错误
+	* 理论上到这里的时候，所有错误都应该已经被解决
+	* 这里捕捉到的错误都是隐藏的比较深的bug触发的
+	*/
+	process.on("uncaughtException", (err) => {
+		Coralian.logger.log("程序发生未捕获异常！");
+		Coralian.logger.err(err);
+	})
+
 	if (!developMode) {
-		// 这段代码当时是从网上抄来的，据说对服务器稳定有好处
-		// 现在也忘记掉具体的用法和功能了，但也懒得删掉
+		/*
+		 * 这段代码当时是从网上抄来的，据说对服务器稳定有好处
+		 * 但从实际运行来看，好像没什么变化，可能是我自己的环境问题
+		 */
 		let cluster = require('cluster');
 
 		if (cluster.isMaster) {
