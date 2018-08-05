@@ -20,7 +20,7 @@ let caches = require("../server/cache");
 let { split, developMode, getRoute } = require("../config/app");
 
 let MimeType = Coralian.constants.MimeType,
-	htmlEscape = Coralian.util.ReplaceHolder.htmlEscape,
+	htmlEscape = Coralian.ReplaceHolder.htmlEscape,
 	isNumber = Number.isNumber;
 let {addAll, isEmpty} = Object;
 let {unsupportedOperation, unsupportedType } = Error;

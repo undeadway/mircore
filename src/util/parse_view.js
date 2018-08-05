@@ -28,11 +28,9 @@ var USING_TAG_START = "<using:",
 	USING_START = "{using:";
 var USING_TAG_START_LEN = USING_TAG_START.length,
 	USING_TAG_END_LEN = USING_TAG_END.length;
-var errorStatement = Error.errorStatement,
-	noSuchProperty = Error.noSuchProperty,
+var {errorStatement, noSuchProperty} = Error,
 	BLANK = String.BLANK;
-var replaceElement = Coralian.util.ReplaceHolder.replaceElement,
-	replaceLoop = Coralian.util.ReplaceHolder.replaceLoop;
+var {replaceElement, replaceLoop} = Coralian.ReplaceHolder;
 var HTML_FILE_MAP = {};
 var pageCache = require("../config/app").getCache('page');
 
