@@ -50,7 +50,7 @@ this.isUsed = getCache;
 function getCache(routes, cacheObj) {
 
 	// routes 必须有值才算开启
-	let isUsed = (routes) ? (!routes.isEmpty()) : false;
+	let isUsed = (routes) ? (!Array.isEmpty(routes)) : false;
 
 	Coralian.logger.log("routes : " + routes);
 

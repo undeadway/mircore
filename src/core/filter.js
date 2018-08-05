@@ -20,7 +20,7 @@ var ERROR_CTRLER_WRAPPER = {
 	inspectors: [],
 	name: {
 		route: ['error'],
-		type: ERROR_CTRLER_INSTANCE.getName()
+		type: Function.getName(ERROR_CTRLER_INSTANCE)
 	}
 };
 var CONTROLLER_MAPPING = {
@@ -39,7 +39,7 @@ function getController(req, res, route) {
 	name.shift();
 	var count = name.length - 1;
 
-	if(count > 0 && name[count].isEmpty()) {
+	if(count > 0 && String.isEmpty(name[count])) {
 		name.pop();
 	}
 

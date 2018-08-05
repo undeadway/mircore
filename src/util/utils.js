@@ -85,7 +85,7 @@ const SYSTEM_INSPECTOR_FOLDER = "../inspectors";
 
 var INSPECOTRS = [];
 
-if (INSPECOTRS.isEmpty()) {
+if (Array.isEmpty(INSPECOTRS)) {
 	if (fs.existsSync(GLOBAL_INSPECTOR_FOLDER)) {
 		var globalInspectors = fs.readdirSync(GLOBAL_INSPECTOR_FOLDER);
 		for ( let i = 0, len = globalInspectors.length; i < len; i++) {
@@ -108,7 +108,7 @@ privates.clientDisAccessable = function(input) {
 
 	input = input.toLowerCase();
 	let reject = clients.reject;
-	if (!reject || reject.isEmpty()) return false;
+	if (!reject || Array.isEmpty(reject)) return false;
 	for(let i = 0, len = reject.length; i < len; i++) {
 		let client = reject[i];
 		if(input === client || input.contains(clients[i])) {
@@ -118,7 +118,7 @@ privates.clientDisAccessable = function(input) {
 	}
 
 	let allow = clients.allow;
-	if (!allow || allow.isEmpty()) return false;
+	if (!allow || Array.isEmpty(allow)) return false;
 	for(let i = 0, len = allow.length; i < len; i++) {
 		let client = allow[i];
 		if(input === client || input.contains(clients[i])) {
@@ -131,6 +131,6 @@ privates.clientDisAccessable = function(input) {
 };
 //////////////////////////// privates ////////////////////////////
 
-module.publics = {
+module.exports = exports = {
     publics : publics, privates : privates
 };

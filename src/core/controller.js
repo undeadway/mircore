@@ -19,14 +19,13 @@ var sessions = require("../server/sessions");
 let caches = require("../server/cache");
 let { split, developMode, getRoute } = require("../config/app");
 
-let MimeType = Coralian.constants.MimeType,
-	htmlEscape = Coralian.ReplaceHolder.htmlEscape,
-	isNumber = Number.isNumber;
+let {MimeType, HttpStatusCode} = Coralian.constants;
 let {addAll, isEmpty} = Object;
 let {unsupportedOperation, unsupportedType } = Error;
+let htmlEscape = Coralian.ReplaceHolder.htmlEscape,
+	isNumber = Number.isNumber;
 let JSONstringify = JSON.stringify;
 let EMPTY_STRING = String.BLANK;
-let HttpStatusCode = Coralian.constants.HttpStatusCode;
 
 let errorCtrler = null;
 

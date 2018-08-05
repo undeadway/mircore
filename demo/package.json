@@ -2,7 +2,7 @@
 	"name": "MIRCoreDemo",
 	"main": "index.js",
 	"dependencies": {
-		"mircore": "file:.."
+		"mircore": "file:../"
 	},
 	"readmeFilename": "README.md",
 	"scripts": {

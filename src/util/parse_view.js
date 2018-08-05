@@ -61,7 +61,7 @@ function replaceSpaceLine(str) {
 	var lines = str.split("\n");
 
 	lines.forEach(function(line) {
-		if(!line.trim().isEmpty()) {
+		if(!String.isEmpty(String.trim(line))) {
 			output.push(line);
 		}
 	});
