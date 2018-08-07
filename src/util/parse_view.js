@@ -246,7 +246,7 @@ function parseUsing(str, obj) {
 
 	obj[usingName] = usingHtml;
 
-	return str.slice(0, start) + String.trim(parseUsing(str.slice(usingEnd + endTag.length)), obj);
+	return str.slice(0, start) + String.trim(parseUsing(str.slice(usingEnd + endTag.length), obj));
 }
 
 function replaceUsing(str) {

@@ -77,6 +77,7 @@ function router(req, res) {
 						unsupportedOperation(method);
 				}
 			}).setTimeout(TIMEOUT, function () {
+				if (developMode) return; // 开发模式的情况下，无视各种超时
 				// req 请求超时，网络不稳定
 				// 408 Request Timeout
 				Coralian.logger.err('request error code : ' + HttpStatusCode.REQUEST_TIMEOUT);
@@ -86,6 +87,7 @@ function router(req, res) {
 			});
 		res.on('error', onError)
 			.setTimeout(TIMEOUT, function () {
+				if (developMode) return; // 开发模式的情况下，无视各种超时
 				// res 响应超时，服务器无应答
 				// 504 Gateway Timeout
 				Coralian.logger.err('response error code : ' + HttpStatusCode.GATEWAY_TIMEOUT);

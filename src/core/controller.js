@@ -274,7 +274,7 @@ function controller() {
 					case 'number':
 						attrs.code = err;
 						break;
-						case 'string':
+					case 'string':
 						let nErr = Math.trunc(err);
 						if (typeIs(nErr, 'NaN')) {
 							Error.errorCast(err, Number);

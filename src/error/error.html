@@ -20,8 +20,8 @@
     <div id="errortitle">${errorcode} - ${errortitle}</div>
 </div>
 <div id="errormsg">${errormsg}</div>
-<?!-- 在开发模式下，将错误信息显示到错误页面上来 --?>
-?{isDevelopMode}<pre>${stack}</pre>?{/isDevelopMode}
+<?!-- 在开发模式且不是404时，将错误信息显示到错误页面上来 --?>
+?{not404}?{isDevelopMode}<pre>${stack}</pre>?{/isDevelopMode}?{/not404}
 </div>
 </body>
 </html>
