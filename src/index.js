@@ -8,8 +8,22 @@ global.pathResolve = pathResolve;
 
 let that = module.exports = exports = {};
 
+function rquireModule(input) {
+	require(input);
+}
+
+that.requireModule = rquireModule;
+that.rquireModules = (... input) => {
+	if (input.length === 1) {
+		input = input[0];
+	}
+	for (let i = 0, len = input.length; i < len ; i++) {
+		rquireModule(input[i]);
+	};
+}
+
 that.requireConfig = (input) => {
-	require(pathResolve(input));
+	rquireModule(pathResolve(input));
 }
 
 that.requireConfigs = (... input) => {
@@ -17,7 +31,7 @@ that.requireConfigs = (... input) => {
 		input = input[0];
 	}
 	for (let i = 0, len = input.length; i < len ; i++) {
-		require(pathResolve(input[i]));
+		rquireModule(pathResolve(input[i]));
 	};
 }
 
