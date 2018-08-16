@@ -2,6 +2,7 @@
 	"name": "MIRCoreDemo",
 	"main": "index.js",
 	"dependencies": {
+		"coralian": "0.0.2",
 		"mircore": "file:../"
 	},
 	"readmeFilename": "README.md",
