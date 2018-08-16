@@ -9,6 +9,7 @@
   },
   "main": "./src/index.js",
   "dependencies": {
+    "coralian": "0.0.2",
     "nodemailer": "2.7.2"
   },
   "engines": {
