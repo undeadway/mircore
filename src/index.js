@@ -8,12 +8,12 @@ global.pathResolve = pathResolve;
 
 let that = module.exports = exports = {};
 
-function rquireModule(input) {
+function requireModule(input) {
 	require(input);
 }
 
-that.requireModule = rquireModule;
-that.rquireModules = (... input) => {
+that.requireModule = requireModule;
+that.requireModules = (... input) => {
 	if (input.length === 1) {
 		input = input[0];
 	}
