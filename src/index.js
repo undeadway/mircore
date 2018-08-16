@@ -18,12 +18,12 @@ that.requireModules = (... input) => {
 		input = input[0];
 	}
 	for (let i = 0, len = input.length; i < len ; i++) {
-		rquireModule(input[i]);
+		requireModule(input[i]);
 	};
 }
 
 that.requireConfig = (input) => {
-	rquireModule(pathResolve(input));
+	requireModule(pathResolve(input));
 }
 
 that.requireConfigs = (... input) => {
@@ -31,7 +31,7 @@ that.requireConfigs = (... input) => {
 		input = input[0];
 	}
 	for (let i = 0, len = input.length; i < len ; i++) {
-		rquireModule(pathResolve(input[i]));
+		requireModule(pathResolve(input[i]));
 	};
 }
 
