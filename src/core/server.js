@@ -110,7 +110,7 @@ function router(req, res) {
 		Coralian.logger.err(err.stack);
 
 		// 如果发生 write after end ，则只将错误信息记录到 log 中去
-		if (err.message.contains('write after end')) return;
+		if (String.contains(err.message, 'write after end')) return;
 
 		req.url = formatString(ERROR_ROUTE_FORMAT, (err.code || HttpStatusCode.INTERNAL_SERVER_ERROR));
 		req.parse = url.parse(req.url, true);

@@ -317,7 +317,7 @@ function controller() {
 			if ('function' === typeof k) {
 				v = k;
 				k = Function.getName(v);
-				if (k.isEmpty()) unsupportedOperation('函数名不能为空');
+				if (String.isEmpty(k)) unsupportedOperation('函数名不能为空');
 
 			} else if (v === undefined) {
 				v = EMPTY_STRING;
@@ -375,7 +375,7 @@ function controller() {
 			return Object.isEmpty(query);
 		},
 		isEmptyCookie: function () {
-			return reqCookie.isEmpty();
+			return Object.isEmpty(reqCookie);
 		},
 		isEmptyPara: function () {
 			return Object.isEmpty(paras);

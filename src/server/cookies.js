@@ -94,12 +94,12 @@ function cookies() {
 			path = str;
 		},
 		setCookieTimeout: function() {
-			setMaxAge(-1); // 
+			setMaxAge(-1);
 		},
 		toString: print,
 		print: print,
 		isEmpty: function() {
-			return Object.isEmpty(instance);//.isEmpty();
+			return Object.isEmpty(instance);
 		},
 		clear: function() {
 			setMaxAge(0);
