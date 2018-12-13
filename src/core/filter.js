@@ -6,12 +6,9 @@
  */
 var CONTROLLER_PATH = pathResolve("/src/modules{?}/controller");
 var INDEX = '/index',
-	SLASH = "/",
-	CONTROLLER = "Controller",
-	INDEX_NAME = ['index'];
-var errorCast = Error.errorCast,
-	firstToUpperCase = Coralian.util.StringUtil.firstToUpperCase;
-var {getRoute, addRoute, delRoute} = require("../config/app");
+	SLASH = "/";
+var errorCast = Error.errorCast;
+var {getRoute} = require("../config/app");
 var fileExistsSync = require("fs").existsSync,
 	getGlobalInspectors = require("../util/utils").privates.getGlobalInspectors;
 var ERROR_CTRLER_INSTANCE = require("../error/controller");

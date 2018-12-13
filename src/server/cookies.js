@@ -6,7 +6,6 @@
  * 在 controller 中设置的 cookie 都是准备写到客户端去的
  */
 var unsupportedType = Error.unsupportedType;
-var noReference = Error.noReference;
 var asUnicodeEndode = Coralian.util.CharUtil.asUnicodeEncode;
 
 function cookies() {

@@ -19,7 +19,11 @@ Object.defineProperty(exports, 'port', {
 	writable: false
 });
 Object.defineProperty(exports, 'developMode', {
-	value: config.develop,
+	value: !!config.develop,
+	writable: false
+});
+Object.defineProperty(exports, 'clusterMode', {
+	value: !!config.cluster,
 	writable: false
 });
 Object.defineProperty(exports, 'appName', {

@@ -12,15 +12,14 @@ const INDEX = 'index',
 	QUESTION = "?",
 	INDEX_ROUTE = SLASH + INDEX;
 
-var getError = require("../error/errorconfig").getError;
 var parseview = require("../util/parse_view");
 var cookies = require("../server/cookies");
 var sessions = require("../server/sessions");
 let caches = require("../server/cache");
-let { split, developMode, getRoute } = require("../config/app");
+let { split, getRoute } = require("../config/app");
 
 let {MimeType, HttpStatusCode} = Coralian.constants;
-let {addAll, isEmpty} = Object;
+let {addAll} = Object;
 let {unsupportedOperation, unsupportedType } = Error;
 let htmlEscape = Coralian.ReplaceHolder.htmlEscape,
 	isNumber = Number.isNumber;

@@ -5,15 +5,14 @@
  * 也就是说，server 这里要完成的是 nodejs 没有实现，但是整个应用程序却需要的功能
  * 更接近于服务器的设置
  */
-let {developMode, port, appName} = require("../config/app");
+let {developMode, port, appName, clusterMode} = require("../config/app");
 let clientDisAccessable = require("../util/utils").privates.clientDisAccessable;
-let HttpStatusCode = Coralian.constants.HttpStatusCode;
+let {HttpStatusCode, HttpRequestMethod} = Coralian.constants;
 
 let url = require("url"),
 	qs = require("querystring"),
 	cookieNewInstance = require("../server/cookies"),
-	filter = require("./filter"),
-	sessions = require("../server/sessions");
+	filter = require("./filter");
 let formatString = Coralian.Formatter.formatString;
 let unsupportedOperation = Error.unsupportedOperation;
 let isStarted = false,
@@ -59,19 +58,19 @@ function router(req, res) {
 				_postData += chunk;
 			}).on("end", function () {
 				switch (method) {
-					case Coralian.constants.HttpRequestMethod.PUT:
-					case Coralian.constants.HttpRequestMethod.POST:
+					case HttpRequestMethod.PUT:
+					case HttpRequestMethod.POST:
 						Object.addAll(qs.parse(_postData), parse.query);
 						// 因为都要调用 request 方法，所以这里 switch 贯穿掉
-					case Coralian.constants.HttpRequestMethod.GET:
+					case HttpRequestMethod.GET:
 						request(req, res);
 						break;
-					case Coralian.constants.HttpRequestMethod.DELETE:
-					case Coralian.constants.HttpRequestMethod.HEAD: // TODO 下面这些暂时不做实现
-					case Coralian.constants.HttpRequestMethod.CONNECT:
-					case Coralian.constants.HttpRequestMethod.OPTIONS:
-					case Coralian.constants.HttpRequestMethod.TRACE:
-					case Coralian.constants.HttpRequestMethod.PATCH:
+					case HttpRequestMethod.DELETE:
+					case HttpRequestMethod.HEAD: // TODO 下面这些暂时不做实现
+					case HttpRequestMethod.CONNECT:
+					case HttpRequestMethod.OPTIONS:
+					case HttpRequestMethod.TRACE:
+					case HttpRequestMethod.PATCH:
 						break;
 					default:
 						unsupportedOperation(method);
@@ -239,7 +238,7 @@ module.exports =  exports = () => {
 		Coralian.logger.err(err);
 	})
 
-	if (!developMode) {
+	if (clusterMode && !developMode) {
 		/*
 		 * 这段代码当时是从网上抄来的，据说对服务器稳定有好处
 		 * 但从实际运行来看，好像没什么变化，可能是我自己的环境问题
@@ -257,6 +256,16 @@ module.exports =  exports = () => {
 
 			process.on('SIGHUP', function () {
 				// master 进程忽略 SIGHUP 信号
+			});
+
+			cluster.on('online', function(worker) {
+				Coralian.logger.log('Worker ' + worker.process.pid + ' is online');
+			});
+
+			cluster.on('exit', function(worker, code, signal) {
+				Coralian.logger.log('Worker ' + worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal);
+				Coralian.logger.log('Starting a new worker');
+				cluster.fork();
 			});
 
 			cluster.on('death', function (worker) {
@@ -277,6 +286,6 @@ module.exports =  exports = () => {
 			listen();
 		}
 	} else {
-		listen(); // 开发模式下，简化所有配置，直接启动服务器
+		listen(); // 开发模式或者非集群模式下，简化所有配置，直接启动服务器
 	}
 }

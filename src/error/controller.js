@@ -5,7 +5,6 @@
 var controller = require("../core/controller"),
 	getError = require("./errorconfig").getError;
 var developMode = require(("../config/app")).developMode;
-var htmlEscape = String.htmlEscape;
 var ERROR_HTML_FILE = __dirname + "/error.html";
 var baseAction = require("../core/base_action");
 let HttpStatusCode = Coralian.constants.HttpStatusCode;
