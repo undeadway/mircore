@@ -104,8 +104,7 @@ function invokeController(req, res, route) {
 		}
 	} catch(e) {
 		e.code = Coralian.constants.HttpStatusCode.INTERNAL_SERVER_ERROR;
-		Coralian.logger.err(e.mesage);
-		Coralian.logger.err(e.stack);
+		Coralian.logger.err(e);
 		req.parse.error = e;
 		var exe = ERROR_CTRLER_INSTANCE();
 		if(exe.judgeExecute(req, res, ERROR_CTRLER_WRAPPER.name)) {
