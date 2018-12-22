@@ -18,9 +18,9 @@ var sessions = require("../server/sessions");
 let caches = require("../server/cache");
 let { split, getRoute } = require("../config/app");
 
-let {MimeType, HttpStatusCode} = Coralian.constants;
-let {addAll} = Object;
-let {unsupportedOperation, unsupportedType } = Error;
+let { MimeType, HttpStatusCode } = Coralian.constants;
+let { addAll } = Object;
+let { unsupportedOperation, unsupportedType } = Error;
 let htmlEscape = Coralian.ReplaceHolder.htmlEscape,
 	isNumber = Number.isNumber;
 let JSONstringify = JSON.stringify;
@@ -94,7 +94,7 @@ function controller() {
 				 * 数据类型是 字符串，则认为是一个 可被显示 的 HTML 文件路径
 				 * 解析HTML，并将 PARA 中的参数赋值到 页面中
 				 */
-				let header =  {
+				let header = {
 					"Content-Type": MimeType.HTML,
 					"Set-Cookie": resCookie.print()
 				}
@@ -249,25 +249,26 @@ function controller() {
 
 				var lastUrl = Array.last(url),
 					lastName = Array.last(name.route);
-				if (lastUrl === lastName || getRoute("/" + lastUrl) === ("/" + lastName)) { // 所请求的不包含 action、para，只有 route
+				if (lastUrl === lastName || getRoute("/" + lastUrl) === ("/" + lastName)) {// 所请求的不包含 action、para，只有 route
 					actionName = INDEX;
-				} else {
-					if (actions[lastUrl]) { // 取得 [route..., action]
-						actionName = lastUrl;
-					} else { // 否则为 [route..., action, para]
-						actionName = Array.last(url, 2);
-						paras = lastUrl;
-						if (!actions[actionName]) {	// 最后为[route..., para]
-							actionName = INDEX;
-						}
+					paras = paras.split(split);
+				} else if (actions[lastUrl]) { // 取得 [route..., action]
+					actionName = lastUrl;
+					paras = paras.split(split);
+				} else { // 否则为 [route..., action, para]
+					actionName = Array.last(url, 2);
+					paras = lastUrl;
+					paras = paras.split(split);
+					if (!actions[actionName]) {	// 最后为[route..., para]
+						paras.unshift(actionName);
+						actionName = INDEX;
 					}
 				}
-				paras = paras.split(split);
 			} else {
 				actionName = INDEX;
 				let err = parse.error;
 				switch (typeOf(err)) {
-					case 'object' :
+					case 'object':
 						attrs = err;
 						break;
 					case 'number':
@@ -279,7 +280,7 @@ function controller() {
 							Error.errorCast(err, Number);
 						}
 						attrs.code = nErr;
-					default :
+					default:
 						Error.unsupportedType(err);
 				}
 			}
@@ -397,7 +398,7 @@ function controller() {
 					break;
 				case 3:
 					break;
-				default :
+				default:
 					break;
 			}
 			name = name || INDEX;
@@ -461,7 +462,7 @@ function addAction(actions, name, instance, inspectors) {
 	let actionName = Function.getName(instance);
 
 	actions[name] = {
-		isAction : String.contains(actionName, "Action"),
+		isAction: String.contains(actionName, "Action"),
 		instance: instance,
 		inspectors: inspectors || [],
 		getActionName: function () {
