@@ -9,6 +9,7 @@ var cache = config.cache;
 var routes = config.routes;
 var routesName = Object.keys(routes);
 var database = (!!config.database) ? require(config.database) : null;
+delete config.database;
 
 Object.defineProperty(exports, 'database', {
 	value: database,
@@ -39,7 +40,7 @@ Object.defineProperty(exports, 'routesName', {
 	writable: false
 });
 Object.defineProperty(exports, 'getRoute', {
-	value: function(name) {
+	value: function (name) {
 		return routes[name];
 	},
 	writable: false
@@ -60,20 +61,16 @@ Object.defineProperty(exports, 'delRoute', {
 	},
 	writable: false
 });
-
-
 Object.defineProperty(exports, 'getCache', {
-	value : function(name) {
+	value: function (name) {
 		if (!cache) return null;
 		return cache[name];
 	},
 	writable: false
 });
-
-Object.defineProperty(exports,'getConfig', {
-	value : (name) => {
+Object.defineProperty(exports, 'getConfig', {
+	value: (name) => {
 		return config.config[name];
 	},
 	writable: false
 });
-

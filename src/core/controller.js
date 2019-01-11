@@ -42,6 +42,8 @@ function controller() {
 
 	function renderOnError(error, code = HttpStatusCode.INTERNAL_SERVER_ERROR) {
 
+		console.log(new Error().stack);
+
 		if (errorCtrler === null) {
 			let instance = require("../error/controller")
 			errorCtrler = {
@@ -258,11 +260,15 @@ function controller() {
 				} else { // 否则为 [route..., action, para]
 					actionName = Array.last(url, 2);
 					paras = lastUrl;
-					paras = paras.split(split);
-					if (!actions[actionName]) {	// 最后为[route..., para]
-						paras.unshift(actionName);
+					if (url.length !== 2) { // 最后为[route..., para]
+						if (!actions[actionName]) {
+							paras.unshift(actionName);
+							actionName = INDEX;
+						}
+					} else { // [route, para]
 						actionName = INDEX;
 					}
+					paras = paras.split(split);
 				}
 			} else {
 				actionName = INDEX;
