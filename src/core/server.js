@@ -129,12 +129,11 @@ function request(req, res) {
 
 	parse.cookies = cookies;
 
-	if (parse.pathname.indexOf(POINT) !== -1) {
-		parse.pathname = formatString(ERROR_ROUTE_FORMAT, HttpStatusCode.NOT_FOUND);
-		parse.path = formatString(ERROR_ROUTE_FORMAT, HttpStatusCode.NOT_FOUND);
+	if (parse.pathname.indexOf(POINT) > -1) {
+		filter(req, res);
+	} else {
+		res.end();
 	}
-
-	filter(req, res);
 }
 
 /*
