@@ -259,7 +259,7 @@ function controller() {
 					paras = paras.split(split);
 				} else { // 否则为 [route..., action, para]
 					actionName = Array.last(url, 2);
-					paras = lastUrl;
+					paras = lastUrl.split(split);
 					if (url.length !== 2) { // 最后为[route..., para]
 						if (!actions[actionName]) {
 							paras.unshift(actionName);
@@ -268,7 +268,6 @@ function controller() {
 					} else { // [route, para]
 						actionName = INDEX;
 					}
-					paras = paras.split(split);
 				}
 			} else {
 				actionName = INDEX;
