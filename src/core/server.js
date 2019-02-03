@@ -130,9 +130,9 @@ function request(req, res) {
 	parse.cookies = cookies;
 
 	if (parse.pathname.indexOf(POINT) > -1) {
-		filter(req, res);
-	} else {
 		res.end();
+	} else {
+		filter(req, res);
 	}
 }
 
