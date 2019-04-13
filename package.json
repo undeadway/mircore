@@ -1,6 +1,6 @@
 {
   "name": "mircore",
-  "version": "0.0.19",
+  "version": "0.0.20"
   "description": "A web server built by node.js",
   "license": "Apache-2.0",
   "repository": {
@@ -9,7 +9,7 @@
   },
   "main": "./src/index.js",
   "dependencies": {
-    "coralian": "0.0.10",
+    "coralian": "0.0.13",
     "nodemailer": "2.7.2"
   },
   "engines": {
