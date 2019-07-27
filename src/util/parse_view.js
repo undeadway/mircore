@@ -134,7 +134,7 @@ function replaceEqual(str, obj, equalStart, equalEnd, equalElse) {
 	}
 	out += str.slice(end + endTag.length);
 
-	return replaceEqual(out, obj);
+	return replaceEqual(out, obj, equalStart, equalEnd, equalElse);
 }
 
 /*
@@ -181,7 +181,7 @@ function getUsing(using, paras) {
 
 function loopMore(str, obj, action) {
 
-	return replaceEqual(str, obj, "#?:{" + action, "#?:{/" + action, "#?|:{/" + action);
+	return replaceEqual(str, obj, "#?:{" + action, "#?:{/" + action, "#?|:{" + action);
 }
 
 function replaceAt(str, obj) {
