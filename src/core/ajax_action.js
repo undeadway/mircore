@@ -6,8 +6,8 @@
  * 子类都需要覆盖 query 方法
  */
 
-var baseAction = require("./base_action");
-let AjaxRenderType_JSON = require("../util/utils").publics.constants.AjaxRenderType.JSON;
+const baseAction = require("./base_action");
+const AjaxRenderType_JSON = require("../util/utils").publics.constants.AjaxRenderType.JSON;
 
 function ajaxAction() {
 

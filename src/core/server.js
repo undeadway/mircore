@@ -5,17 +5,17 @@
  * 也就是说，server 这里要完成的是 nodejs 没有实现，但是整个应用程序却需要的功能
  * 更接近于服务器的设置
  */
-let {developMode, port, appName, clusterMode} = require("../config/app");
-let clientDisAccessable = require("../util/utils").privates.clientDisAccessable;
-let {HttpStatusCode, HttpRequestMethod} = Coralian.constants;
+const {developMode, port, appName, clusterMode} = require("../config/app");
+const clientDisAccessable = require("../util/utils").privates.clientDisAccessable;
+const {HttpStatusCode, HttpRequestMethod} = Coralian.constants;
 
-let url = require("url"),
+const url = require("url"),
 	qs = require("querystring"),
 	cookieNewInstance = require("../server/cookies"),
 	filter = require("./filter");
-let formatString = Coralian.Formatter.formatString;
-let unsupportedOperation = Error.unsupportedOperation;
-let isStarted = false,
+	const formatString = Coralian.Formatter.formatString;
+const unsupportedOperation = Error.unsupportedOperation;
+const isStarted = false,
 	TIMEOUT = 20000,
 	ERROR_ROUTE_FORMAT = "/error/%s",
 	POINT = ".";

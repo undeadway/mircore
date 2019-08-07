@@ -4,15 +4,15 @@
  * 如果是已注册的路径（可用模块），
  * 则返回请求该路径所对应的controller，否则返回 404 。
  */
-var CONTROLLER_PATH = pathResolve("/src/modules{?}/controller");
-var INDEX = '/index',
+const CONTROLLER_PATH = pathResolve("/src/modules{?}/controller");
+const INDEX = '/index',
 	SLASH = "/";
-var errorCast = Error.errorCast;
-var {getRoute} = require("../config/app");
-var fileExistsSync = require("fs").existsSync,
+	const errorCast = Error.errorCast;
+	const {getRoute} = require("../config/app");
+const fileExistsSync = require("fs").existsSync,
 	getGlobalInspectors = require("../util/utils").privates.getGlobalInspectors;
-var ERROR_CTRLER_INSTANCE = require("../error/controller");
-var ERROR_CTRLER_WRAPPER = {
+const ERROR_CTRLER_INSTANCE = require("../error/controller");
+const ERROR_CTRLER_WRAPPER = {
 	instance: ERROR_CTRLER_INSTANCE,
 	inspectors: [],
 	name: {
@@ -20,7 +20,7 @@ var ERROR_CTRLER_WRAPPER = {
 		type: Function.getName(ERROR_CTRLER_INSTANCE)
 	}
 };
-var CONTROLLER_MAPPING = {
+const CONTROLLER_MAPPING = {
 	'/error': ERROR_CTRLER_WRAPPER
 };
 

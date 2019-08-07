@@ -4,12 +4,12 @@
  * 主要是配置网站启动的端口、转发路径等
  */
 
-var config = JSON.parse(require("fs").readFileSync(pathResolve("/res/json/app.json"), "utf-8"));
-var cache = config.cache;
-var routes = config.routes;
-var routesName = Object.keys(routes);
-var database = (!!config.database) ? require(config.database) : null;
-delete config.database;
+const config = JSON.parse(require("fs").readFileSync(pathResolve("/res/json/app.json"), "utf-8"));
+const cache = config.cache;
+const routes = config.routes;
+const routesName = Object.keys(routes);
+const database = (!!config.database) ? require(config.database) : null;
+//delete config.database;
 
 Object.defineProperty(exports, 'database', {
 	value: database,

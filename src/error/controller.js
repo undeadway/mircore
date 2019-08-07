@@ -2,12 +2,12 @@
  * 错误的 controller
  */
 
-var controller = require("../core/controller"),
+const controller = require("../core/controller"),
 	getError = require("./errorconfig").getError;
-var developMode = require(("../config/app")).developMode;
-var ERROR_HTML_FILE = __dirname + "/error.html";
-var baseAction = require("../core/base_action");
-let HttpStatusCode = Coralian.constants.HttpStatusCode;
+const developMode = require(("../config/app")).developMode;
+const ERROR_HTML_FILE = __dirname + "/error.html";
+const baseAction = require("../core/base_action");
+const HttpStatusCode = Coralian.constants.HttpStatusCode;
 
 function errorController() {
 
@@ -20,7 +20,7 @@ function errorController() {
 function indexAction() {
 	let action = baseAction();
 
-	action.execute = function() {
+	action.execute = function () {
 
 		let ctrler = action.controller;
 		let getAttr = ctrler.getAttr;
