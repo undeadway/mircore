@@ -12,28 +12,27 @@ const INDEX = 'index',
 	QUESTION = "?",
 	INDEX_ROUTE = SLASH + INDEX;
 
-var parseview = require("../util/parse_view");
-var cookies = require("../server/cookies");
-var sessions = require("../server/sessions");
-let caches = require("../server/cache");
-let { split, getRoute } = require("../config/app");
+const parseview = require("../util/parse_view");
+const cookies = require("../server/cookies");
+const sessions = require("../server/sessions");
+const caches = require("../server/cache");
+const { split, getRoute } = require("../config/app");
 
-let { MimeType, HttpStatusCode } = Coralian.constants;
-let { addAll } = Object;
-let { unsupportedOperation, unsupportedType } = Error;
-let htmlEscape = Coralian.ReplaceHolder.htmlEscape,
-	isNumber = Number.isNumber;
-let JSONstringify = JSON.stringify;
-let EMPTY_STRING = String.BLANK;
+const { MimeType, HttpStatusCode } = Coralian.constants;
+const { addAll } = Object;
+const { unsupportedOperation, unsupportedType } = Error;
+
+const JSONstringify = JSON.stringify;
+const EMPTY_STRING = String.BLANK;
 
 let errorCtrler = null;
 
 function controller() {
 
 	// 这些都要经过 juddeExe 才处理后才会赋值
-	var req, res, parse, method, query, route, reqRoute, typeName, pathName, actionName, reqCookie, client;
+	let req, res, parse, method, query, route, reqRoute, typeName, pathName, actionName, reqCookie, client;
 	// 这些都是已经初始化好的值
-	var attrs = {},
+	let attrs = {},
 		actions = {},
 		httpStatusCode = HttpStatusCode.OK,
 		paras = EMPTY_STRING,
@@ -315,7 +314,11 @@ function controller() {
 			return decodeURIComponent(para);
 		},
 		getQuery: function (key) {
-			return !!query ? query[key] : null;
+			if (key) {
+				return !!query ? query[key] : null;
+			} else {
+				return query;
+			}
 		},
 		setAttr: function (k, v) {
 
