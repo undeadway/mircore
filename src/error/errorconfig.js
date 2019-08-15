@@ -6,7 +6,7 @@ var HTTP_STATUS_CODES = require("http").STATUS_CODES;
 let HttpStatusCode = Coralian.constants.HttpStatusCode;
 
 var ERR_OBJ = {
-	[HttpStatusCode.BAD_REQUEST] : "由于包含语法错误，当前请求无法被服务器理解。",
+	[HttpStatusCode.BAD_REQUEST]: "由于包含语法错误，当前请求无法被服务器理解。",
 	[HttpStatusCode.NOT_FOUND]: "请求失败，未在服务器上发现所请求的资源。",
 	[HttpStatusCode.REQUEST_TIMEOUT]: "网络请求超时。",
 	[HttpStatusCode.URI_TOO_LONG]: "请求的URI长度超过了服务器能够解释的长度，因此服务器拒绝对该请求提供服务。",
@@ -16,7 +16,7 @@ var ERR_OBJ = {
 	[HttpStatusCode.GATEWAY_TIMEOUT]: "服务器相应超时"
 };
 
-this.getError = function(code) {
+this.getError = function (code) {
 	return {
 		errorcode: code,
 		errortitle: HTTP_STATUS_CODES[code],

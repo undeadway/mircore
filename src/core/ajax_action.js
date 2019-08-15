@@ -13,9 +13,9 @@ function ajaxAction() {
 
 	var action = baseAction();
 
-	action.execute = function(renderType = AjaxRenderType_JSON) {
+	action.execute = function (renderType = AjaxRenderType_JSON) {
 		action.renderAjax = action.controller['render' + renderType];
-		action.query(); 
+		action.query();
 	};
 
 	return action;

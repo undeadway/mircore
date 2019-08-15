@@ -10,12 +10,12 @@ const CONTROLLER = "Controller";
 function baseAction() {
 
 	return {
-		invoke : function(ctrler) {
+		invoke: function (ctrler) {
 			this.controller = ctrler;
 			// 这个方法需要子类覆盖重写
 			this.execute();
 		},
-		getRequestRoute : function() {
+		getRequestRoute: function () {
 			return this.controller.getTypeName().replace(CONTROLLER, String.BLANK);
 		}
 	};

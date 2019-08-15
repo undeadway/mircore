@@ -5,20 +5,20 @@
  * 也就是说，server 这里要完成的是 nodejs 没有实现，但是整个应用程序却需要的功能
  * 更接近于服务器的设置
  */
-const {developMode, port, appName, clusterMode} = require("../config/app");
+const { developMode, port, appName, clusterMode } = require("../config/app");
 const clientDisAccessable = require("../util/utils").privates.clientDisAccessable;
-const {HttpStatusCode, HttpRequestMethod} = Coralian.constants;
+const { HttpStatusCode, HttpRequestMethod } = Coralian.constants;
 
 const url = require("url"),
 	qs = require("querystring"),
 	cookieNewInstance = require("../server/cookies"),
 	filter = require("./filter");
-	const formatString = Coralian.Formatter.formatString;
+const formatString = Coralian.Formatter.formatString;
 const unsupportedOperation = Error.unsupportedOperation;
-const isStarted = false,
-	TIMEOUT = 20000,
+const TIMEOUT = 20000,
 	ERROR_ROUTE_FORMAT = "/error/%s",
 	POINT = ".";
+let isStarted = false;
 
 /*
  * 初始化完毕，执行 listen 函数启动 http 服务器
@@ -61,7 +61,7 @@ function router(req, res) {
 					case HttpRequestMethod.PUT:
 					case HttpRequestMethod.POST:
 						Object.addAll(qs.parse(_postData), parse.query);
-						// 因为都要调用 request 方法，所以这里 switch 贯穿掉
+					// 因为都要调用 request 方法，所以这里 switch 贯穿掉
 					case HttpRequestMethod.GET:
 						request(req, res);
 						break;
@@ -222,7 +222,7 @@ function getUserAgent(header) {
  * 整个程序的启动函数
  * 这里主要是针对操作系统进行的一些设置和配置
  */
-module.exports =  exports = () => {
+module.exports = exports = () => {
 
 	if (isStarted) return;
 	isStarted = true;
@@ -257,11 +257,11 @@ module.exports =  exports = () => {
 				// master 进程忽略 SIGHUP 信号
 			});
 
-			cluster.on('online', function(worker) {
+			cluster.on('online', function (worker) {
 				Coralian.logger.log('Worker ' + worker.process.pid + ' is online');
 			});
 
-			cluster.on('exit', function(worker, code, signal) {
+			cluster.on('exit', function (worker, code, signal) {
 				Coralian.logger.log('Worker ' + worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal);
 				Coralian.logger.log('Starting a new worker');
 				cluster.fork();
