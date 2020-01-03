@@ -11,64 +11,63 @@
  * <using:name>...</using:name> 模板
  * @{name} 外部功能函数
  */
-var readFileSync = require("fs").readFileSync;
+const readFileSync = require("fs").readFileSync;
 
-var SHAPE_INCLUDE = "<#include file=\"",
+const SHAPE_INCLUDE = "<#include file=\"",
 	INCLUDE_END = " />",
 	COMMENT_START = "<?!--",
 	COMMENT_END = "--?>";
-	END_BRACKES = "}";
-var PARA_START = "&{",
+END_BRACKES = "}";
+const PARA_START = "&{",
 	EQUAL_START = "?{",
 	EQUAL_END = "?{/",
 	ELSE = "?|{",
 	AT_START = "@{";
-var USING_TAG_START = "<using:",
+const USING_TAG_START = "<using:",
 	USING_TAG_END = "</using:",
 	USING_START = "{using:";
-var USING_TAG_START_LEN = USING_TAG_START.length,
-	USING_TAG_END_LEN = USING_TAG_END.length;
-var {errorStatement, noSuchProperty} = Error,
+const USING_TAG_START_LEN = USING_TAG_START.length;
+const { errorStatement, noSuchProperty } = Error,
 	BLANK = String.BLANK;
-var {replaceElement, replaceLoop} = Coralian.ReplaceHolder;
-var HTML_FILE_MAP = {};
-var pageCache = require("../config/app").getCache('page');
+const { replaceElement, replaceLoop } = Coralian.ReplaceHolder;
+const HTML_FILE_MAP = {};
+const pageCache = require("../config/app").getCache('page');
 
 function replaceComment(str) {
 
-	var start = str.indexOf(COMMENT_START);
-	var end = str.indexOf(COMMENT_END);
+	let start = str.indexOf(COMMENT_START);
+	let end = str.indexOf(COMMENT_END);
 
-	if(start < 0) {
-		if(end > 0) errorStatement();
+	if (start < 0) {
+		if (end > 0) errorStatement();
 		return str;
 	}
 
-	if(end < start) errorStatement();
+	if (end < start) errorStatement();
 	return replaceComment(str.slice(0, start) + str.slice(end + 4));
 }
 
 function replaceSpaceLine(str) {
 
-	var pre = [];
-	while((matches = str.match(/<pre((.|\s)*?)<\/pre>/)) !== null) {
-		var inner = matches[0];
+	let pre = [];
+	while ((matches = str.match(/<pre((.|\s)*?)<\/pre>/)) !== null) {
+		let inner = matches[0];
 		str = str.replace(inner, "[pre-" + pre.length + "]");
 		pre.push(inner);
 	}
 
-	var output = [];
-	var lines = str.split("\n");
+	let output = [];
+	let lines = str.split("\n");
 
-	lines.forEach(function(line) {
-		if(!String.isEmpty(String.trim(line))) {
+	lines.forEach(function (line) {
+		if (!String.isEmpty(String.trim(line))) {
 			output.push(line);
 		}
 	});
 
 	str = output.join(BLANK);
 
-	Object.forEach(pre, function(i, e) {
+	Object.forEach(pre, function (i, e) {
 		str = str.replace("[pre-" + i + "]", e);
 	});
 
@@ -80,55 +79,55 @@ function replaceEqual(str, obj, equalStart, equalEnd, equalElse) {
 	equalStart = equalStart || EQUAL_START;
 	equalEnd = equalEnd || EQUAL_END;
 	equalElse = equalElse || ELSE;
-	var tagStart = str.indexOf(equalStart);
+	let tagStart = str.indexOf(equalStart);
 
-	if(tagStart < 0) {
+	if (tagStart < 0) {
 		return str;
 	}
 
-	var statement = str.slice(tagStart + equalStart.length, tagStart + str.slice(tagStart).indexOf(END_BRACKES));
-	var result = false, tmpObj;
+	let statement = str.slice(tagStart + equalStart.length, tagStart + str.slice(tagStart).indexOf(END_BRACKES));
+	let result = false, tmpObj;
 
 	// 多层级对应处理
-	if(String.contains(statement, '.')) {
-		var tmpStmt = statement.split('.');
+	if (String.contains(statement, '.')) {
+		let tmpStmt = statement.split('.');
 		tmpObj = obj;
 
-		for(var i = 0, len = tmpStmt.length; i < len; i++) {
+		for (let i = 0, len = tmpStmt.length; i < len; i++) {
 			tmpObj = tmpObj[tmpStmt[i]];
-			if(tmpObj === undefined) noSuchProperty(tmpStmt[i]);
+			if (tmpObj === undefined) noSuchProperty(tmpStmt[i]);
 		}
 	} else {
 		tmpObj = obj[statement];
 	}
 
 	// 当 statement 的类型不是 function 的时候，当作这个 statement 不存在处理
-	if('function' === typeof tmpObj) {
+	if ('function' === typeof tmpObj) {
 		try {
 			result = tmpObj();
-		} catch(e) {
+		} catch (e) {
 			Coralian.logger.err(e.message);
 			Coralian.logger.err(e.stack);
 			// 当指定 statement 所对应的那个函数在执行过程中抛出错误的时候，当作这个 statement 不存在处理
 		}
 	}
 
-	var startTag = equalStart + statement + END_BRACKES,
+	let startTag = equalStart + statement + END_BRACKES,
 		endTag = equalEnd + statement + END_BRACKES,
 		elseTag = equalElse +
-		statement + END_BRACKES;
-	var start = str.indexOf(startTag),
+			statement + END_BRACKES;
+	let start = str.indexOf(startTag),
 		end = str.indexOf(endTag),
 		out = str.slice(0, start);
 
-	if(result) {
-		if(String.contains(str, elseTag) && end > str.indexOf(elseTag)) {
+	if (result) {
+		if (String.contains(str, elseTag) && end > str.indexOf(elseTag)) {
 			out += str.slice(start + startTag.length, str.indexOf(elseTag));
 		} else {
 			out += str.slice(start + startTag.length, end);
 		}
 	} else {
-		if(String.contains(str, elseTag) && end > str.indexOf(elseTag)) {
+		if (String.contains(str, elseTag) && end > str.indexOf(elseTag)) {
 			out += str.slice(str.indexOf(elseTag) + elseTag.length, end);
 		}
 	}
@@ -142,17 +141,17 @@ function replaceEqual(str, obj, equalStart, equalEnd, equalElse) {
  */
 function parseInclude(path) {
 
-	var html = getHTMLFile(path),
+	let html = getHTMLFile(path),
 		result = [],
 		i = 0;
 
 	result.push(html[i++]);
-	for(var len = html.length; i < len; i++) {
-		var part = html[i];
-		var end = part.indexOf(INCLUDE_END);
-		var paras = {};
-		var using = getUsing(part.slice(0, end), paras);
-		var innerHTML = parseInclude(pathResolve(using));
+	for (let len = html.length; i < len; i++) {
+		let part = html[i];
+		let end = part.indexOf(INCLUDE_END);
+		let paras = {};
+		let using = getUsing(part.slice(0, end), paras);
+		let innerHTML = parseInclude(pathResolve(using));
 		result.push(replaceElement(innerHTML, paras, PARA_START)); // 页面参数在页面加载时就处理掉
 		result.push(part.slice(end + 3));
 	}
@@ -162,16 +161,16 @@ function parseInclude(path) {
 
 function getUsing(using, paras) {
 
-	var arr = using.split('" ');
+	let arr = using.split('" ');
 
-	for(var i = 1, len = arr.length; i < len; i++) {
-		var line = arr[i].split('="');
+	for (let i = 1, len = arr.length; i < len; i++) {
+		let line = arr[i].split('="');
 		paras[line[0]] = line[1].replace('"', String.BLANK);
 	}
 
 	// 获得文件
-	var file = arr[0];
-	if(file.endsWith('"')) {
+	let file = arr[0];
+	if (file.endsWith('"')) {
 		file = file.slice(0, file.length - 1);
 	}
 
@@ -186,22 +185,22 @@ function loopMore(str, obj, action) {
 
 function replaceAt(str, obj) {
 
-	var tagStart = str.indexOf(AT_START);
-	var tagEnd = tagStart + str.slice(tagStart).indexOf(END_BRACKES);
+	let tagStart = str.indexOf(AT_START);
+	let tagEnd = tagStart + str.slice(tagStart).indexOf(END_BRACKES);
 
-	if(tagStart < 0) return str;
+	if (tagStart < 0) return str;
 
-	var statement = str.slice(tagStart + 2, tagEnd);
-	var result = String.BLANK;
-	if(String.contains(statement, ':')) {
+	let statement = str.slice(tagStart + 2, tagEnd);
+	let result = String.BLANK;
+	if (String.contains(statement, ':')) {
 		statement = statement.split(':');
 		result = obj[statement[0]].apply(null, statement[1].split(','));
 	} else {
-		var method = obj[statement];
+		let method = obj[statement];
 		if (method) {
 			result = obj[statement]();
 		}
-		
+
 	}
 	str = str.slice(0, tagStart) + result + str.slice(tagEnd + 1);
 
@@ -210,13 +209,13 @@ function replaceAt(str, obj) {
 
 function getHTMLFile(path) {
 
-	var html = HTML_FILE_MAP[path];
+	let html = HTML_FILE_MAP[path];
 
-	if(pageCache) {
-		if(html === undefined) {
+	if (pageCache) {
+		if (html === undefined) {
 			try {
 				html = HTML_FILE_MAP[path] = readFileSync(path, "utf-8").split(SHAPE_INCLUDE);
-			} catch(e) {
+			} catch (e) {
 				Coralian.logger.err("errpath:" + path);
 				throw e;
 			}
@@ -224,7 +223,7 @@ function getHTMLFile(path) {
 	} else {
 		try {
 			html = readFileSync(path, "utf-8").split(SHAPE_INCLUDE);
-		} catch(e) {
+		} catch (e) {
 			Coralian.logger.err("errpath:" + path);
 			throw e;
 		}
@@ -235,14 +234,14 @@ function getHTMLFile(path) {
 
 function parseUsing(str, obj) {
 
-	var start = str.indexOf(USING_TAG_START);
-	if(start < 0) return str;
-	var end = str.slice(start).indexOf(">") + start;
-	if(end < 0) return str;
-	var usingName = str.slice(start + USING_TAG_START_LEN, end);
-	var endTag = USING_TAG_END + usingName + ">";
-	var usingEnd = str.indexOf(endTag);
-	var usingHtml = str.slice(end + 1, usingEnd);
+	let start = str.indexOf(USING_TAG_START);
+	if (start < 0) return str;
+	let end = str.slice(start).indexOf(">") + start;
+	if (end < 0) return str;
+	let usingName = str.slice(start + USING_TAG_START_LEN, end);
+	let endTag = USING_TAG_END + usingName + ">";
+	let usingEnd = str.indexOf(endTag);
+	let usingHtml = str.slice(end + 1, usingEnd);
 
 	obj[usingName] = usingHtml;
 
@@ -251,12 +250,12 @@ function parseUsing(str, obj) {
 
 function replaceUsing(str) {
 
-	var obj = {};
+	let obj = {};
 
 	str = parseUsing(str, obj);
 
 	// 循环替换，以保证内嵌的 using 也被替换掉
-	while(String.contains(str, USING_START)) {
+	while (String.contains(str, USING_START)) {
 		str = replaceElement(str, obj, USING_START);
 	}
 
@@ -266,7 +265,7 @@ function replaceUsing(str) {
 function parseView(path, obj) {
 
 	// 这里需要把所有页面都 加载完毕之后再去对页面内容进行解析
-	var str = parseInclude(path);
+	let str = parseInclude(path);
 
 	// 去注释
 	str = replaceComment(str);

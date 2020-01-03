@@ -5,12 +5,12 @@
  * 在 controller 中判断的都是从客户端上去的 cookie
  * 在 controller 中设置的 cookie 都是准备写到客户端去的
  */
-var unsupportedType = Error.unsupportedType;
-var asUnicodeEndode = Coralian.util.CharUtil.asUnicodeEncode;
+const unsupportedType = Error.unsupportedType;
+const asUnicodeEndode = Coralian.util.CharUtil.asUnicodeEncode;
 
 function cookies() {
 
-	var instance = {};
+	let instance = {};
 
 	function add(key, value) {
 
@@ -27,7 +27,7 @@ function cookies() {
 	function addAll(input) {
 		if(!input) return;
 
-		for(var k in input) {
+		for(let k in input) {
 			if(input.hasOwnProperty(k)) {
 				add(k, input[k]);
 			}
@@ -37,11 +37,11 @@ function cookies() {
 
 	function print() {
 
-		var result = [];
+		let result = [];
 
-		for(var key in instance) {
+		for(let key in instance) {
 			if(instance.hasOwnProperty(key)) {
-				var value = instance[key];
+				let value = instance[key];
 				if(!typeIs(value, 'function')) {
 					result.push(key + "=" + changeToUnicodeCode(instance[key]));
 				} else {
@@ -50,7 +50,7 @@ function cookies() {
 			}
 		}
 
-		var output = result.join(";");
+		let output = result.join(";");
 		return output;
 	}
 
@@ -68,7 +68,7 @@ function cookies() {
 
 	return {
 		getValues: function() {
-			var result = {};
+			let result = {};
 			addAll(instance, result);
 			return result;
 		},
@@ -79,7 +79,7 @@ function cookies() {
 		addFromRequest: function(string) {
 			if(string) {
 				Object.forEach(string.split(';'), function(i, obj) {
-					var tmp = obj.split('=');
+					let tmp = obj.split('=');
 					add(tmp[0], tmp[1]);
 				});
 			}
@@ -118,7 +118,7 @@ function cookies() {
  */
 function changeToUnicodeCode(val) {
 
-	var output = "";
+	let output = "";
 	for(let i = 0; i < val.length; ++i) {
 		let c = val.charCodeAt(i);
 		if((c <= 31 && c !== 9) || c > 255 || c === 127) {

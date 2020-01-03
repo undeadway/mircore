@@ -11,7 +11,7 @@ const HttpStatusCode = Coralian.constants.HttpStatusCode;
 
 function errorController() {
 
-	var ctrler = controller();
+	let ctrler = controller();
 	ctrler.addAction(indexAction);
 
 	return ctrler;

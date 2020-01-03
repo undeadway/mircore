@@ -6,7 +6,7 @@ function pathResolve(name, isFolder) {
 }
 global.pathResolve = pathResolve;
 
-let that = module.exports = exports = {};
+const that = module.exports = exports = {};
 
 function requireModule(input) {
 	require(input);

@@ -2,10 +2,10 @@
  * Error Code 与 Error 信息的对照表
  */
 
-var HTTP_STATUS_CODES = require("http").STATUS_CODES;
-let HttpStatusCode = Coralian.constants.HttpStatusCode;
+const HTTP_STATUS_CODES = require("http").STATUS_CODES;
+const HttpStatusCode = Coralian.constants.HttpStatusCode;
 
-var ERR_OBJ = {
+const ERR_OBJ = {
 	[HttpStatusCode.BAD_REQUEST]: "由于包含语法错误，当前请求无法被服务器理解。",
 	[HttpStatusCode.NOT_FOUND]: "请求失败，未在服务器上发现所请求的资源。",
 	[HttpStatusCode.REQUEST_TIMEOUT]: "网络请求超时。",

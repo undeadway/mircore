@@ -9,8 +9,7 @@
  */
 const INDEX = 'index',
 	SLASH = "/",
-	QUESTION = "?",
-	INDEX_ROUTE = SLASH + INDEX;
+	QUESTION = "?";
 
 const parseview = require("../util/parse_view");
 const cookies = require("../server/cookies");
@@ -224,7 +223,7 @@ function controller() {
 			parse = req.parse, method = req.method;
 
 			query = parse.query, reqCookie = parse.cookies, reqRoute = parse.pathname, client = req.client;
-			route = name.route.join(SLASH), typeName = name.type, pathName = name.path;
+			route = name.route, typeName = name.type, pathName = name.path;
 
 			if (name.route === 'error' || parse.error) {
 				console.log(parse.error);
@@ -233,22 +232,22 @@ function controller() {
 				Coralian.logger.log("request route : " + name.route);
 			}
 
-			var notOnError = !parse.error;
+			let notOnError = !parse.error;
 
 			if (notOnError) { // 如果传入的 parse 对象中未包含 error 对象，则正常执行
-				var path = reqRoute.slice(1); // 去掉最前面的 “/”
+				let path = reqRoute.slice(1); // 去掉最前面的 “/”
 				if (String.isEmpty(path)) {
 					path = INDEX;
 				}
 
-				var question = path.indexOf(QUESTION);
+				let question = path.indexOf(QUESTION);
 				if (0 < question) {
 					path = path.slice(0, question);
 				}
 				// 到这里， path 就不含任何 和 路径无关的东西了
-				var url = path.split(SLASH);
+				let url = path.split(SLASH);
 
-				var lastUrl = Array.last(url),
+				let lastUrl = Array.last(url),
 					lastName = Array.last(name.route);
 				if (lastUrl === lastName || getRoute("/" + lastUrl) === ("/" + lastName)) {// 所请求的不包含 action、para，只有 route
 					actionName = INDEX;
@@ -307,7 +306,7 @@ function controller() {
 			return paras;
 		},
 		getPara: function (index) {
-			var para = paras[index];
+			let para = paras[index];
 			if (para === null || para === undefined) {
 				return para;
 			}
@@ -332,7 +331,7 @@ function controller() {
 			}
 
 			if (typeIs(v, 'object')) {
-				var value = attrs[k];
+				let value = attrs[k];
 				if (!value) {
 					attrs[k] = value = {};
 				}
@@ -342,7 +341,7 @@ function controller() {
 			}
 		},
 		setAttrs: function (name, obj) {
-			var target;
+			let target;
 			if (arguments.length === 1) {
 				target = attrs;
 				obj = name;
@@ -429,13 +428,10 @@ function controller() {
 			render(code, EMPTY_STRING, location);
 		},
 		isIndex: function () {
-			return route === INDEX_ROUTE || route === SLASH;
+			return route === INDEX || String.isEmpty(route);
 		},
 		method: function (get) {
 			return (!get) ? method : (method.toUpperCase() === get.toUpperCase());
-		},
-		getRoute: function () {
-			return route;
 		},
 		getRequestRoute: function () {
 			return reqRoute;
@@ -481,7 +477,7 @@ function addAction(actions, name, instance, inspectors) {
 
 function invokeAction(actions, name, ctrler) {
 
-	var action = actions[name];
+	let action = actions[name];
 
 	if (!action) {
 		Coralian.logger.err(`Action ${name} not exists.`);
@@ -489,8 +485,8 @@ function invokeAction(actions, name, ctrler) {
 		return;
 	}
 
-	var inspectors = action.inspectors || [];
-	var count = inspectors.length,
+	let inspectors = action.inspectors || [];
+	let count = inspectors.length,
 		index = 0;
 
 	function end() {

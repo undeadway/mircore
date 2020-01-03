@@ -4,13 +4,13 @@
  * 每个 session 对象都可以保持30分钟，超过30分钟就会自动对过期处理
  * 每 24 对过期的 session 进行清理
  */
-var TIME_OUT = 1000 * 60 * 30;
-var ONE_DAY = 1000 * 60 * 60 * 24;
-var sessions = {};
+const TIME_OUT = 1000 * 60 * 30;
+const ONE_DAY = 1000 * 60 * 60 * 24;
+const sessions = {};
 
 function session(sid) {
 
-	var type, timeout, session = {};
+	let timeout, session = {};
 
 	function renew() {
 		timeout = Date.now() + TIME_OUT;
@@ -33,7 +33,7 @@ function session(sid) {
 		},
 		removeValue: function(key) {
 			renew();
-			var value = session[key];
+			let value = session[key];
 			delete session[key];
 			return value;
 		},
@@ -63,7 +63,7 @@ function session(sid) {
 
 function create() {
 
-	var sid = Date.now();
+	let sid = Date.now();
 
 	sessions[sid] = session(sid);
 
@@ -73,7 +73,7 @@ function create() {
 exports.create = create;
 
 exports.has = function(sid) {
-	var session = sessions[sid];
+	let session = sessions[sid];
 
 	if(session) {
 		return session.isValid();
@@ -84,7 +84,7 @@ exports.has = function(sid) {
 
 exports.get = function(sid) {
 
-	var session = sessions[sid];
+	let session = sessions[sid];
 
 	if(session.isValid()) {
 		return session;
@@ -97,7 +97,7 @@ exports.get = function(sid) {
 
 exports.remove = function(sid) {
 
-	var session = sessions[sid];
+	let session = sessions[sid];
 
 	return clear(session, sid);
 };
@@ -111,14 +111,14 @@ function clear(session, sid) {
 // 每天 0 点 清理清理一次 session
 (function() {
 
-	var now = new Date();
-	var nextZero = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0); // 次日零点
+	let now = new Date();
+	let nextZero = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0); // 次日零点
 
 	setTimeout(function() {
 		setInterval(function() {
 
-			for(var sid in sessions) {
-				var session = sessions[sid];
+			for(let sid in sessions) {
+				let session = sessions[sid];
 				if(!session.isValid()) {
 					clear(session, sid);
 				}

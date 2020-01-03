@@ -11,7 +11,7 @@ const AjaxRenderType_JSON = require("../util/utils").publics.constants.AjaxRende
 
 function ajaxAction() {
 
-	var action = baseAction();
+	let action = baseAction();
 
 	action.execute = function (renderType = AjaxRenderType_JSON) {
 		action.renderAjax = action.controller['render' + renderType];
