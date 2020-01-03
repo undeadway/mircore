@@ -22,7 +22,6 @@ const { addAll } = Object;
 const { unsupportedOperation, unsupportedType } = Error;
 
 const JSONstringify = JSON.stringify;
-const EMPTY_STRING = String.BLANK;
 
 let errorCtrler = null;
 
@@ -34,7 +33,7 @@ function controller() {
 	let attrs = {},
 		actions = {},
 		httpStatusCode = HttpStatusCode.OK,
-		paras = EMPTY_STRING,
+		paras = String.BLANK,
 		isLogged = false,
 		resCookie = cookies();
 
@@ -321,13 +320,13 @@ function controller() {
 		},
 		setAttr: function (k, v) {
 
-			if ('function' === typeof k) {
+			if (typeIs(k, 'function')) {
 				v = k;
 				k = Function.getName(v);
 				if (String.isEmpty(k)) unsupportedOperation('函数名不能为空');
 
 			} else if (v === undefined) {
-				v = EMPTY_STRING;
+				v = String.BLANK;
 			}
 
 			if (typeIs(v, 'object')) {
@@ -425,7 +424,7 @@ function controller() {
 				code = 302;
 			}
 
-			render(code, EMPTY_STRING, location);
+			render(code, String.BLANK, location);
 		},
 		isIndex: function () {
 			return route === INDEX || String.isEmpty(route);
