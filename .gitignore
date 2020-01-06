@@ -1,7 +1,5 @@
-demo/lib/util/coralian.js
 demo/.vscode
 demo/node_modules
+demo/package-lock.json
 node_modules
-demo/.editorconfig
-npm-debug.log
-demo/reset.sh
+package-lock.json

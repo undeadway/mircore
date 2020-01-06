@@ -6,11 +6,16 @@
 		"/next": "/next"
 	},
 	"config": {
-		"mail": {
-		},
+		"mail": {},
 		"limited-clients": {
-			"reject" : ["unknown", "torrent"],
-			"allow" : ["firefox"]
+			"reject": [
+				"unknown",
+				"torrent"
+			],
+			"allow": [
+				"firefox",
+				"chrome"
+			]
 		}
 	}
 }

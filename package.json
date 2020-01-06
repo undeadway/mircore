@@ -1,11 +1,11 @@
 {
   "name": "mircore",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "description": "A web server built by node.js",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/undeadway/mircore.git"
+    "url": "git+https://gitee.com/undeadway/mircore.git"
   },
   "main": "./src/index.js",
   "dependencies": {
@@ -16,9 +16,9 @@
     "node": "6.10.0"
   },
   "bugs": {
-    "url": "https://github.com/undeadway/mircore/issues"
+    "url": "https://gitee.com/undeadway/mircore/issues"
   },
-  "homepage": "http://wpl.waygc.net/prj=mircore",
+  "homepage": "http://codes.waygc.net/mircore",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -1,3 +1,4 @@
-let server = require("mircore");
-server.requireModule("coralian");
+require("coralian")
+
+const server = require("mircore");
 server.start();
