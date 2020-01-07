@@ -88,11 +88,11 @@ exports.get = function (sid) {
 
 	if (session.isValid()) {
 		return session;
+	} else {
+
+		clear(session, sid);
+		return null;
 	}
-
-	clear(session, sid);
-
-	return null;
 };
 
 exports.remove = function (sid) {
@@ -105,7 +105,11 @@ exports.remove = function (sid) {
 function clear(session, sid) {
 
 	session.timeout();
+
+	var obj = sessions[sid];
 	delete sessions[sid];
+
+	return obj;
 }
 
 // 每天 0 点 清理清理一次 session
@@ -124,7 +128,7 @@ function clear(session, sid) {
 				}
 			}
 
-			global.gc();
+			// global.gc();
 
 		}, ONE_DAY);
 	}, nextZero.getTime() - now.getTime());
