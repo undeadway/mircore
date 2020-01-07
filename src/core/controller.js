@@ -29,7 +29,7 @@ let errorCtrler = null;
 function controller() {
 
 	// 这些都要经过 juddeExe 才处理后才会赋值
-	let req, res, parse, method, query, route, reqRoute, typeName, pathName, actionName, reqCookie, client;
+	let req, res, parse, method, query, realRoute, reqRoute, typeName, modName, actionName, reqCookie, client;
 	// 这些都是已经初始化好的值
 	let attrs = {},
 		actions = {},
@@ -217,13 +217,21 @@ function controller() {
 			parse = req.parse, method = req.method;
 
 			query = parse.query, reqCookie = parse.cookies, reqRoute = parse.pathname, client = req.client;
-			route = name.route, typeName = name.type, pathName = route.join(String.BLANK);
+			realRoute = name.route, typeName = name.type;
 
-			if (pathName === 'error' || parse.error) {
-				console.log(parse.error);
-				Coralian.logger.err("request route : " + pathName);
+			modName = realRoute[0];
+
+			/**
+			 * reqRoute 是浏览器中输入的 url : /setting
+			 * reqlRoute = name.path 是对应文件物理路径 : /panel/setting/
+			 * modName 是模块名 = 物理路径的第一层 panel
+			 */
+
+			if (modName === 'error' || parse.error) {
+				Coralian.logger.err("request route : " + modName);
+				Coralian.logger.err(parse.error);
 			} else {
-				Coralian.logger.log("request route : " + pathName);
+				Coralian.logger.log("request route : " + modName);
 			}
 
 			let notOnError = !parse.error;
@@ -445,8 +453,14 @@ function controller() {
 		getClientInfo: function (name) {
 			return client[name.toUpperCase()];
 		},
-		getPathName: function () {
-			return pathName;
+		getReqRoute: function () {
+			return reqRoute;
+		},
+		getRealRoute: function () {
+			return realRoute;
+		},
+		getModName: function () {
+			return modName;
 		}
 	};
 }
