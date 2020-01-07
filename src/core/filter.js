@@ -11,8 +11,8 @@ const errorCast = Error.errorCast;
 const { getRoute } = require("../config/app");
 const fileExistsSync = require("fs").existsSync,
 	getGlobalInspectors = require("../util/utils").privates.getGlobalInspectors;
-const ERROR_CTRLER_INSTANCE = require("./../error/errorconfig").getControllerInstance();
-const ERROR_CTRLER_WRAPPER = require("./../error/errorconfig").getControllerWrapper();
+const ERROR_CTRLER_INSTANCE = require("./../util/config").getControllerInstance();
+const ERROR_CTRLER_WRAPPER = require("./../util/config").getControllerWrapper();
 const CONTROLLER_MAPPING = {
 	'/error': ERROR_CTRLER_WRAPPER
 };

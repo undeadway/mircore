@@ -6,7 +6,7 @@
  * 更接近于服务器的设置
  */
 const { developMode, port, appName, clusterMode } = require("../config/app");
-const clientDisAccessable = require("../util/utils").privates.clientDisAccessable;
+const { clientDisAccessable } = require("../util/utils").privates;
 const { HttpStatusCode, HttpRequestMethod } = Coralian.constants;
 
 const url = require("url"),

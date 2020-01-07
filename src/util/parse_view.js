@@ -11,21 +11,24 @@
  * <using:name>...</using:name> 模板
  * @{name} 外部功能函数
  */
-const readFileSync = require("fs").readFileSync;
+const { readFileSync } = require("fs");
 
 const SHAPE_INCLUDE = "<#include file=\"",
 	INCLUDE_END = " />",
 	COMMENT_START = "<?!--",
 	COMMENT_END = "--?>";
-END_BRACKES = "}";
+
 const PARA_START = "&{",
 	EQUAL_START = "?{",
 	EQUAL_END = "?{/",
+	END_BRACKES = "}",
 	ELSE = "?|{",
 	AT_START = "@{";
+
 const USING_TAG_START = "<using:",
 	USING_TAG_END = "</using:",
 	USING_START = "{using:";
+
 const USING_TAG_START_LEN = USING_TAG_START.length;
 const { errorStatement, noSuchProperty } = Error,
 	BLANK = String.BLANK;

@@ -18,44 +18,44 @@ function session(sid) {
 	renew();
 
 	return {
-		getSessionId: function() {
+		getSessionId: function () {
 			return sid;
 		},
-		getValueNames: function() {
+		getValueNames: function () {
 			return Object.key(session);
 		},
-		getValue: function(key) {
+		getValue: function (key) {
 			return session[key];
 		},
-		putValue: function(key, value) {
+		putValue: function (key, value) {
 			renew();
 			session[key] = value;
 		},
-		removeValue: function(key) {
+		removeValue: function (key) {
 			renew();
 			let value = session[key];
 			delete session[key];
 			return value;
 		},
-		hasValue: function(key) {
+		hasValue: function (key) {
 			return !!session[key];
 		},
-		isValid: function() {
-			if(timeout === timeout) {
+		isValid: function () {
+			if (timeout === timeout) {
 				return timeout < Date.now();
 			} else {
 				return false;
 			}
 		},
-		getLastAccessedTime: function() {
+		getLastAccessedTime: function () {
 			return timeout;
 		},
-		timeout: function() {
+		timeout: function () {
 			session = null;
 			timeout = NaN;
 		},
 		renew: renew,
-		toString: function() {
+		toString: function () {
 
 		}
 	};
@@ -72,21 +72,21 @@ function create() {
 
 exports.create = create;
 
-exports.has = function(sid) {
+exports.has = function (sid) {
 	let session = sessions[sid];
 
-	if(session) {
+	if (session) {
 		return session.isValid();
 	} else {
 		return false;
 	}
 };
 
-exports.get = function(sid) {
+exports.get = function (sid) {
 
 	let session = sessions[sid];
 
-	if(session.isValid()) {
+	if (session.isValid()) {
 		return session;
 	}
 
@@ -95,7 +95,7 @@ exports.get = function(sid) {
 	return null;
 };
 
-exports.remove = function(sid) {
+exports.remove = function (sid) {
 
 	let session = sessions[sid];
 
@@ -109,17 +109,17 @@ function clear(session, sid) {
 }
 
 // 每天 0 点 清理清理一次 session
-(function() {
+(function () {
 
 	let now = new Date();
 	let nextZero = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0); // 次日零点
 
-	setTimeout(function() {
-		setInterval(function() {
+	setTimeout(function () {
+		setInterval(function () {
 
-			for(let sid in sessions) {
+			for (let sid in sessions) {
 				let session = sessions[sid];
-				if(!session.isValid()) {
+				if (!session.isValid()) {
 					clear(session, sid);
 				}
 			}
@@ -128,5 +128,5 @@ function clear(session, sid) {
 
 		}, ONE_DAY);
 	}, nextZero.getTime() - now.getTime());
-//	global.gc(); // TODO
+	//	global.gc(); // TODO
 })();

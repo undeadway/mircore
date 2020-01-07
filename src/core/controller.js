@@ -16,7 +16,7 @@ const cookies = require("../server/cookies");
 const sessions = require("../server/sessions");
 const caches = require("../server/cache");
 const { split, getRoute } = require("../config/app");
-const ERROR_CTRLER_WRAPPER = require("./../error/errorconfig").getControllerWrapper();
+const ERROR_CTRLER_WRAPPER = require("./../util/config").getControllerWrapper();
 
 const { MimeType, HttpStatusCode } = Coralian.constants;
 const { addAll } = Object;
