@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://gitee.com/undeadway/mircore.git"
+    "url": "https://gitee.com/undeadway/mircore.git"
   },
   "main": "./src/index.js",
   "dependencies": {
