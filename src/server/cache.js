@@ -4,11 +4,11 @@
  * 设置空间的目的是区分不同种别的 cache，可以让某些模块启用 cache，某些模块不启用 cache。不会造成全局配置的 cache 污染。
  */
 
-const _getCache = require("../config/app").getCache;
+const { getCache } = require("../config/app");
 const CACHES = {};
 
 function cacheUsed(space) {
-	return _getCache(space);
+	return getCache(space);
 }
 
 this.cacheUsed = cacheUsed;
@@ -42,7 +42,7 @@ this.get = function (space) {
 	let cacheObj = CACHES[space];
 	if (!cacheObj) cacheObj = create(space);
 
-	return getCache(_getCache(space), cacheObj);
+	return getCache(getCache(space), cacheObj);
 }
 
 this.isUsed = getCache;

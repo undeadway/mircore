@@ -2,9 +2,9 @@
  * 错误的 controller
  */
 
-const controller = require("../core/controller"),
-	getError = require("./errorconfig").getError;
-const developMode = require(("../config/app")).developMode;
+const controller = require("../core/controller");
+const { getError } = require("./errorconfig");
+const { developMode } = require("../config/app");
 const ERROR_HTML_FILE = __dirname + "/error.html";
 const baseAction = require("../core/base_action");
 const HttpStatusCode = Coralian.constants.HttpStatusCode;

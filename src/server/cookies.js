@@ -5,7 +5,7 @@
  * 在 controller 中判断的都是从客户端上去的 cookie
  * 在 controller 中设置的 cookie 都是准备写到客户端去的
  */
-const unsupportedType = Error.unsupportedType;
+const { unsupportedType } = Error;
 const asUnicodeEndode = Coralian.util.CharUtil.asUnicodeEncode;
 
 function cookies() {
@@ -14,10 +14,10 @@ function cookies() {
 
 	function add(key, value) {
 
-		if(!typeIs(key, 'string')) unsupportedType(key);
-		if(!key || value === null || value === undefined) return;
+		if (!typeIs(key, 'string')) unsupportedType(key);
+		if (!key || value === null || value === undefined) return;
 
-		if(!typeIs(value, 'string')) {
+		if (!typeIs(value, 'string')) {
 			value = (value).toString();
 		}
 
@@ -25,10 +25,10 @@ function cookies() {
 	}
 
 	function addAll(input) {
-		if(!input) return;
+		if (!input) return;
 
-		for(let k in input) {
-			if(input.hasOwnProperty(k)) {
+		for (let k in input) {
+			if (input.hasOwnProperty(k)) {
 				add(k, input[k]);
 			}
 		}
@@ -39,10 +39,10 @@ function cookies() {
 
 		let result = [];
 
-		for(let key in instance) {
-			if(instance.hasOwnProperty(key)) {
+		for (let key in instance) {
+			if (instance.hasOwnProperty(key)) {
 				let value = instance[key];
-				if(!typeIs(value, 'function')) {
+				if (!typeIs(value, 'function')) {
 					result.push(key + "=" + changeToUnicodeCode(instance[key]));
 				} else {
 					unsupportedType(value);
@@ -56,8 +56,8 @@ function cookies() {
 
 	function setMaxAge(second) {
 
-		if(second === null || second === undefined) return;
-		if(!Number.isNumber(second)) unsupportedType(second);
+		if (second === null || second === undefined) return;
+		if (!Number.isNumber(second)) unsupportedType(second);
 
 		maxAge = second;
 
@@ -67,18 +67,18 @@ function cookies() {
 	}
 
 	return {
-		getValues: function() {
+		getValues: function () {
 			let result = {};
 			addAll(instance, result);
 			return result;
 		},
-		getValue: function(key) {
+		getValue: function (key) {
 			return instance[key];
 		},
 		add: add,
-		addFromRequest: function(string) {
-			if(string) {
-				Object.forEach(string.split(';'), function(i, obj) {
+		addFromRequest: function (string) {
+			if (string) {
+				Object.forEach(string.split(';'), function (i, obj) {
 					let tmp = obj.split('=');
 					add(tmp[0], tmp[1]);
 				});
@@ -86,21 +86,21 @@ function cookies() {
 		},
 		addAll: addAll,
 		setMaxAge: setMaxAge,
-		setPath: function(str) {
-			if(str === null || str === undefined) {
+		setPath: function (str) {
+			if (str === null || str === undefined) {
 				return;
 			}
 			path = str;
 		},
-		setCookieTimeout: function() {
+		setCookieTimeout: function () {
 			setMaxAge(-1);
 		},
 		toString: print,
 		print: print,
-		isEmpty: function() {
+		isEmpty: function () {
 			return Object.isEmpty(instance);
 		},
-		clear: function() {
+		clear: function () {
 			setMaxAge(0);
 			instance = {};
 		}
@@ -119,9 +119,9 @@ function cookies() {
 function changeToUnicodeCode(val) {
 
 	let output = "";
-	for(let i = 0; i < val.length; ++i) {
+	for (let i = 0; i < val.length; ++i) {
 		let c = val.charCodeAt(i);
-		if((c <= 31 && c !== 9) || c > 255 || c === 127) {
+		if ((c <= 31 && c !== 9) || c > 255 || c === 127) {
 			output += asUnicodeEndode(c);
 		} else {
 			output += val.charAt(i);
