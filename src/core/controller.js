@@ -308,9 +308,15 @@ function controller() {
 		end: end,
 		// 获得数组形式的 para
 		getParas: function () {
+			if (!paras) {
+				paras = [];
+			}
 			return paras;
 		},
 		getPara: function (index = 0) {
+			if (!paras) {
+				paras = [];
+			}
 			let para = paras[index];
 			if (para === null || para === undefined) {
 				return para;

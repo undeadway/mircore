@@ -1,18 +1,25 @@
-const ERROR_CTRLER_INSTANCE = require("./../error/controller");
-const ERROR_CTRLER_WRAPPER = {
-	instance: ERROR_CTRLER_INSTANCE,
-	inspectors: [],
-	name: {
-		path: "/error",
-		route: ['error'],
-		type: Function.getName(ERROR_CTRLER_INSTANCE)
-	}
-};
+let wrapper = null, instance = null;
 
 this.getControllerInstance = () => {
-	return ERROR_CTRLER_INSTANCE;
+	if (instance = null) {
+		instance = require("./../error/controller");
+	}
+	return instance;
 };
 
 this.getControllerWrapper = () => {
-	return ERROR_CTRLER_WRAPPER;
+
+	if (wrapper === null) {
+		wrapper = {
+			instance: instance,
+			inspectors: [],
+			name: {
+				path: "/error",
+				route: ['error'],
+				type: Function.getName(instance)
+			}
+		};
+	}
+
+	return wrapper;
 };
