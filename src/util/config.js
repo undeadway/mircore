@@ -1,4 +1,4 @@
-const ERROR_CTRLER_INSTANCE = require("./controller");
+const ERROR_CTRLER_INSTANCE = require("./../error/controller");
 const ERROR_CTRLER_WRAPPER = {
 	instance: ERROR_CTRLER_INSTANCE,
 	inspectors: [],
