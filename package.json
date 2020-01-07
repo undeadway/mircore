@@ -1,6 +1,6 @@
 {
   "name": "mircore",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "description": "A web server built by node.js",
   "license": "Apache-2.0",
   "repository": {
