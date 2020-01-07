@@ -216,7 +216,7 @@ function controller() {
 			req = request, res = response;
 			parse = req.parse, method = req.method;
 
-			query = parse.query, reqCookie = parse.cookies, reqRoute = parse.pathname, client = req.client;
+			query = parse.query, reqCookie = parse.cookies, reqRoute = parse.pathname.slice(1), client = req.client;
 			realRoute = name.route, typeName = name.type;
 
 			modName = realRoute[0];
