@@ -319,7 +319,7 @@ function controller() {
 			}
 			let para = paras[index];
 			if (para === null || para === undefined) {
-				return para;
+				return null;
 			}
 			return decodeURIComponent(para);
 		},
