@@ -15,7 +15,7 @@ const parseview = require("../util/parse_view");
 const cookies = require("../server/cookies");
 const sessions = require("../server/sessions");
 const caches = require("../server/cache");
-const { split, getRoute } = require("../config/app");
+const { split } = require("../config/app");
 const ERROR_CTRLER_WRAPPER = require("./../util/config").getControllerWrapper();
 
 const { MimeType, HttpStatusCode } = Coralian.constants;
@@ -29,12 +29,12 @@ let errorCtrler = null;
 function controller() {
 
 	// 这些都要经过 juddeExe 才处理后才会赋值
-	let req, res, parse, method, query, realRoute, reqRoute, typeName, modName, actionName, reqCookie, client;
+	let req, res, parse, method, query, realRoute, reqRoute, typeName, modName, actionName, reqCookie, client, reqPath;
 	// 这些都是已经初始化好的值
 	let attrs = {},
 		actions = {},
 		httpStatusCode = HttpStatusCode.OK,
-		paras = String.BLANK,
+		paras = null,
 		isLogged = false,
 		resCookie = cookies();
 
@@ -215,17 +215,22 @@ function controller() {
 			// 初期设置
 			req = request, res = response;
 			parse = req.parse, method = req.method;
+			query = parse.query, reqCookie = parse.cookies, typeName = name.type, client = req.client;
 
-			query = parse.query, reqCookie = parse.cookies, reqRoute = parse.pathname.slice(1), client = req.client;
-			realRoute = name.route, typeName = name.type;
-
-			modName = realRoute[0];
+			// reqRoute = reqRoute.slice(1); // 去掉最前面的 “/”
+			// if (String.isEmpty(reqRoute)) {
+			// 	reqRoute = INDEX; // 首页的时候，将 空 修正为 index
+			// }
 
 			/**
-			 * reqRoute 是浏览器中输入的 url : /setting
-			 * reqlRoute = name.path 是对应文件物理路径 : /panel/setting/
-			 * modName 是模块名 = 物理路径的第一层 panel
+			 * realRoute = name.path 是对应文件物理路径 : [blog,read]
+			 * reqRoute 是浏览器中输入的 url，如果有多层，在取最后一层 : read
+			 * modName 是模块名 = 物理路径的第一层 blog
+			 * reqPath 是浏览器请求中的完整 url /blog/create?bid=123456
 			 */
+			reqPath = parse.pathname;
+			realRoute = name.route;
+			modName = realRoute[0];
 
 			if (modName === 'error' || parse.error) {
 				Coralian.logger.err("request route : " + modName);
@@ -234,40 +239,37 @@ function controller() {
 				Coralian.logger.log("request route : " + modName);
 			}
 
-			let notOnError = !parse.error;
-
-			if (notOnError) { // 如果传入的 parse 对象中未包含 error 对象，则正常执行
-				let path = reqRoute.slice(1); // 去掉最前面的 “/”
-				if (String.isEmpty(path)) {
-					path = INDEX;
+			if (!parse.error) { // 如果传入的 parse 对象中未包含 error 对象，则正常执行
+				let path = reqPath.split(QUESTION);
+				paras = path[1];
+				path = path[0];
+				if (!Object.isEmpty(paras)) {
+					paras = paras.split(split);
 				}
 
-				let question = path.indexOf(QUESTION);
-				if (0 < question) {
-					path = path.slice(0, question);
+				if (path === SLASH) {
+					path += INDEX;
 				}
-				// 到这里， path 就不含任何 和 路径无关的东西了
-				let url = path.split(SLASH);
 
-				let lastUrl = Array.last(url),
-					lastName = Array.last(name.route);
-				if (lastUrl === lastName || getRoute("/" + lastUrl) === ("/" + lastName)) { // [route...] 所请求的不包含 action、para，只有 route
+				let url = path.split("/"); // 到这里， path 就不含任何 和 路径无关的东西了
+				url.shift(); // 去掉一个的空值
+
+				let lastUrl = Array.last(url); // 获取 url 中最后一个
+				let lastName = Array.last(realRoute);
+				if (url.length === 1 // 只有 [route]
+					|| path === SLASH + realRoute.join(SLASH)) { // [route...] 所请求的不包含 action、paras，只有 route
+					reqRoute = lastUrl;
 					actionName = INDEX;
-					paras = paras.split(split);
 				} else if (actions[lastUrl]) { // 取得 [route..., action]
+					reqRoute = lastName;
 					actionName = lastUrl;
-					paras = paras.split(split);
-				} else { // 否则为 [route..., action, para]
+				} else { // 否则为 [route..., action, paras]
+					reqRoute = Array.last(url, 3);
 					actionName = Array.last(url, 2);
-					paras = lastUrl.split(split);
-					if (url.length !== 2) { // 最后为[route..., para]
-						if (!actions[actionName]) {
-							paras.unshift(actionName);
-							actionName = INDEX;
-						}
-					} else { // [route, para]
-						actionName = INDEX;
+					if (!actions[actionName]) {
+						actionName = INDEX; // 防止拼写错误，如果 action 表里没有，则转到首页
 					}
+					paras = lastUrl.split(split);
 				}
 			} else {
 				actionName = INDEX;
@@ -289,6 +291,7 @@ function controller() {
 						Error.unsupportedType(err);
 				}
 			}
+
 			return true;
 		},
 		/*
@@ -307,7 +310,7 @@ function controller() {
 		getParas: function () {
 			return paras;
 		},
-		getPara: function (index) {
+		getPara: function (index = 0) {
 			let para = paras[index];
 			if (para === null || para === undefined) {
 				return para;
