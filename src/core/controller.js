@@ -16,6 +16,7 @@ const cookies = require("../server/cookies");
 const sessions = require("../server/sessions");
 const caches = require("../server/cache");
 const { split, getRoute } = require("../config/app");
+const ERROR_CTRLER_WRAPPER = require("./../error/errorconfig").getControllerWrapper();
 
 const { MimeType, HttpStatusCode } = Coralian.constants;
 const { addAll } = Object;
@@ -42,13 +43,7 @@ function controller() {
 		console.log(new Error().stack);
 
 		if (errorCtrler === null) {
-			let instance = require("../error/controller")
-			errorCtrler = {
-				instance, name: {
-					route: ['error'],
-					type: Function.getName(instance)
-				}
-			};
+			errorCtrler = ERROR_CTRLER_WRAPPER;
 		}
 
 		let ctrler = errorCtrler.instance();
@@ -222,13 +217,13 @@ function controller() {
 			parse = req.parse, method = req.method;
 
 			query = parse.query, reqCookie = parse.cookies, reqRoute = parse.pathname, client = req.client;
-			route = name.route, typeName = name.type, pathName = name.path;
+			route = name.route, typeName = name.type, pathName = route.join(String.BLANK);
 
-			if (name.route === 'error' || parse.error) {
+			if (pathName === 'error' || parse.error) {
 				console.log(parse.error);
-				Coralian.logger.err("request route : " + name.route);
+				Coralian.logger.err("request route : " + pathName);
 			} else {
-				Coralian.logger.log("request route : " + name.route);
+				Coralian.logger.log("request route : " + pathName);
 			}
 
 			let notOnError = !parse.error;
@@ -248,7 +243,7 @@ function controller() {
 
 				let lastUrl = Array.last(url),
 					lastName = Array.last(name.route);
-				if (lastUrl === lastName || getRoute("/" + lastUrl) === ("/" + lastName)) {// 所请求的不包含 action、para，只有 route
+				if (lastUrl === lastName || getRoute("/" + lastUrl) === ("/" + lastName)) { // [route...] 所请求的不包含 action、para，只有 route
 					actionName = INDEX;
 					paras = paras.split(split);
 				} else if (actions[lastUrl]) { // 取得 [route..., action]
@@ -427,7 +422,7 @@ function controller() {
 			render(code, String.BLANK, location);
 		},
 		isIndex: function () {
-			return route === INDEX || String.isEmpty(route);
+			return pathName === INDEX || String.isEmpty(pathName);
 		},
 		method: function (get) {
 			return (!get) ? method : (method.toUpperCase() === get.toUpperCase());
