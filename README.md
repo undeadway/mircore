@@ -19,9 +19,6 @@ server.start();
 * [路上的垃圾回收](http://waygc.net)
 * [道亦会](http://daoyiclub.com)
 
-## 声明
-Coralian 属于私有不开源的代码，请自行实现相关功能。
-
 ## TODO
 * 文件处理
 
@@ -46,9 +43,6 @@ server.start();
 ## Instance
 * [路上的垃圾回收](http://waygc.net)
 * [道亦会](http://daoyiclub.com)
-
-## About
-Coralian is private codes, please to find a substitue by self to insetead them.
 
 ## TODO
 * file uploads/downloads
