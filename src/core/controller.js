@@ -267,12 +267,11 @@ function controller() {
 				} else { // [...., paras]
 					let lastTwo = Array.last(url, 2); // 取得倒数第二个
 					if (url.length > 2 && actions[lastTwo]) {  // [route..., action, paras]
-						reqRoute = lastName;
 						actionName = lastTwo;
 					} else { // [route..., paras]
-						reqRoute = lastName;
 						actionName = INDEX;
 					}
+					reqRoute = lastName;
 					paras = lastUrl.split(split);
 				}
 			} else {
