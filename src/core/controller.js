@@ -265,9 +265,9 @@ function controller() {
 					reqRoute = lastUrl;
 					actionName = INDEX;
 				} else { // [...., paras]
-					let lastTwo = Array.last(url, 2); // 取得倒数第二个
-					if (url.length > 2 && actions[lastTwo]) {  // [route..., action, paras]
-						actionName = lastTwo;
+					let lastSecond = Array.last(url, 2); // 取得倒数第二个
+					if (url.length > 2 && actions[lastSecond]) {  // [route..., action, paras]
+						actionName = lastSecond;
 					} else { // [route..., paras]
 						actionName = INDEX;
 					}
