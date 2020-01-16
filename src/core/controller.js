@@ -256,18 +256,27 @@ function controller() {
 
 				let lastUrl = Array.last(url); // 获取 url 中最后一个
 				let lastName = Array.last(realRoute);
-				if (url.length === 1 // 只有 [route]
+
+				if (actions[lastUrl]) { // [route..., action]
+					reqRoute = lastName;
+					actionName = lastUrl;
+				} else if (url.length === 1 // [route]
 					|| path === SLASH + realRoute.join(SLASH)) { // [route...] 所请求的不包含 action、paras，只有 route
 					reqRoute = lastUrl;
 					actionName = INDEX;
-				} else if (actions[lastUrl]) { // 取得 [route..., action]
-					reqRoute = lastName;
-					actionName = lastUrl;
-				} else { // 否则为 [route..., action, paras]
-					reqRoute = Array.last(url, 3);
-					actionName = Array.last(url, 2);
-					if (!actions[actionName]) {
-						actionName = INDEX; // 防止拼写错误，如果 action 表里没有，则转到首页
+				} else { // [...., paras]
+					if (url.length > 2) {
+						let lastTwo = Array.last(url, 2); // 取得倒数第二个
+						if (actions[lastTwo]) { // [route..., action, paras]
+							reqRoute = lastName;
+							actionName = lastTwo;
+						} else { // [route..., paras]
+							reqRoute = lastName;
+							actionName = INDEX;
+						}
+					} else { // [route, paras]
+						reqRoute = lastName;
+						actionName = INDEX;
 					}
 					paras = lastUrl.split(split);
 				}
