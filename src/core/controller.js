@@ -265,16 +265,11 @@ function controller() {
 					reqRoute = lastUrl;
 					actionName = INDEX;
 				} else { // [...., paras]
-					if (url.length > 2) {
-						let lastTwo = Array.last(url, 2); // 取得倒数第二个
-						if (actions[lastTwo]) { // [route..., action, paras]
-							reqRoute = lastName;
-							actionName = lastTwo;
-						} else { // [route..., paras]
-							reqRoute = lastName;
-							actionName = INDEX;
-						}
-					} else { // [route, paras]
+					let lastTwo = Array.last(url, 2); // 取得倒数第二个
+					if (url.length > 2 && actions[lastTwo]) {  // [route..., action, paras]
+						reqRoute = lastName;
+						actionName = lastTwo;
+					} else { // [route..., paras]
 						reqRoute = lastName;
 						actionName = INDEX;
 					}
