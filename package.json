@@ -1,6 +1,6 @@
 {
   "name": "mircore",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "description": "A web server built by node.js",
   "license": "Apache-2.0",
   "repository": {
@@ -9,7 +9,7 @@
   },
   "main": "./src/index.js",
   "dependencies": {
-    "coralian": "0.0.14",
+    "coralian": "0.0.19",
     "nodemailer": "2.7.2"
   },
   "engines": {
@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://gitee.com/undeadway/mircore/issues"
   },
-  "homepage": "http://codes.waygc.net/mircore",
+  "homepage": "http://codes.waygc.net/project/?mircore",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

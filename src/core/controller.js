@@ -47,7 +47,7 @@ function controller() {
 		}
 
 		let ctrler = errorCtrler.instance();
-		if (typeIs(error, 'number')) {
+		if (typeIs(error, Number.TYPE_NAME)) {
 			let newErr = new Error();
 			newErr.code = error;
 			req.parse.error = newErr;
@@ -70,12 +70,12 @@ function controller() {
 			url = code;
 			code = httpStatusCode;
 		}
-		if (arguments.length === 2 && typeIs(url, 'boolean')) {
+		if (arguments.length === 2 && typeIs(url, Boolean.TYPE_NAME)) {
 			renderType = url;
 			url = code;
 		}
 
-		if (arguments.length === 3 && typeIs(location, 'boolean')) {
+		if (arguments.length === 3 && typeIs(location, Boolean.TYPE_NAME)) {
 			renderType = location;
 			location = undefined;
 		}
@@ -286,7 +286,7 @@ function controller() {
 						break;
 					case 'string':
 						let nErr = Math.trunc(err);
-						if (typeIs(nErr, 'NaN')) {
+						if (typeIs(nErr, NaN.TYPE_NAME)) {
 							Error.errorCast(err, Number);
 						}
 						attrs.code = nErr;
@@ -335,7 +335,7 @@ function controller() {
 		},
 		setAttr: function (k, v) {
 
-			if (typeIs(k, 'function')) {
+			if (typeIs(k, Function.TYPE_NAME)) {
 				v = k;
 				k = Function.getName(v);
 				if (String.isEmpty(k)) unsupportedOperation('函数名不能为空');
@@ -344,7 +344,7 @@ function controller() {
 				v = String.BLANK;
 			}
 
-			if (typeIs(v, 'object')) {
+			if (typeIs(v, Object.TYPE_NAME)) {
 				let value = attrs[k];
 				if (!value) {
 					attrs[k] = value = {};
@@ -479,7 +479,7 @@ function controller() {
 
 function addAction(actions, name, instance, inspectors) {
 
-	if (typeIs(inspectors, 'object')) {
+	if (typeIs(inspectors, Object.TYPE_NAME)) {
 		inspectors = [inspectors];
 	}
 
@@ -536,7 +536,7 @@ function invokeAction(actions, name, ctrler) {
 			 * 当目标请求的 action 被逻辑拒绝的时候，调用这个方法来更替 action
 			 */
 			resetAction: function (actionName) {
-				if (!typeIs(actionName, 'string')) unsupportedType(actionName);
+				if (!typeIs(actionName, String.TYPE_NAME)) unsupportedType(actionName);
 				invokeAction(actions, actionName, ctrler); // 递归调用 invokeAction
 				end();
 			},

@@ -14,10 +14,10 @@ function cookies() {
 
 	function add(key, value) {
 
-		if (!typeIs(key, 'string')) unsupportedType(key);
+		if (!typeIs(key, String.TYPE_NAME)) unsupportedType(key);
 		if (!key || value === null || value === undefined) return;
 
-		if (!typeIs(value, 'string')) {
+		if (!typeIs(value, String.TYPE_NAME)) {
 			value = (value).toString();
 		}
 
@@ -42,7 +42,7 @@ function cookies() {
 		for (let key in instance) {
 			if (instance.hasOwnProperty(key)) {
 				let value = instance[key];
-				if (!typeIs(value, 'function')) {
+				if (!typeIs(value, Function.TYPE_NAME)) {
 					result.push(key + "=" + changeToUnicodeCode(instance[key]));
 				} else {
 					unsupportedType(value);
