@@ -286,7 +286,7 @@ function controller() {
 						break;
 					case 'string':
 						let nErr = Math.trunc(err);
-						if (typeIs(nErr, NaN.TYPE_NAME)) {
+						if (typeIs(nErr, Number.NaN_TYPE_NAME)) {
 							Error.errorCast(err, Number);
 						}
 						attrs.code = nErr;
