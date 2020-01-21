@@ -52,7 +52,7 @@ function router(req, res) {
 		res.end();
 		return;
 	} else {
-		req.on('error', onError)
+		req.on(Error.TYPE_NAME, onError)
 			.on('data', function (chunk) {
 				// TODO 现在这里只处理 post 上来的字符串，二进制格式要怎么弄还要再研究
 				_postData += chunk;
@@ -79,17 +79,17 @@ function router(req, res) {
 				if (developMode) return; // 开发模式的情况下，无视各种超时
 				// req 请求超时，网络不稳定
 				// 408 Request Timeout
-				Coralian.logger.err('request error code : ' + HttpStatusCode.REQUEST_TIMEOUT);
+				Coralian.logger.err('request 请求错误: ' + HttpStatusCode.REQUEST_TIMEOUT);
 				req.url = formatString(ERROR_ROUTE_FORMAT, HttpStatusCode.REQUEST_TIMEOUT);
 				req.parse = url.parse(req.url, true);
 				request(req, res);
 			});
-		res.on('error', onError)
+		res.on(Erorr.TYPE_NAME, onError)
 			.setTimeout(TIMEOUT, function () {
 				if (developMode) return; // 开发模式的情况下，无视各种超时
 				// res 响应超时，服务器无应答
 				// 504 Gateway Timeout
-				Coralian.logger.err('response error code : ' + HttpStatusCode.GATEWAY_TIMEOUT);
+				Coralian.logger.err('response 返信错误 : ' + HttpStatusCode.GATEWAY_TIMEOUT);
 				req.url = formatString(ERROR_ROUTE_FORMAT, HttpStatusCode.GATEWAY_TIMEOUT);
 				parse = url.parse(req.url, true);
 				request(req, res);

@@ -7,9 +7,8 @@
  * 
  * 通过 controller 可以完成对页面进行渲染、重定向等所有 request 和 response 的操作
  */
-const INDEX = 'index',
-	SLASH = "/",
-	QUESTION = "?";
+const INDEX = 'index';
+const { SLASH, QUESTION } = Coralian.constants.Mark;
 
 const parseview = require("../util/parse_view");
 const cookies = require("../server/cookies");
@@ -83,7 +82,7 @@ function controller() {
 		url = String.trim(url);
 
 		switch (typeOf(url)) {
-			case 'string':
+			case String.TYPE_NAME:
 				/*
 				 * 数据类型是 字符串，则认为是一个 可被显示 的 HTML 文件路径
 				 * 解析HTML，并将 PARA 中的参数赋值到 页面中
@@ -132,10 +131,10 @@ function controller() {
 				}
 
 				break;
-			case 'function': // 单数类型是是函数，则认为是回调函数，并执行该回调函数
+			case Function.TYPE_NAME: // 单数类型是是函数，则认为是回调函数，并执行该回调函数
 				url(res);
 				break;
-			case 'object': // 如果传入的 url 是个 对象，则判断为 ajax 请求的返回结果
+			case Object.TYPE_NAME: // 如果传入的 url 是个 对象，则判断为 ajax 请求的返回结果
 				plain(url);
 				return;
 			default:
@@ -157,14 +156,14 @@ function controller() {
 			"Set-Cookie": resCookie.print()
 		});
 		switch (typeOf(data)) {
-			case 'object':
-			case 'array':
+			case Object.TYPE_NAME:
+			case Array.TYPE_NAME:
 				data = JSONstringify(data);
 				break;
-			case 'regexp':
+			case RegExp.TYPE_NAME:
 				data = data.toString();
 				break;
-			case 'function':
+			case Function.TYPE_NAME:
 				unsupportedType(data);
 				break;
 			default:
@@ -232,7 +231,7 @@ function controller() {
 			realRoute = name.route;
 			modName = realRoute[0];
 
-			if (modName === 'error' || parse.error) {
+			if (modName === Error.TYPE_NAME || parse.error) {
 				Coralian.logger.err("request route : " + modName);
 				Coralian.logger.err(parse.error);
 			} else {
@@ -251,7 +250,7 @@ function controller() {
 					path += INDEX;
 				}
 
-				let url = path.split("/"); // 到这里， path 就不含任何 和 路径无关的东西了
+				let url = path.split(SLASH); // 到这里， path 就不含任何 和 路径无关的东西了
 				url.shift(); // 去掉一个的空值
 
 				let lastUrl = Array.last(url); // 获取 url 中最后一个
@@ -278,13 +277,13 @@ function controller() {
 				actionName = INDEX;
 				let err = parse.error;
 				switch (typeOf(err)) {
-					case 'object':
+					case Object.TYPE_NAME:
 						attrs = err;
 						break;
-					case 'number':
+					case Number.TYPE_NAME:
 						attrs.code = err;
 						break;
-					case 'string':
+					case String.TYPE_NAME:
 						let nErr = Math.trunc(err);
 						if (typeIs(nErr, Number.NaN_TYPE_NAME)) {
 							Error.errorCast(err, Number);
@@ -500,7 +499,7 @@ function invokeAction(actions, name, ctrler) {
 	let action = actions[name];
 
 	if (!action) {
-		Coralian.logger.err(`Action ${name} not exists.`);
+		Coralian.logger.err(`Action ${name} 不存在`);
 		ctrler.renderOnError(HttpStatusCode.NOT_FOUND);
 		return;
 	}
