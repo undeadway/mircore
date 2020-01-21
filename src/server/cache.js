@@ -6,6 +6,7 @@
 
 const _getCache = require("../config/app").getCache;
 const CACHES = {};
+const { unsupportedOperation } = Error;
 
 function cacheUsed(space) {
 	return _getCache(space);
@@ -17,7 +18,7 @@ function create(space) {
 	let isUsed = cacheUsed(space);
 
 	if (!isUsed) {
-		Error.unsupportedOperation(space + " 的 cache 没有被启用，无法创建对应空间");
+		unsupportedOperation(space + " 的 cache 没有被启用，无法创建对应空间");
 	}
 
 	let cacheObj = CACHES[space];
@@ -25,7 +26,7 @@ function create(space) {
 		Coralian.logger.log("create " + space + " cache space.");
 		CACHES[space] = cacheObj = {};
 	} else {
-		Error.unsupportedOperation(space + " 的 cache 空间已经创建，请勿重复创建");
+		unsupportedOperation(space + " 的 cache 空间已经创建，请勿重复创建");
 	}
 
 	return getCache(isUsed, cacheObj);
@@ -70,13 +71,13 @@ function getCache(routes, cacheObj) {
 		},
 		get: function (key) {
 			if (!isUsed) {
-				Error.unsupportedOperation(space + " 的 cache 没有被启用，无法从对应空间中获取数据");
+				unsupportedOperation(space + " 的 cache 没有被启用，无法从对应空间中获取数据");
 			}
 			return cacheObj[key];
 		},
 		save: function (key, value) {
 			if (!isUsed) {
-				Error.unsupportedOperation(space + " 的 cache 没有被启用，无法将数据存入对应空间");
+				unsupportedOperation(space + " 的 cache 没有被启用，无法将数据存入对应空间");
 			}
 			cacheObj[key] = value;
 		},
