@@ -12,9 +12,6 @@
     "coralian": "0.0.19",
     "nodemailer": "2.7.2"
   },
-  "engines": {
-    "node": "6.10.0"
-  },
   "bugs": {
     "url": "https://gitee.com/undeadway/mircore/issues"
   },
