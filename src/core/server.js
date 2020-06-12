@@ -84,7 +84,7 @@ function router(req, res) {
 				req.parse = url.parse(req.url, true);
 				request(req, res);
 			});
-		res.on(Erorr.TYPE_NAME, onError)
+		res.on(Error.TYPE_NAME, onError)
 			.setTimeout(TIMEOUT, function () {
 				if (developMode) return; // 开发模式的情况下，无视各种超时
 				// res 响应超时，服务器无应答
