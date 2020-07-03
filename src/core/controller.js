@@ -14,8 +14,7 @@ const parseview = require("../util/parse_view");
 const cookies = require("../server/cookies");
 const sessions = require("../server/sessions");
 const caches = require("../server/cache");
-const { split } = require("../config/app");
-// const { getControllerWrapper } = require("./../util/config");
+const SPLIT_MARK = require("../config/app").split;
 
 const { MimeType, HttpStatusCode, HttpRequestMethod } = Coralian.constants;
 const { addAll } = Object;
@@ -243,7 +242,7 @@ function controller(contollerMapping) {
 				paras = path[1];
 				path = path[0];
 				if (!Object.isEmpty(paras)) {
-					paras = paras.split(split);
+					paras = paras.split(SPLIT_MARK);
 				}
 
 				if (path === SLASH) {
@@ -271,7 +270,7 @@ function controller(contollerMapping) {
 						actionName = INDEX;
 					}
 					reqRoute = lastName;
-					paras = lastUrl.split(split);
+					paras = lastUrl.split(SPLIT_MARK);
 				}
 			} else {
 				actionName = INDEX;
@@ -325,12 +324,18 @@ function controller(contollerMapping) {
 			}
 			return decodeURIComponent(para);
 		},
+		isEmptyPara: function () {
+			return Object.isEmpty(paras);
+		},
 		getQuery: function (key) {
 			if (key) {
 				return !!query ? query[key] : null;
 			} else {
 				return query;
 			}
+		},
+		isEmptyQuery: function () {
+			return Object.isEmpty(query);
 		},
 		setAttr: function (k, v) {
 
@@ -369,12 +374,14 @@ function controller(contollerMapping) {
 		getAttr: function (k) {
 			return attrs[k];
 		},
+		// Session 处理
 		getSession: function (key) {
 			return sessions.get(key);
 		},
 		setSession: function (key, value) {
 			sessions.set(key, value);
 		},
+		// Cookie 处理
 		getCookie: function (key) {
 			return reqCookie.getValue(key);
 		},
@@ -391,15 +398,10 @@ function controller(contollerMapping) {
 		setCookie: function (key, value) {
 			resCookie.add(key, value);
 		},
-		isEmptyQuery: function () {
-			return Object.isEmpty(query);
-		},
 		isEmptyCookie: function () {
 			return Object.isEmpty(reqCookie);
 		},
-		isEmptyPara: function () {
-			return Object.isEmpty(paras);
-		},
+		// Action 处理
 		// 添加 action 用的函数
 		addAction: function (name, action, method = HttpRequestMethod.GET, inspectors) { // 添加一个对应请求方法的参数，可以 RESTFul 化处理
 
@@ -449,8 +451,8 @@ function controller(contollerMapping) {
 		isIndex: function () {
 			return pathName === INDEX || String.isEmpty(pathName);
 		},
-		method: function (get) {
-			return (!get) ? method : (method.toUpperCase() === get.toUpperCase());
+		method: function (name) {
+			return (!name) ? method : (method.toUpperCase() === name.toUpperCase());
 		},
 		getRequestRoute: function () {
 			return reqRoute;
