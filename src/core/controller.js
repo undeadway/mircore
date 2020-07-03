@@ -15,9 +15,9 @@ const cookies = require("../server/cookies");
 const sessions = require("../server/sessions");
 const caches = require("../server/cache");
 const { split } = require("../config/app");
-const ERROR_CTRLER_WRAPPER = require("./../util/config").getControllerWrapper();
+// const { getControllerWrapper } = require("./../util/config");
 
-const { MimeType, HttpStatusCode } = Coralian.constants;
+const { MimeType, HttpStatusCode, HttpRequestMethod } = Coralian.constants;
 const { addAll } = Object;
 const { unsupportedOperation, unsupportedType } = Error;
 
@@ -25,7 +25,7 @@ const JSONstringify = JSON.stringify;
 
 let errorCtrler = null;
 
-function controller() {
+function controller(contollerMapping) {
 
 	// 这些都要经过 juddeExe 才处理后才会赋值
 	let req, res, parse, method, query, realRoute, reqRoute, typeName, modName, actionName, reqCookie, client, reqPath;
@@ -42,7 +42,7 @@ function controller() {
 		console.log(new Error().stack);
 
 		if (errorCtrler === null) {
-			errorCtrler = ERROR_CTRLER_WRAPPER;
+			errorCtrler = contollerMapping['/error'];
 		}
 
 		let ctrler = errorCtrler.instance();
@@ -401,11 +401,10 @@ function controller() {
 			return Object.isEmpty(paras);
 		},
 		// 添加 action 用的函数
-		addAction: function (name, action, inspectors) {
+		addAction: function (name, action, method = HttpRequestMethod.GET, inspectors) { // 添加一个对应请求方法的参数，可以 RESTFul 化处理
 
 			switch (arguments.length) {
-				case 1:
-					// [action]
+				case 1: // [action]
 					action = name;
 					name = Function.getName(action).replace("Action", "");
 					break;
@@ -417,12 +416,19 @@ function controller() {
 					} // [action, inspectors]
 					break;
 				case 3:
+					if (typeIs(method, 'array')) { // [name, action, inspectors]
+						inspectors = method;
+						method = HttpRequestMethod.GET;
+					}
+					break;
+				case 4: // 所有参数都有
 					break;
 				default:
 					break;
 			}
+			method = method.toLowerCase();
 			name = name || INDEX;
-			addAction(actions, name, action, inspectors);
+			addAction(actions, `${method}_${name}`, action, inspectors);
 		},
 		getAction: function (name) {
 			return actions[name];
@@ -476,7 +482,7 @@ function controller() {
 	};
 }
 
-function addAction(actions, name, instance, inspectors) {
+function addAction(actions, name, instance, inspectors = []) {
 
 	if (typeIs(inspectors, Object.TYPE_NAME)) {
 		inspectors = [inspectors];
@@ -487,7 +493,7 @@ function addAction(actions, name, instance, inspectors) {
 	actions[name] = {
 		isAction: String.contains(actionName, "Action"),
 		instance: instance,
-		inspectors: inspectors || [],
+		inspectors: inspectors,
 		getActionName: function () {
 			return name;
 		}

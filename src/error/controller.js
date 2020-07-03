@@ -1,15 +1,13 @@
 /**
  * 错误的 controller
  */
-
-const controller = require("../core/controller");
 const { getError } = require("./errorconfig");
 const { developMode } = require("../config/app");
 const ERROR_HTML_FILE = __dirname + "/error.html";
 const baseAction = require("../core/base_action");
 const HttpStatusCode = Coralian.constants.HttpStatusCode;
 
-function errorController() {
+function errorController(controller) {
 
 	let ctrler = controller();
 	ctrler.addAction(indexAction);

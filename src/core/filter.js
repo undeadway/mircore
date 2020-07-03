@@ -11,8 +11,8 @@ const errorCast = Error.errorCast;
 const { getRoute } = require("../config/app");
 const fileExistsSync = require("fs").existsSync,
 	getGlobalInspectors = require("../util/utils").privates.getGlobalInspectors;
-const ERROR_CTRLER_INSTANCE = require("./../util/config").getControllerInstance();
-const ERROR_CTRLER_WRAPPER = require("./../util/config").getControllerWrapper();
+const ERROR_CTRLER_INSTANCE = require("./../util/config").getErrorControllerInstance();
+const ERROR_CTRLER_WRAPPER = require("./../util/config").getErrorControllerWrapper();
 const CONTROLLER_MAPPING = {
 	'/error': ERROR_CTRLER_WRAPPER
 };
@@ -92,7 +92,7 @@ function invokeController(req, res, route) {
 
 	try {
 		let ctrler = getController(req, res, route);
-		let instance = ctrler.instance();
+		let instance = ctrler.instance(CONTROLLER_MAPPING);
 
 		/*
 		 * 在 controller 中判断是否正常执行
@@ -108,7 +108,7 @@ function invokeController(req, res, route) {
 		e.code = Coralian.constants.HttpStatusCode.INTERNAL_SERVER_ERROR;
 		Coralian.logger.err(e);
 		req.parse.error = e;
-		let exe = ERROR_CTRLER_INSTANCE();
+		let exe = ERROR_CTRLER_INSTANCE(CONTROLLER_MAPPING);
 		if (exe.judgeExecute(req, res, ERROR_CTRLER_WRAPPER.name)) {
 			exe.execute();
 		}

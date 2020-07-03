@@ -1,24 +1,20 @@
-let wrapper = null, instance = null;
+const errorController = require("../error/controller");
+const controller = require("../core/controller");
 
-function getErrorController() {
-	if (instance === null) {
-		instance = require("./../error/controller");
+let wapper = null, instance = null;
+
+function getControllerInstance () {
+	if (!instance) {
+		instance = errorController(controller);
 	}
+	return instance;
 }
 
-this.getControllerInstance = () => {
-	getErrorController();
-	return instance;
-};
-
-this.getControllerWrapper = () => {
-
+this.getErrorControllerWapper = () => {
 	if (wrapper === null) {
 
-		getErrorController();
-
 		wrapper = {
-			instance: instance,
+			instance: getControllerInstance(),
 			inspectors: [],
 			name: {
 				path: "/error",
@@ -27,6 +23,6 @@ this.getControllerWrapper = () => {
 			}
 		};
 	}
-
 	return wrapper;
 };
+this.getControllerInstance = getControllerInstance;
