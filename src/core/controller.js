@@ -7,7 +7,7 @@
  * 
  * 通过 controller 可以完成对页面进行渲染、重定向等所有 request 和 response 的操作
  */
-const INDEX = 'index';
+const INDEX_STR = 'index';
 const { SLASH, QUESTION } = Coralian.constants.Mark;
 
 const parseview = require("../util/parse_view");
@@ -246,7 +246,7 @@ function controller(contollerMapping) {
 				}
 
 				if (path === SLASH) {
-					path += INDEX;
+					path += INDEX_STR;
 				}
 
 				let url = path.split(SLASH); // 到这里， path 就不含任何 和 路径无关的东西了
@@ -261,19 +261,19 @@ function controller(contollerMapping) {
 				} else if (url.length === 1 // [route]
 					|| path === SLASH + realRoute.join(SLASH)) { // [route...] 所请求的不包含 action、paras，只有 route
 					reqRoute = lastUrl;
-					actionName = INDEX;
+					actionName = INDEX_STR;
 				} else { // [...., paras]
 					let lastSecond = Array.last(url, 2); // 取得倒数第二个
 					if (url.length > 2 && actions[lastSecond]) {  // [route..., action, paras]
 						actionName = lastSecond;
 					} else { // [route..., paras]
-						actionName = INDEX;
+						actionName = INDEX_STR;
 					}
 					reqRoute = lastName;
 					paras = lastUrl.split(SPLIT_MARK);
 				}
 			} else {
-				actionName = INDEX;
+				actionName = INDEX_STR;
 				let err = parse.error;
 				switch (typeOf(err)) {
 					case Object.TYPE_NAME:
@@ -431,7 +431,7 @@ function controller(contollerMapping) {
 					break;
 			}
 			method = method.toLowerCase();
-			name = name || INDEX;
+			name = name || INDEX_STR;
 			addAction(actions, `${method}_${name}`, action, inspectors);
 		},
 		getAction: function (name) {
@@ -451,7 +451,7 @@ function controller(contollerMapping) {
 			render(code, String.BLANK, location);
 		},
 		isIndex: function () {
-			return pathName === INDEX || String.isEmpty(pathName);
+			return pathName === INDEX_STR || String.isEmpty(pathName);
 		},
 		method: function (name) {
 			return (!name) ? method : (method.toUpperCase() === name.toUpperCase());
