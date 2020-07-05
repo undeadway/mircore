@@ -6,7 +6,7 @@
  * execute 是个抽象方法，需要其他子类实现
  */
 const AjaxRenderType_JSON = require("../util/utils").publics.constants.AjaxRenderType.JSON;
-const CONTROLLER = "Controller";
+const CONTROLLER_STR = "Controller";
 
 function baseAction() {
 
@@ -16,7 +16,7 @@ function baseAction() {
 			this.execute(); // 这个方法需要子类覆盖重写
 		},
 		getRequestRoute: function () {
-			return this.controller.getTypeName().replace(CONTROLLER, String.BLANK);
+			return this.controller.getTypeName().replace(CONTROLLER_STR, String.BLANK);
 		}
 	};
 }

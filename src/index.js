@@ -47,12 +47,12 @@ that.start = () => {
 	that.util = require("./util/utils").publics;
 	that.util.parseView = require("./util/parse_view");
 
-	let fs = require("fs");
-	let siteappPath = pathResolve("/src/config/siteapp");
+	const fs = require("fs");
+	const siteappPath = pathResolve("/src/config/siteapp");
 	if (fs.existsSync(siteappPath + ".js")) {
-		that.config.site = require(siteappPath)
+		that.config.site = require(siteappPath);
 	}
 
-	let server = require("./core/server");
+	const server = require("./core/server");
 	server();
 }

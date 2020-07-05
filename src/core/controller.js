@@ -301,12 +301,14 @@ function controller(contollerMapping) {
 		execute: function () {
 			invokeAction(actions, actionName, this);
 		},
+		// Render 处理
 		render: render,
 		renderOnError: renderOnError,
 		plain: plain,
 		renderFile: renderFile,
 		renderJSON: renderJSON,
 		end: end,
+		// 各种参数处理
 		// 获得数组形式的 para
 		getParas: function () {
 			if (!paras) {
@@ -408,13 +410,13 @@ function controller(contollerMapping) {
 			switch (arguments.length) {
 				case 1: // [action]
 					action = name;
-					name = Function.getName(action).replace("Action", "");
+					name = Function.getName(action).replace("Action", String.BLANK);
 					break;
 				case 2:
 					if (typeof name === "function") { // [name, action]
 						inspectors = action;
 						action = name;
-						name = Function.getName(action).replace("Action", "");
+						name = Function.getName(action).replace("Action", String.BLANK);
 					} // [action, inspectors]
 					break;
 				case 3:
