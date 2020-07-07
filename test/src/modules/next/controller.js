@@ -1,10 +1,31 @@
 const controller = require("./../../../../src/core/controller");
+const { baseAction } = require("./../../../../src/core/actions");
+const { getLink } = require("./../../util/util");
+const { HttpRequestMethod } = Coralian.constants;
+const PAGE = "/res/html/page.html"
 
-function nextController() {
+function indexAction() {
+	const action = baseAction();
 
-    const ctrler = controller();
+	action.execute = () => {
+		const ctrler = action.controller;
+		ctrler.setAttr("now", new Date().toString());
+		ctrler.setAttr("name", ctrler.getReqRoute());
+		ctrler.setAttr("link", getLink());
 
-    return ctrler;
+		ctrler.render(PAGE);
+	};
+
+	return action;
 }
 
-module.exports = exports = nextController;
+function indexController() {
+
+	const ctrler = controller();
+
+	ctrler.addAction(indexAction, HttpRequestMethod.GET);
+
+	return ctrler;
+}
+
+module.exports = exports = indexController;
