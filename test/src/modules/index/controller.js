@@ -1,23 +1,26 @@
 const controller = require("./../../../../src/core/controller");
 const { baseAction } = require("./../../../../src/core/actions");
+const { HttpRequestMethod } = Coralian.constants;
+const PAGE = "/res/html/page.html"
 
 function indexAction() {
-    const action = baseAction();
+	const action = baseAction();
 
-    action.execute = ctrler => {
+	action.execute = () => {
+		const ctrler = action.controller;
+		ctrler.render(PAGE);
+	};
 
-    };
-
-    return action;
+	return action;
 }
 
 function indexController() {
 
-    const ctrler = controller();
+	const ctrler = controller();
 
-    ctrler.addAction(Coralian.constants.HttpRequestMethod.GET, indexAction());
+	ctrler.addAction(indexAction, HttpRequestMethod.GET);
 
-    return ctrler;
+	return ctrler;
 }
 
 module.exports = exports = indexController;
