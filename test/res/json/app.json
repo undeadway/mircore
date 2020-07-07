@@ -1,0 +1,14 @@
+{
+	"port": 9000,
+	"split": ":",
+	"develop": true,
+	"name": "mircore-demo;",
+	"config" : {
+	},
+	"routes": {
+		"/index": "/index",
+		"/first": "/index",
+		"/next": "/next",
+		"/second": "/next"
+	}
+}
