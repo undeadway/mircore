@@ -19,12 +19,10 @@ const SPLIT_MARK = require("../config/app").split;
 const { MimeType, HttpStatusCode, HttpRequestMethod } = Coralian.constants;
 const { addAll } = Object;
 const { unsupportedOperation, unsupportedType } = Error;
-
+const contollerMapping = require("./../util/controller_mapping");
 const JSONstringify = JSON.stringify;
 
-let errorCtrler = null;
-
-function controller(contollerMapping) {
+function controller() {
 
 	// 这些都要经过 juddeExe 才处理后才会赋值
 	let req, res, parse, method, query, realRoute, reqRoute, typeName, modName, actionName, reqCookie, client, reqPath;
@@ -38,13 +36,9 @@ function controller(contollerMapping) {
 
 	function renderOnError(error, code = HttpStatusCode.INTERNAL_SERVER_ERROR) {
 
-		console.log(new Error().stack);
-
-		if (errorCtrler === null) {
-			errorCtrler = contollerMapping['/error'];
-		}
-
+		let errorCtrler = contollerMapping.get('/error');
 		let ctrler = errorCtrler.instance();
+
 		if (typeIs(error, Number.TYPE_NAME)) {
 			let newErr = new Error();
 			newErr.code = error;
@@ -299,7 +293,7 @@ function controller(contollerMapping) {
 		 * 暂时只是对action的处理（包括inspector和之后的执行 action
 		 */
 		execute: function () {
-			invokeAction(actions, actionName, this);
+			invokeAction(actions, method.toLowerCase() + "_" + actionName, this);
 		},
 		// Render 处理
 		render: render,
@@ -405,7 +399,7 @@ function controller(contollerMapping) {
 		},
 		// Action 处理
 		// 添加 action 用的函数
-		addAction: function (name, action, method = HttpRequestMethod.GET, inspectors) { // 添加一个对应请求方法的参数，可以 RESTFul 化处理
+		addAction: function (name, action, method = HttpRequestMethod.GET, inspectors = []) { // 添加一个对应请求方法的参数，可以 RESTFul 化处理
 
 			switch (arguments.length) {
 				case 1: // [action]
@@ -413,11 +407,17 @@ function controller(contollerMapping) {
 					name = Function.getName(action).replace("Action", String.BLANK);
 					break;
 				case 2:
-					if (typeof name === "function") { // [name, action]
-						inspectors = action;
+					if (typeIs(name, "function")) {
+						
+						if (typeIs(action, "string")) { // [action, method]
+							method = action;
+						} else if (typeIs(action, "array")) { // [action, inspectors]
+							inspectors = action;
+						}
+
 						action = name;
-						name = Function.getName(action).replace("Action", String.BLANK);
-					} // [action, inspectors]
+						name = INDEX_STR;
+					}
 					break;
 				case 3:
 					if (typeIs(method, 'array')) { // [name, action, inspectors]

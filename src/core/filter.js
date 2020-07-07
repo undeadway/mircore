@@ -11,11 +11,12 @@ const errorCast = Error.errorCast;
 const { getRoute } = require("../config/app");
 const fileExistsSync = require("fs").existsSync,
 	getGlobalInspectors = require("../util/utils").privates.getGlobalInspectors;
-const ERROR_CTRLER_INSTANCE = require("./../util/config").getErrorControllerInstance();
-const ERROR_CTRLER_WRAPPER = require("./../util/config").getErrorControllerWrapper();
-const CONTROLLER_MAPPING = {
-	'/error': ERROR_CTRLER_WRAPPER
-};
+// const ERROR_CTRLER_INSTANCE = require("./../util/config").getErrorControllerInstance();
+// const ERROR_CTRLER_WRAPPER = require("./../util/config").getErrorControllerWrapper();
+// const CONTROLLER_MAPPING = {
+// 	'/error': ERROR_CTRLER_WRAPPER
+// };
+const CONTROLLER_MAPPING = require("./../util/controller_mapping");
 
 function getController(req, res, route) {
 
@@ -40,7 +41,7 @@ function getController(req, res, route) {
 		if (ctrlerName === undefined) { // 非已注册的路径则判断非法路径，不做请求处理，进入下一轮循环
 			name.pop();
 		} else {
-			ctrlerWrapper = CONTROLLER_MAPPING[ctrlerName];
+			ctrlerWrapper = CONTROLLER_MAPPING.get(ctrlerName);
 
 			if (ctrlerWrapper) { // 若 CONTROLLER_MAPPING 中已包含请求路径，则直接返回所对应的 Controller
 				return ctrlerWrapper;
@@ -48,7 +49,7 @@ function getController(req, res, route) {
 			// 通过请求的 URL 来动态分析当前环境下所对应的 Controller 路径
 			let ctrlerPath = CONTROLLER_PATH.replace("{?}", ctrlerName);
 			if (fileExistsSync(ctrlerPath + ".js")) {
-				return putController(require(ctrlerPath), ctrlerName);
+				return CONTROLLER_MAPPING.put(ctrlerName, require(ctrlerPath));
 			} else { // 当解析 Controller 路径不存在的时候，认为该请求路径非法，进入下一轮循环
 				name.pop();
 			}
@@ -56,43 +57,18 @@ function getController(req, res, route) {
 	}
 
 	if (!ctrlerWrapper && count === 0) {
-		return putController(require(CONTROLLER_PATH.replace("{?}", INDEX)), INDEX);
+		return CONTROLLER_MAPPING.put(INDEX, require(CONTROLLER_PATH.replace("{?}", INDEX)));
 	} else {
 		req.parse.error = 404;
-		return ERROR_CTRLER_WRAPPER;
+		return CONTROLLER_MAPPING.error();
 	}
-}
-
-function putController(ctrler, ctrlerName) {
-
-	let instance = ctrler;
-
-	let route = ctrlerName.split(SLASH);
-	let outRoute = [];
-
-	for (let i = 0, len = route.length; i < len; i++) {
-		if (!String.isEmpty(route[i])) {
-			outRoute.push(route[i]);
-		}
-	}
-
-	let ctrlerWrapper = CONTROLLER_MAPPING[ctrlerName] = {
-		instance: instance,
-		inspectors: ctrler.inspectors || [],
-		name: {
-			path: ctrlerName,
-			route: outRoute, // 文件系统的物理路径
-			type: Function.getName(instance)
-		}
-	};
-	return ctrlerWrapper;
 }
 
 function invokeController(req, res, route) {
 
 	try {
 		let ctrler = getController(req, res, route);
-		let instance = ctrler.instance(CONTROLLER_MAPPING);
+		let instance = ctrler.instance();
 
 		/*
 		 * 在 controller 中判断是否正常执行
@@ -108,8 +84,9 @@ function invokeController(req, res, route) {
 		e.code = Coralian.constants.HttpStatusCode.INTERNAL_SERVER_ERROR;
 		Coralian.logger.err(e);
 		req.parse.error = e;
-		let exe = ERROR_CTRLER_INSTANCE(CONTROLLER_MAPPING);
-		if (exe.judgeExecute(req, res, ERROR_CTRLER_WRAPPER.name)) {
+		let errorControllerWapper = CONTROLLER_MAPPING.get('/error');
+		let exe = errorControllerWapper.instance();
+		if (exe.judgeExecute(req, res, errorControllerWapper.name)) {
 			exe.execute();
 		}
 	}
