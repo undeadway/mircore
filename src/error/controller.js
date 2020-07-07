@@ -24,7 +24,6 @@ function indexAction() {
 		let ctrler = action.controller;
 		let getAttr = ctrler.getAttr;
 		let errorcode = getAttr('code');
-
 		let error = getError(errorcode);
 
 		ctrler.setAttrs(error);
@@ -34,11 +33,10 @@ function indexAction() {
 			return not404;
 		})
 
-		
 		if (not404) {
 			Coralian.logger.err(error);
 		} else {
-			Coralian.logger.log(getAttr('errormsg'));
+			Coralian.logger.log(error.errormsg);
 		}
 
 		ctrler.render(errorcode, ERROR_HTML_FILE, true);
