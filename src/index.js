@@ -1,3 +1,5 @@
+require("coralian"); // 预载入 coralian
+
 function pathResolve(name, isFolder) {
 
 	let output = require("path").resolve("." + name);
