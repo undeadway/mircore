@@ -22,6 +22,9 @@ server.start();
 ## TODO
 * 文件处理
 
+## 教程
+[教程](./documents/manual.cn.md)
+
 ## License
 Apache 2.0
 
@@ -49,3 +52,6 @@ server.start();
 
 ## License
 Apache 2.0
+
+## Manual
+[Manual](./documents/manual.en.md)
