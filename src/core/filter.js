@@ -5,17 +5,11 @@
  * 则返回请求该路径所对应的controller，否则返回 404 。
  */
 const CONTROLLER_PATH = pathResolve("/src/modules{?}/controller");
-const INDEX = '/index',
-	SLASH = "/";
-const errorCast = Error.errorCast;
+const INDEX = '/index', SLASH = "/";
+const { errorCastn } = Error;
 const { getRoute } = require("../config/app");
 const fileExistsSync = require("fs").existsSync,
 	getGlobalInspectors = require("../util/utils").privates.getGlobalInspectors;
-// const ERROR_CTRLER_INSTANCE = require("./../util/config").getErrorControllerInstance();
-// const ERROR_CTRLER_WRAPPER = require("./../util/config").getErrorControllerWrapper();
-// const CONTROLLER_MAPPING = {
-// 	'/error': ERROR_CTRLER_WRAPPER
-// };
 const CONTROLLER_MAPPING = require("./../util/controller_mapping");
 
 function getController(req, res, route) {
