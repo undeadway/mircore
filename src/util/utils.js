@@ -81,7 +81,7 @@ Object.defineProperty(publics, 'constants', {
 //////////////////////////// publics ////////////////////////////
 //////////////////////////// privates ////////////////////////////
 
-const clients = getConfig("limited-clients");
+const clients = getConfig("limited-clients") || {};
 const GLOBAL_INSPECTOR_FOLDER = pathResolve("/src/inspector/global", true);
 const SYSTEM_INSPECTOR_FOLDER = "../inspectors";
 const INSPECOTRS = [];
