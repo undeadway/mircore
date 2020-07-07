@@ -84,7 +84,7 @@ function invokeController(req, res, route) {
 		e.code = Coralian.constants.HttpStatusCode.INTERNAL_SERVER_ERROR;
 		Coralian.logger.err(e);
 		req.parse.error = e;
-		let errorControllerWapper = CONTROLLER_MAPPING.get('/error');
+		let errorControllerWapper = CONTROLLER_MAPPING.error();;
 		let exe = errorControllerWapper.instance();
 		if (exe.judgeExecute(req, res, errorControllerWapper.name)) {
 			exe.execute();
