@@ -9,6 +9,8 @@
 		"/index": "/index",
 		"/first": "/index",
 		"/next": "/next",
-		"/second": "/next"
+		"/second": "/next",
+		"/err": "/eooo",
+		"/method": "/method"
 	}
 }
