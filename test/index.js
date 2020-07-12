@@ -1,2 +1,2 @@
-let server = require("../src/index");
+const server = require("../src/index");
 server.start();
