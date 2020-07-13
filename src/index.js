@@ -43,8 +43,7 @@ that.start = () => {
 	that.sessions = require("./server/sessions");
 	that.cache = require("./server/cache");
 	that.cookies = require("./server/cookies");
-	that.baseAction = require("./core/actions").baseAction;
-	that.ajaxAction = require("./core/actions").ajaxAction;
+	Object.addAll(require("./core/actions"), that);
 	that.config = require("./config/app");
 	that.util = require("./util/utils").publics;
 	that.util.parseView = require("./util/parse_view");
