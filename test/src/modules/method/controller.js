@@ -1,6 +1,6 @@
-const controller = require("./../../../../src/core/controller");
-const { baseAction } = require("./../../../../src/core/actions");
-const { getLink } = require("./../../util/util");
+const controller = mircore.controller;
+const baseAction = mircore.baseAction;
+const { split } = mircore.config;
 const { HttpRequestMethod } = Coralian.constants;
 const PAGE = "/res/html/method.html"
 
@@ -11,8 +11,14 @@ function getAction() {
 
 		const ctrler = action.controller;
 
-		let param = ctrler.getQuery("param");
-		ctrler.setAttr("param", param);
+		let param = ctrler.getParas();
+		if (Array.isEmpty(param)) {
+			param.push("-");
+		}
+		ctrler.setAttr("requestUrl", param.join(split));
+
+		console.log();
+		ctrler.setAttr("requestMethod", ctrler.method());
 
 		ctrler.render(PAGE);
 	};
@@ -20,26 +26,14 @@ function getAction() {
 	return action;
 }
 
-function postAction() {
-
-}
-
-function putAction() {
-
-}
-
-function deleteAction () {
-
-}
-
 function indexController() {
 
 	const ctrler = controller();
 
 	ctrler.addAction("index", getAction, HttpRequestMethod.GET);
-	ctrler.addAction("index", postAction, HttpRequestMethod.POST);
-	ctrler.addAction("index", putAction, HttpRequestMethod.PUT);
-	ctrler.addAction("index", deleteAction, HttpRequestMethod.DELETE);
+	ctrler.addAction("index", getAction, HttpRequestMethod.POST);
+	ctrler.addAction("index", getAction, HttpRequestMethod.PUT);
+	ctrler.addAction("index", getAction, HttpRequestMethod.DELETE);
 
 	return ctrler;
 }
