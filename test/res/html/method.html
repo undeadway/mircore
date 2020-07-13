@@ -8,8 +8,13 @@
 		margin: 0px;
 		padding: 0px;
 	}
-	div {
-		width: 800px;
+	.box-wrapper {
+		width: 95%;
+	}
+	.wrapper {
+		display: inline-block;
+		width:49%;
+		vertical-align: top;
 	}
 	input {
 		width:300px;
@@ -48,28 +53,36 @@
 </style>
 </head>
 <body>
-	<h3>基本配置</h3>
-	<div class="box base-box">
-		<ul><li>请求方式：</li><li>
-			<select id="query_method">
-				<option>GET</option>
-				<option>POST</option>
-				<option>PUT</option>
-				<option>DELETE</option>
-			</select>
-		</li></ul>
-		<ul><li>请求地址：</li><li><input type="text" id="query_url" /></li></ul>
+	<div class="wrapper">
+		<h3>基本配置</h3>
+		<div class="box base-box box-wrapper">
+			<ul><li>请求方式：</li><li>
+				<select id="query_method">
+					<option>GET</option>
+					<option>POST</option>
+					<option>PUT</option>
+					<option>DELETE</option>
+				</select>
+			</li></ul>
+			<ul><li>请求地址：</li><li><input type="text" id="query_url" /></li></ul>
+		</div>
+		<div class="query-box box-wrapper">
+			<h3>请求参数</h3><div class="add-line" id="add_line">+</div>
+			<div class="box">
+				<ul><li>参数名称</li><li>参数值</li></ul>
+				<div class="query-val-box" id="query_config_box"></div>
+			</div>
+		</div>
+		<button id="form_submit">发送请求</button>
 	</div>
-	<div class="query-box">
-		<h3>请求参数</h3><div class="add-line" id="add_line">+</div>
-		<div class="box">
-			<ul><li>参数名称</li><li>参数值</li></ul>
-			<div class="query-val-box" id="query_config_box"></div>
+	<div class="wrapper">
+		<h3>请求内容</h3>
+		<div class="box base-box box-wrapper">
+			<ul><li>请求方法</li><li>${requestMethod}</li></ul>
+			<ul><li>请求URL</li><li>${requestUrl}</li></ul>
+			<ul><li>请求参数</li><li>${requestPrams}</li></ul>
 		</div>
 	</div>
-	<form id="sunmit_form" method="get" action="/method/">
-		<button id="form_submit">发送请求</button>
-	</form>
 <script>
 var index = 0;
 var querConfigBox = document.getElementById("query_config_box");
@@ -107,17 +120,14 @@ frmSubmitBtn.onclick = function() {
 
 	for (var i = 0, len = names.length; i< len; i++) {
 		var name = names[i].value;
-		if (!name) {
-			alert("必需填写 name");
-			document.getElementById("name" + i).focus();
-			return;
-		}
-		var input = document.createElement("input");
-		input.setAttribute("type","hidden");
-		input.name = name;
-	    input.value = values[i].value;
+		if (name)  {
+			var input = document.createElement("input");
+			input.setAttribute("type","hidden");
+			input.name = name;
+			input.value = values[i].value;
 
-		frm.appendChild(input);
+			frm.appendChild(input);
+		}
 	}
 
 	frm.method = method.value;
