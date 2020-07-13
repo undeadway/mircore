@@ -6,13 +6,13 @@
  */
 const CONTROLLER_PATH = pathResolve("/src/modules{?}/controller");
 const INDEX = '/index', SLASH = "/";
-const { errorCastn } = Error;
+const { errorCast } = Error;
 const { getRoute } = require("../config/app");
 const fileExistsSync = require("fs").existsSync,
 	getGlobalInspectors = require("../util/utils").privates.getGlobalInspectors;
 const CONTROLLER_MAPPING = require("./../util/controller_mapping");
 
-function getController(req, res, route) {
+function getController(req, route) {
 
 	let ctrlerWrapper, name = route;
 
@@ -61,7 +61,7 @@ function getController(req, res, route) {
 function invokeController(req, res, route) {
 
 	try {
-		let ctrler = getController(req, res, route);
+		let ctrler = getController(req, route);
 		let instance = ctrler.instance();
 
 		/*
