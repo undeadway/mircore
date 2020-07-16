@@ -5,7 +5,8 @@
  * 则返回请求该路径所对应的controller，否则返回 404 。
  */
 const CONTROLLER_PATH = pathResolve("/src/modules{?}/controller");
-const INDEX = '/index', SLASH = "/";
+const INDEX = '/index';
+const Mark = Coralian.constants.Mark;
 const { errorCast } = Error;
 const { getRoute } = require("../util/app-config");
 const fileExistsSync = require("fs").existsSync,
@@ -16,11 +17,11 @@ function getController(req, route) {
 
 	let ctrlerWrapper, name = route;
 
-	if (name === SLASH) {
+	if (name === Mark.SLASH) {
 		name = INDEX;
 	}
 
-	name = name.split(SLASH);
+	name = name.split(Mark.SLASH);
 	name.shift();
 	let count = name.length - 1;
 
@@ -30,7 +31,7 @@ function getController(req, route) {
 
 	for (; count >= 0; count--) {
 
-		let ctrlerName = getRoute(SLASH + name.join(SLASH));
+		let ctrlerName = getRoute(Mark.SLASH + name.join(Mark.SLASH));
 
 		if (ctrlerName === undefined) { // 非已注册的路径则判断非法路径，不做请求处理，进入下一轮循环
 			name.pop();
