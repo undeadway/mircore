@@ -1,6 +1,6 @@
 const controller = mircore.controller;
 
-function indexController() {
+function nonoController() {
 
 	const ctrler = controller();
 
@@ -11,4 +11,4 @@ function indexController() {
 	return ctrler;
 }
 
-module.exports = exports = indexController;
+module.exports = exports = nonoController;

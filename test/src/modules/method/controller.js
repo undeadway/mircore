@@ -111,7 +111,7 @@ function deleteAction() {
 	return action;
 }
 
-function indexController() {
+function methodController() {
 
 	const ctrler = controller();
 
@@ -124,4 +124,4 @@ function indexController() {
 	return ctrler;
 }
 
-module.exports = exports = indexController;
+module.exports = exports = methodController;

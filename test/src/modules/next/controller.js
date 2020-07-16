@@ -19,7 +19,7 @@ function indexAction() {
 	return action;
 }
 
-function indexController() {
+function nextController() {
 
 	const ctrler = controller();
 
@@ -28,4 +28,4 @@ function indexController() {
 	return ctrler;
 }
 
-module.exports = exports = indexController;
+module.exports = exports = nextController;
