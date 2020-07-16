@@ -7,6 +7,7 @@
  * 
  * 通过 controller 可以完成对页面进行渲染、重定向等所有 request 和 response 的操作
  */
+const fs = require("fs");
 const INDEX_STR = 'index';
 const { SLASH, QUESTION } = Coralian.constants.Mark;
 
@@ -76,6 +77,7 @@ function controller() {
 
 		switch (typeOf(url)) {
 			case String.TYPE_NAME:
+
 				/*
 				 * 数据类型是 字符串，则认为是一个 可被显示 的 HTML 文件路径
 				 * 解析HTML，并将 PARA 中的参数赋值到 页面中
@@ -84,44 +86,52 @@ function controller() {
 					"Content-Type": MimeType.HTML,
 					"Set-Cookie": resCookie.print()
 				}
+				let page = String.BLANK;
+
 				if (location !== undefined) {
 					header["Location"] = location;
 				}
 				res.writeHead(code, header);
 
-				if (!String.isEmpty(url)) {
 
-					if (!renderType) {
-						url = pathResolve(url);
-					}
+				let absoluteUrl = pathResolve(url);
 
-					// 这里的缓存处理只是为了不每次都进行页面模板解析而进行的处理
-					let page = null;
-					if (caches.cacheUsed('page')) {
-						let pageCache = caches.get('page');
-						/*
-						 * 判断使用 cache 的标准
-						 * 1. cache 必须打开（被定义）
-						 * 2. cache 必须至少有一个定义值
-						 * 3. cache 内必须有可对应的route
-						 */
-						if (pageCache !== null && pageCache.isUsed(reqRoute)) {
-							Coralian.logger.log(reqRoute + " use page cache.");
-							let cacheObj = pageCache.get(reqRoute);
-							if (!cacheObj) {
-								page = parseView(url, attrs);
-								pageCache.save(reqRoute, page);
+				if (fs.existsSync(absoluteUrl)) {
+					if (!String.isEmpty(url)) {
+
+						if (!renderType) {
+							url = absoluteUrl;
+						}
+
+						// 这里的缓存处理只是为了不每次都进行页面模板解析而进行的处理
+						if (caches.cacheUsed('page')) {
+							let pageCache = caches.get('page');
+							/*
+							* 判断使用 cache 的标准
+							* 1. cache 必须打开（被定义）
+							* 2. cache 必须至少有一个定义值
+							* 3. cache 内必须有可对应的route
+							*/
+							if (pageCache !== null && pageCache.isUsed(reqRoute)) {
+								Coralian.logger.log(reqRoute + " use page cache.");
+								let cacheObj = pageCache.get(reqRoute);
+								if (!cacheObj) {
+									page = parseView(url, attrs);
+									pageCache.save(reqRoute, page);
+								} else {
+									page = cacheObj;
+								}
 							} else {
-								page = cacheObj;
+								page = parseView(url, attrs);
 							}
 						} else {
 							page = parseView(url, attrs);
 						}
-					} else {
-						page = parseView(url, attrs);
 					}
-					res.write(page);
+				} else {
+					page = url; // 如果不存在对应的文件，则把该请求的内容直接显示在页面上
 				}
+				res.write(page);
 
 				break;
 			case Function.TYPE_NAME: // 单数类型是是函数，则认为是回调函数，并执行该回调函数
