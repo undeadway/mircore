@@ -54,7 +54,7 @@ function postAction() {
 		let querys = ctrler.getQueries();
 
 		ctrler.renderJSON({
-			"requestUrl": param.join(split),
+			"requestUrl": param.join(";"),
 			"requestMethod": ctrler.method(),
 			"requestParams": JSON.stringify(querys)
 		});
@@ -78,7 +78,7 @@ function putAction() {
 		let querys = ctrler.getQueries();
 
 		ctrler.renderJSON({
-			"requestUrl": param.join(split),
+			"requestUrl": param.join("-"),
 			"requestMethod": ctrler.method(),
 			"requestParams": JSON.stringify(querys)
 		});
@@ -102,7 +102,7 @@ function deleteAction() {
 		let querys = ctrler.getQueries();
 
 		ctrler.renderJSON({
-			"requestUrl": param.join(split),
+			"requestUrl": param.join(),
 			"requestMethod": ctrler.method(),
 			"requestParams": JSON.stringify(querys)
 		});
