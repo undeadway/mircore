@@ -26,10 +26,10 @@ let isStarted = false;
  * 这个函数只会在初始化服务器的时候才会调用一次
  * 
  */
-function listen() {
+function listen(name) {
 	let httpServer = require('http').createServer(router);
 	httpServer.listen(port);
-	Coralian.logger.log("Server started");
+	Coralian.logger.log(`${name} Server started`);
 }
 
 /*
@@ -275,16 +275,15 @@ module.exports = exports = () => {
 			});
 		} else {
 			process.title = appName + ' worker ' + process.env.NODE_WORKER_ID;
-			Coralian.logger.log(process.title, '#' + process.pid, 'started');
 
 			process.on('SIGHUP', function () {
 				// 接收到 SIGHUP 信号时，关闭 worker
 				process.exit(0);
 			});
 
-			listen();
+			listen(process.title, '#' + process.pid);
 		}
 	} else {
-		listen(); // 开发模式或者非集群模式下，简化所有配置，直接启动服务器
+		listen(appName); // 开发模式或者非集群模式下，简化所有配置，直接启动服务器
 	}
 }
