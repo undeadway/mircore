@@ -2,7 +2,7 @@
 	"port": 9000,
 	"split-mark": ":",
 	"develop-mode": true,
-	"app-name": "mircore-demo;",
+	"app-name": "mircore-demo",
 	"config" : {
 	},
 	"routes": {
