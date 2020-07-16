@@ -87,14 +87,12 @@ function controller() {
 					"Set-Cookie": resCookie.print()
 				}
 				let page = String.BLANK;
+				let absoluteUrl = pathResolve(url);
 
 				if (location !== undefined) {
 					header["Location"] = location;
 				}
 				res.writeHead(code, header);
-
-
-				let absoluteUrl = pathResolve(url);
 
 				if (fs.existsSync(absoluteUrl)) {
 					if (!String.isEmpty(url)) {
@@ -137,9 +135,10 @@ function controller() {
 			case Function.TYPE_NAME: // 单数类型是是函数，则认为是回调函数，并执行该回调函数
 				url(res);
 				break;
-			case Object.TYPE_NAME: // 如果传入的 url 是个 对象，则判断为 ajax 请求的返回结果
+				
+			case Object.TYPE_NAME: // 如果传入的 url 是个对象，则判断为 ajax 请求的返回结果
 				plain(url);
-				return;
+				return; // 因为 plain 已经有 end 了，所以这里直接 return
 			default:
 				unsupportedType(url);
 		}
