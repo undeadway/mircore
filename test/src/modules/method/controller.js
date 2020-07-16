@@ -1,5 +1,5 @@
 const { controller, baseAction, ajaxAction } = mircore;
-const { split } = mircore.config;
+const { splitMark } = mircore.config;
 const { HttpRequestMethod } = Coralian.constants;
 const PAGE = "/res/html/method.html"
 
@@ -30,7 +30,7 @@ function getAction() {
 		let querys = ctrler.getQueries();
 
 		ctrler.renderJSON({
-			"requestUrl": param.join(split),
+			"requestUrl": param.join(splitMark),
 			"requestMethod": ctrler.method(),
 			"requestParams": JSON.stringify(querys)
 		});
