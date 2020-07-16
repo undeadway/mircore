@@ -9,7 +9,7 @@
  */
 const fs = require("fs");
 const INDEX_STR = 'index';
-const { SLASH, QUESTION } = Coralian.constants.Mark;
+const Mark = Coralian.constants.Mark;
 
 const parseView = require("../util/parse-view");
 const cookies = require("../server/cookies");
@@ -135,7 +135,7 @@ function controller() {
 			case Function.TYPE_NAME: // 单数类型是是函数，则认为是回调函数，并执行该回调函数
 				url(res);
 				break;
-				
+
 			case Object.TYPE_NAME: // 如果传入的 url 是个对象，则判断为 ajax 请求的返回结果
 				plain(url);
 				return; // 因为 plain 已经有 end 了，所以这里直接 return
@@ -236,18 +236,18 @@ function controller() {
 			}
 
 			if (!parse.error) { // 如果传入的 parse 对象中未包含 error 对象，则正常执行
-				let path = reqPath.split(QUESTION);
+				let path = reqPath.split(Mark.QUESTION);
 				paras = path[1];
 				path = path[0];
 				if (!Object.isEmpty(paras)) {
 					paras = paras.split(splitMark);
 				}
 
-				if (path === SLASH) {
+				if (path === Mark.SLASH) {
 					path += INDEX_STR;
 				}
 
-				let url = path.split(SLASH); // 到这里， path 就不含任何 和 路径无关的东西了
+				let url = path.split(Mark.SLASH); // 到这里， path 就不含任何 和 路径无关的东西了
 				url.shift(); // 去掉一个的空值
 
 				if (String.endsWith(path, SLASH)) {
@@ -262,7 +262,7 @@ function controller() {
 					reqRoute = lastName;
 					actionName = lastUrl;
 				} else if (url.length === 1 // [route]
-					|| path === SLASH + realRoute.join(SLASH)) { // [route...] 所请求的不包含 action、paras，只有 route
+					|| path === Mark.SLASH + realRoute.join(Mark.SLASH)) { // [route...] 所请求的不包含 action、paras，只有 route
 					reqRoute = lastUrl;
 					actionName = INDEX_STR;
 				} else { // [...., paras]
