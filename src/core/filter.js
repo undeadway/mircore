@@ -96,7 +96,7 @@ function invokeGlobalInspectors(ctrler, fi) {
 		index = count + 1;
 	}
 
-	// 因为 所有 的 inspector 都要用得到 controller 所以将 GlobalInvocation 放在这里实现
+	// 因为 所有的 inspector 都要用得到 controller 所以将 GlobalInvocation 放在这里实现
 	({ // GlobalInvocation
 		getController: function () {
 			return ctrler;
@@ -105,7 +105,7 @@ function invokeGlobalInspectors(ctrler, fi) {
 			if (index < count) {
 				inspectors[index++].inspect(this);
 			} else if (index++ === count) {
-				fi.execute(); // 当global  inspector 被执行完时，执行 filter inspector
+				fi.execute(); // 当 global  inspector 被执行完时，执行 filter inspector
 				end();
 			}
 		},

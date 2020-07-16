@@ -20,6 +20,6 @@ this.getError = function (code) {
 	return {
 		errorcode: code,
 		errortitle: HTTP_STATUS_CODES[code],
-		errormsg: ERR_OBJ[code]
+		errormsg: ERR_OBJ[code] || '不可预料的错误'
 	};
 };
