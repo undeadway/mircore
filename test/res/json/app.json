@@ -6,8 +6,8 @@
 	"config" : {
 	},
 	"routes": {
-		"/index": "/index",
-		"/first": "/index",
+		"/index": "/homepage",
+		"/first": "/homepage",
 		"/next": "/next",
 		"/second": "/next",
 		"/err": "/eooo",
