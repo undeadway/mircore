@@ -17,7 +17,6 @@ const caches = require("../server/cache");
 const SPLIT_MARK = require("../config/app").split;
 
 const { MimeType, HttpStatusCode, HttpRequestMethod } = Coralian.constants;
-const { addAll } = Object;
 const { unsupportedOperation, unsupportedType } = Error;
 const contollerMapping = require("./../util/controller_mapping");
 const JSONstringify = JSON.stringify;
@@ -369,7 +368,7 @@ function controller() {
 					attrs[name] = target = {};
 				}
 			}
-			addAll(obj, target);
+			Object.addAll(obj, target);
 		},
 		getAttr: function (k) {
 			return attrs[k];
