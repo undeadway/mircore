@@ -47,6 +47,7 @@ function controller() {
 			error.code = code;
 			req.parse.error = error;
 		}
+		req.method = HttpRequestMethod.GET; // controller 中执行错误页面的时候，改成 get 模式
 		if (ctrler.judgeExecute(req, res, errorCtrler.name)) {
 			ctrler.execute();
 		}
@@ -209,11 +210,6 @@ function controller() {
 			parse = req.parse, method = req.method;
 			query = parse.query, reqCookie = parse.cookies, typeName = name.type, client = req.client;
 
-			// reqRoute = reqRoute.slice(1); // 去掉最前面的 “/”
-			// if (String.isEmpty(reqRoute)) {
-			// 	reqRoute = INDEX; // 首页的时候，将 空 修正为 index
-			// }
-
 			/**
 			 * realRoute = name.path 是对应文件物理路径 : [blog,read]
 			 * reqRoute 是浏览器中输入的 url，如果有多层，在取最后一层 : read
@@ -246,10 +242,15 @@ function controller() {
 				let url = path.split(SLASH); // 到这里， path 就不含任何 和 路径无关的东西了
 				url.shift(); // 去掉一个的空值
 
+				if (String.endsWith(path, SLASH)) {
+					url.pop(); // 去掉最后一个空值
+				}
+
+				let reqMethod = method.toLowerCase();
 				let lastUrl = Array.last(url); // 获取 url 中最后一个
 				let lastName = Array.last(realRoute);
 
-				if (actions[lastUrl]) { // [route..., action]
+				if (actions[`${reqMethod}_${lastUrl}`]) { // [route..., action]
 					reqRoute = lastName;
 					actionName = lastUrl;
 				} else if (url.length === 1 // [route]
@@ -258,7 +259,7 @@ function controller() {
 					actionName = INDEX_STR;
 				} else { // [...., paras]
 					let lastSecond = Array.last(url, 2); // 取得倒数第二个
-					if (url.length > 2 && actions[lastSecond]) {  // [route..., action, paras]
+					if (url.length > 2 && actions[`${reqMethod}_${lastSecond}`]) {  // [route..., action, paras]
 						actionName = lastSecond;
 					} else { // [route..., paras]
 						actionName = INDEX_STR;
@@ -329,6 +330,9 @@ function controller() {
 			} else {
 				return query;
 			}
+		},
+		getQueries: function() {
+			return query;
 		},
 		isEmptyQuery: function () {
 			return Object.isEmpty(query);
