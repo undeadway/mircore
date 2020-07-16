@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <title>Mircore 请求测试页面</title>
+<script src="https://cdn.staticfile.org/jquery/2.0.0/jquery.min.js"></script>
 <style>
 	ul, li {
 		margin: 0px;
@@ -57,14 +58,14 @@
 		<h3>基本配置</h3>
 		<div class="box base-box box-wrapper">
 			<ul><li>请求方式：</li><li>
-				<select id="query_method">
+				<select id="request_method">
 					<option>GET</option>
 					<option>POST</option>
 					<option>PUT</option>
 					<option>DELETE</option>
 				</select>
 			</li></ul>
-			<ul><li>请求地址：</li><li><input type="text" id="query_url" /></li></ul>
+			<ul><li>请求地址：</li><li><input type="text" id="request_url" /></li></ul>
 		</div>
 		<div class="query-box box-wrapper">
 			<h3>请求参数</h3><div class="add-line" id="add_line">+</div>
@@ -73,68 +74,80 @@
 				<div class="query-val-box" id="query_config_box"></div>
 			</div>
 		</div>
-		<button id="form_submit">发送请求</button>
+		<button id="submit_btn">发送请求</button>
 	</div>
 	<div class="wrapper">
 		<h3>请求内容</h3>
 		<div class="box base-box box-wrapper">
-			<ul><li>请求方法</li><li>${requestMethod}</li></ul>
-			<ul><li>请求URL</li><li>${requestUrl}</li></ul>
-			<ul><li>请求参数</li><li>${requestPrams}</li></ul>
+			<ul><li>请求方法</li><li id="request_method_response"></li></ul>
+			<ul><li>请求URL</li><li id="request_url_response"></li></ul>
+			<ul><li>请求参数</li><li id="request_params_response"></li></ul>
 		</div>
 	</div>
 <script>
-var index = 0;
-var querConfigBox = document.getElementById("query_config_box");
-function createQueryConfig() {
-	var ul = document.createElement("ul");
-	var nameLi = document.createElement("li");
-	var nameInput = document.createElement("input");
-	nameInput.id = "name" + index++;
-	nameInput.className = "name";
-	nameLi.appendChild(nameInput);
-	ul.appendChild(nameLi);
 
-	var valueLi = document.createElement("li");
-	var valInput = document.createElement("input");
-	valInput.id = "value" + index++;
-	valInput.className = "value";
-	valueLi.appendChild(valInput);
-	ul.appendChild(valueLi);
+var createQueryConfig = (function() {
 
-	querConfigBox.appendChild(ul);
-}
+	var index = 0;
+	var querConfigBox =$("#query_config_box");
+
+	return function() {
+
+		var node = $(`<ul><li><input type="text" id="name_${index}" class="names" /></li>
+					<li><input type='text' id="value_${index}" class="values" /></li></ul>`);
+		index++;
+		querConfigBox.append(node);
+
+	};
+})();
+
 createQueryConfig();
 
-var addLineBtn = document.getElementById("add_line");
-addLineBtn.onclick = createQueryConfig;
+$("#add_line").on('click', createQueryConfig);
 
-var frmSubmitBtn = document.getElementById("form_submit");
-frmSubmitBtn.onclick = function() {
-	var method = document.getElementById("query_method");
-	var url = document.getElementById("query_url");
-	var frm = document.getElementById("sunmit_form");
+$("#submit_btn").on('click', (function() {
 
-	var names = document.getElementsByClassName("name");
-	var values = document.getElementsByClassName("value");
+	var requestMethod = $("#request_method_response");
+	var requestUrl = $("#request_url_response");
+	var requestParams = $("#request_params_response");
 
-	for (var i = 0, len = names.length; i< len; i++) {
-		var name = names[i].value;
-		if (name)  {
-			var input = document.createElement("input");
-			input.setAttribute("type","hidden");
-			input.name = name;
-			input.value = values[i].value;
+	return function() {
 
-			frm.appendChild(input);
+		try {
+			var names = $(".names");
+			var values = $(".values");
+			var method = $("#request_method").val();
+			var url = $("#request_url").val();
+
+			var data = {};
+
+			for (var i = 0, len = names.length; i < len; i++) {
+				var name = $(names[i]).val();
+				var value = $(values[i]).val();
+
+				if (name) {
+					data[name] = value;
+				}
+			}
+
+			var res = $.ajax({
+				url: '/method/testreq/' + url,
+				method: method,
+				data: data,
+				success: function(res) {
+					requestMethod.html(res.requestMethod);
+					requestUrl.html(res.requestUrl);
+					requestParams.html(res.requestParams);
+				}
+			});
+
+		} catch (e) {
+			alert(e.message);
+			console.log(e.stack);
 		}
 	}
+})());
 
-	frm.method = method.value;
-	frm.action += url.value;
-
-	frm.submit();
-};
 </script>
 </body>
 </html>
