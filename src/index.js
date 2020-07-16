@@ -44,9 +44,9 @@ that.start = () => {
 	that.cache = require("./server/cache");
 	that.cookies = require("./server/cookies");
 	Object.addAll(require("./core/actions"), that);
-	that.config = require("./config/app");
+	that.config = require("./util/app-config");
 	that.util = require("./util/utils").publics;
-	that.util.parseView = require("./util/parse_view");
+	that.util.parseView = require("./util/parse-view");
 
 	const fs = require("fs");
 	const siteappPath = pathResolve("/src/config/siteapp");

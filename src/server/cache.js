@@ -7,7 +7,7 @@
  * 从而避免全局配置的 cache 污染。
  */
 
-const _getCache = require("../config/app").getCache;
+const _getCache = require("../util/app-config").getCache;
 const CACHES = {};
 const { unsupportedOperation } = Error;
 

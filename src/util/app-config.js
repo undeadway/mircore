@@ -9,7 +9,6 @@ const cache = config.cache;
 const routes = config.routes;
 const routesName = Object.keys(routes);
 const database = (!!config.database) ? require(config.database) : null;
-//delete config.database;
 
 Object.defineProperty(exports, 'database', {
 	value: database,
@@ -20,19 +19,19 @@ Object.defineProperty(exports, 'port', {
 	writable: false
 });
 Object.defineProperty(exports, 'developMode', {
-	value: !!config.develop,
+	value: !!config["develop-mode"],
 	writable: false
 });
 Object.defineProperty(exports, 'clusterMode', {
-	value: !!config.cluster,
+	value: !!config["cluster-mode"],
 	writable: false
 });
 Object.defineProperty(exports, 'appName', {
-	value: config.name,
+	value: config["app-name"],
 	writable: false
 });
-Object.defineProperty(exports, 'split', {
-	value: (config.split || ':'),
+Object.defineProperty(exports, 'splitMark', {
+	value: (config["split-mark"] || ':'),
 	writable: false
 });
 Object.defineProperty(exports, 'routesName', {
@@ -64,7 +63,7 @@ Object.defineProperty(exports, 'delRoute', {
 Object.defineProperty(exports, 'getCache', {
 	value: function (name) {
 		if (!cache) return null;
-		return cache[name];
+		return cache[name] || null;
 	},
 	writable: false
 });

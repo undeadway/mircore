@@ -34,7 +34,7 @@ const { errorStatement, noSuchProperty } = Error,
 	BLANK = String.BLANK;
 const { replaceElement, replaceLoop } = Coralian.ReplaceHolder;
 const HTML_FILE_MAP = {};
-const pageCache = require("../config/app").getCache('page');
+const pageCache = require("../util/app-config").getCache('page');
 
 function replaceComment(str) {
 

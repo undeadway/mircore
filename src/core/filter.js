@@ -7,10 +7,10 @@
 const CONTROLLER_PATH = pathResolve("/src/modules{?}/controller");
 const INDEX = '/index', SLASH = "/";
 const { errorCast } = Error;
-const { getRoute } = require("../config/app");
+const { getRoute } = require("../util/app-config");
 const fileExistsSync = require("fs").existsSync,
 	getGlobalInspectors = require("../util/utils").privates.getGlobalInspectors;
-const CONTROLLER_MAPPING = require("./../util/controller_mapping");
+const CONTROLLER_MAPPING = require("./../util/controller-mapping");
 
 function getController(req, route) {
 

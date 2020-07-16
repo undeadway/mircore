@@ -10,15 +10,15 @@
 const INDEX_STR = 'index';
 const { SLASH, QUESTION } = Coralian.constants.Mark;
 
-const parseview = require("../util/parse_view");
+const parseView = require("../util/parse-view");
 const cookies = require("../server/cookies");
 const sessions = require("../server/sessions");
 const caches = require("../server/cache");
-const SPLIT_MARK = require("../config/app").split;
+const { splitMark } = require("../util/app-config");
 
 const { MimeType, HttpStatusCode, HttpRequestMethod } = Coralian.constants;
 const { unsupportedOperation, unsupportedType } = Error;
-const contollerMapping = require("./../util/controller_mapping");
+const contollerMapping = require("./../util/controller-mapping");
 const JSONstringify = JSON.stringify;
 
 function controller() {
@@ -109,16 +109,16 @@ function controller() {
 							Coralian.logger.log(reqRoute + " use page cache.");
 							let cacheObj = pageCache.get(reqRoute);
 							if (!cacheObj) {
-								page = parseview(url, attrs);
+								page = parseView(url, attrs);
 								pageCache.save(reqRoute, page);
 							} else {
 								page = cacheObj;
 							}
 						} else {
-							page = parseview(url, attrs);
+							page = parseView(url, attrs);
 						}
 					} else {
-						page = parseview(url, attrs);
+						page = parseView(url, attrs);
 					}
 					res.write(page);
 				}
@@ -231,7 +231,7 @@ function controller() {
 				paras = path[1];
 				path = path[0];
 				if (!Object.isEmpty(paras)) {
-					paras = paras.split(SPLIT_MARK);
+					paras = paras.split(splitMark);
 				}
 
 				if (path === SLASH) {
@@ -264,7 +264,7 @@ function controller() {
 						actionName = INDEX_STR;
 					}
 					reqRoute = lastName;
-					paras = lastUrl.split(SPLIT_MARK);
+					paras = lastUrl.split(splitMark);
 				}
 			} else {
 				actionName = INDEX_STR;

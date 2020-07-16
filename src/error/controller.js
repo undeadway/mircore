@@ -3,7 +3,7 @@
  */
 const controller = require("./../core/controller");
 const { getError } = require("./errorconfig");
-const { developMode } = require("../config/app");
+const { developMode } = require("../util/app-config");
 const ERROR_HTML_FILE = __dirname + "/error.html";
 const baseAction = require("./../core/actions").baseAction;
 const HttpStatusCode = Coralian.constants.HttpStatusCode;

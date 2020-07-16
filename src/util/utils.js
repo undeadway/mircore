@@ -8,7 +8,7 @@ const constants = {};
 const process = require('child_process');
 const nodemailer = require("nodemailer");
 const fs = require("fs");
-const { getConfig } = require("../config/app");
+const { getConfig } = require("../util/app-config");
 
 //////////////////////////// publics ////////////////////////////
 publics.runShell = (shellCmd) => {
