@@ -54,6 +54,7 @@ nodejs 的程序配置，不多做解释。
 
 mircore 支持在 url 中带参数，形式如下： `/controller/action/parameters` 。  
 暂时先关注最后的 `parameters` 。这部分可以由多个参数构成，所以需要一个分割符来区分不同的参数：`/controller/action/p1:p2:p3`。
+关于 mircore 的 url 说明，可以参考[2.3.2. url](#232-url)
 
 ### 2.2.3. 开发模式
 开发模式的配置名是 `develop-mode` ，如果不配置，默认使用 `true`（开发模式）。
@@ -85,8 +86,34 @@ routes: {
     /index: /homepage
 }
 ```
-这样，模块和 浏览器url 之间的对应关系就建立好了。
+这样，模块和 浏览器url 之间的对应关系就建立好了。然后在 `homepage` 文件夹中新建一个叫 `controller.js` 的文件。  
+**不要随意修改 `controller.js` 的文件名，否则 mircore 将无法识别**。
 
-### 2.3.1. controller
-在 `homepage` 文件夹中新建一个叫 `controller.js` 的文件。**不要随意修改这个文件的文件名，否则 mircore 将无法识别**。
+然后在 `controller.js` 中写下面的代码，一个最简单的网站就建好了，可以通过浏览器访问了。
+```
+const controller = mircore.controller;
 
+function indexController() {
+
+	const ctrler = controller();
+
+	ctrler.addAction(() => {
+		ctrler.render("Hello world!");
+	});
+
+	return ctrler;
+}
+
+module.exports = exports = indexController;
+```
+
+![](./helloworld.png)
+
+### 2.3.1 渲染
+在上述
+
+### 2.4 url
+mircore 把 url 分成了四段。一个完整的 url 应该类似下面的结构：
+`/controller/action/parametes?queries`
+
+#### 2.4.1. controller
