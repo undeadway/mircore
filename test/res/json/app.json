@@ -11,6 +11,7 @@
 		"/next": "/next",
 		"/second": "/next",
 		"/err": "/eooo",
-		"/method": "/method"
+		"/method": "/method",
+		"/nono": "/nono"
 	}
 }
