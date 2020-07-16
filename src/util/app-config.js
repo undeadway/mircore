@@ -8,12 +8,7 @@ const config = JSON.parse(require("fs").readFileSync(pathResolve("/res/json/app.
 const cache = config.cache;
 const routes = config.routes;
 const routesName = Object.keys(routes);
-const database = (!!config.database) ? require(config.database) : null;
 
-Object.defineProperty(exports, 'database', {
-	value: database,
-	writable: false
-});
 Object.defineProperty(exports, 'port', {
 	value: (config.port || 9000),
 	writable: false
