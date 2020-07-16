@@ -130,12 +130,10 @@ function controller() {
 					page = url; // 如果不存在对应的文件，则把该请求的内容直接显示在页面上
 				}
 				res.write(page);
-
 				break;
 			case Function.TYPE_NAME: // 单数类型是是函数，则认为是回调函数，并执行该回调函数
 				url(res);
 				break;
-
 			case Object.TYPE_NAME: // 如果传入的 url 是个对象，则判断为 ajax 请求的返回结果
 				plain(url);
 				return; // 因为 plain 已经有 end 了，所以这里直接 return
@@ -302,7 +300,7 @@ function controller() {
 		 * 暂时只是对action的处理（包括inspector和之后的执行 action
 		 */
 		execute: function () {
-			invokeAction(actions, method.toLowerCase() + "_" + actionName, this);
+			invokeAction(actions, method.toLowerCase(), actionName, this);
 		},
 		// Render 处理
 		render: render,
@@ -516,9 +514,9 @@ function addAction(actions, name, instance, inspectors = []) {
 	};
 }
 
-function invokeAction(actions, name, ctrler) {
+function invokeAction(actions, method, name, ctrler) {
 
-	let action = actions[name];
+	let action = actions[`${method}_${name}`];
 
 	if (!action) {
 		Coralian.logger.err(`Action ${name} 不存在`);
@@ -555,10 +553,11 @@ function invokeAction(actions, name, ctrler) {
 			},
 			/**
 			 * 当目标请求的 action 被逻辑拒绝的时候，调用这个方法来更替 action
+			 * 但被替换之后的 action 只能是 get 请求
 			 */
 			resetAction: function (actionName) {
 				if (!typeIs(actionName, String.TYPE_NAME)) unsupportedType(actionName);
-				invokeAction(actions, actionName, ctrler); // 递归调用 invokeAction
+				invokeAction(actions, HttpRequestMethod.GET, actionName, ctrler); // 递归调用 invokeAction
 				end();
 			},
 			getController: function () {
