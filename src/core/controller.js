@@ -87,7 +87,7 @@ function controller() {
 					"Set-Cookie": resCookie.print()
 				}
 				let page = String.BLANK;
-				let absoluteUrl = (code === 200) ? pathResolve(url) : url;
+				let absoluteUrl = pathResolve(url);
 
 				if (location !== undefined) {
 					header["Location"] = location;

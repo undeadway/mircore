@@ -2,6 +2,10 @@ require("coralian"); // 预载入 coralian
 
 function pathResolve(name, isFolder) {
 
+	if (String.startsWith(name, __dirname)) {
+		return name; // 如果已经是绝对文件，则不做处理
+	}
+
 	let output = require("path").resolve("." + name);
 	if (isFolder) output += "/";
 	return output;
