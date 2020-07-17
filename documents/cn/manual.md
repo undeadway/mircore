@@ -122,7 +122,7 @@ module.exports = exports = indexController;
 >![图1 Hello world](./../imgs/helloworld.png)
 >图1 Hello world
 
-### 2.3.1 渲染
+### 2.3.1. 渲染
 在上述示例中，采用了直接将文本渲染到前端页面中的方式。  
 在 mircore 中，也可以采用模板化处理来渲染一个 HTML 文件。  
 此时，就需要先引入一个 HTML 文件，这个文件的位置从项目根目录开始。
@@ -197,6 +197,15 @@ HTML 文件修改为：
 同样可以获得和 图1 相同的效果。
 
 模板的更多配置可以参考：[页面模板](./page-template.md)
+
+#### 2.3.1.1. 渲染方式
+##### 2.3.1.1.1. render
+mircore 默认的渲染方式，只用于 HTML 的渲染。
+##### 2.3.1.1.2. plain
+用于渲染 text/plain 形式的渲染。
+如果指定渲染类型，则可以渲染相对应的内容。
+##### 2.3.1.1.3. renderJSON
+用于渲染 application/json 形式的渲染。
 
 ## 2.4 url
 mircore 把 url 分成了四段。一个完整的 url 应该类似下面的结构：
@@ -318,17 +327,19 @@ function indexAction() {
 	return action;
 }
 ```
-baseAction 继承自 baseAction，所以已经实现 `execute` 方法。  
-baseAction 是一个抽象类，所以所有继承 baseAction 的类都要自行实现 `query` 方法。
+ajaxAction 继承自 baseAction，所以已经实现 `execute` 方法。  
+ajaxAction 是一个抽象类，所以所有继承 ajaxAction 的类都要自行实现 `query` 方法。  
+ajaxAction 重载了一个 renderAjax 的方法，默认的渲染方式时 JSON 。  
+如果需要实现其他形式的渲染，需要调用 controller 中其他的渲染方式来实现。
 
 #### 2.4.2.3. 将 action 添加到 controller
 ##### 2.4.2.3.1. 用匿名函数作为 action
-代码就如最开始示例的
+就如值前示例的：
 ```
 ctrler.addAction(() => {
 });
 ```
-通过这种方式加载的 action，所对应的 url 就是 index。
+通过这种方式加载的 action，所对应的 url 就是 index 。
 
 ##### 2.4.2.3.2. 通过命名函数作为 action
 ```
@@ -342,7 +353,7 @@ function xxxAction() {
 ```
 ctrler.addAction(xxxAction);
 ```
-通过这种方式加载的 action，所对应的 url 就是 xxx。
+通过这种方式加载的 action ，所对应的 url 就是 xxx 。
 
 ##### 2.4.2.3.3. 通过指定 action 名来添加 action
 ```
