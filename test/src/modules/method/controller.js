@@ -29,7 +29,7 @@ function getAction() {
 
 		let querys = ctrler.getQueries();
 
-		ctrler.renderJSON({
+		action.renderAjax({
 			"requestUrl": param.join(splitMark),
 			"requestMethod": ctrler.method(),
 			"requestParams": JSON.stringify(querys)
@@ -53,7 +53,7 @@ function postAction() {
 
 		let querys = ctrler.getQueries();
 
-		ctrler.renderJSON({
+		action.renderAjax({
 			"requestUrl": param.join(";"),
 			"requestMethod": ctrler.method(),
 			"requestParams": JSON.stringify(querys)
@@ -77,7 +77,7 @@ function putAction() {
 
 		let querys = ctrler.getQueries();
 
-		ctrler.renderJSON({
+		action.renderAjax({
 			"requestUrl": param.join("-"),
 			"requestMethod": ctrler.method(),
 			"requestParams": JSON.stringify(querys)
@@ -101,7 +101,7 @@ function deleteAction() {
 
 		let querys = ctrler.getQueries();
 
-		ctrler.renderJSON({
+		action.renderAjax({
 			"requestUrl": param.join(),
 			"requestMethod": ctrler.method(),
 			"requestParams": JSON.stringify(querys)
