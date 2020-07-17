@@ -23,7 +23,7 @@ server.start();
 * 文件处理
 
 ## 教程
-[教程](./documents/manual.cn.md)
+[教程](./documents/cn/manual.md)
 
 ## License
 Apache 2.0
