@@ -87,7 +87,7 @@ function controller() {
 					"Set-Cookie": resCookie.print()
 				}
 				let page = String.BLANK;
-				let absoluteUrl = pathResolve(url);
+				let absoluteUrl = (code === 200) ? pathResolve(url) : url;
 
 				if (location !== undefined) {
 					header["Location"] = location;
@@ -226,11 +226,20 @@ function controller() {
 			realRoute = name.route;
 			modName = realRoute[0];
 
-			if (modName === Error.TYPE_NAME || parse.error) {
-				Coralian.logger.err("request route : " + modName);
-				Coralian.logger.err(parse.error);
-			} else {
-				Coralian.logger.log("request route : " + modName);
+			// if (modName === Error.TYPE_NAME|| ) {
+			// 	
+			// 	
+			// } else {
+			// 	
+			// }
+
+			Coralian.logger.log(`request route : ${modName}`);
+			if (modName === Error.TYPE_NAME) {
+				if ((parse.error && typeIs(parse.error, 'number'))) {
+					Coralian.logger.log(`Error code : ${parse.error}`);
+				} else {
+					Coralian.logger.err(parse.error);
+				}
 			}
 
 			if (!parse.error) { // 如果传入的 parse 对象中未包含 error 对象，则正常执行
@@ -248,7 +257,7 @@ function controller() {
 				let url = path.split(Mark.SLASH); // 到这里， path 就不含任何 和 路径无关的东西了
 				url.shift(); // 去掉一个的空值
 
-				if (String.endsWith(path, SLASH)) {
+				if (String.endsWith(path, Mark.SLASH)) {
 					url.pop(); // 去掉最后一个空值
 				}
 
