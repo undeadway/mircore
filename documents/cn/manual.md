@@ -55,7 +55,7 @@ nodejs 的程序配置，不多做解释。
 
 mircore 支持在 url 中带参数，形式如下： `/controller/action/parameters` 。  
 暂时先关注最后的 `parameters` 。这部分可以由多个参数构成，所以需要一个分割符来区分不同的参数：`/controller/action/p1:p2:p3`。
-关于 mircore 的 url 说明，可以参考 **[2.3. url](#24-url)**
+关于 mircore 的 url 说明，可以参考 **[2.4. url](#24-url)**
 
 ### 2.2.3. 开发模式
 开发模式的配置名是 `develop-mode` ，如果不配置，默认使用 `true`（开发模式）。
@@ -196,7 +196,7 @@ HTML 文件修改为：
 ```
 同样可以获得和 图1 相同的效果。
 
-模板的更多配置可以参考：[](./page-template.md)
+模板的更多配置可以参考：[页面模板](./page-template.md)
 
 ## 2.4 url
 mircore 把 url 分成了四段。一个完整的 url 应该类似下面的结构：
