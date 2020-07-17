@@ -19,7 +19,7 @@ package.json
 ```
 
 ## 2.1.1. index.js
-`index.js` is the entery file of the project.
+`index.js` is the entry of the project.
 Import `mircore` at here, the server will been start.
 ```
 const server = require("mircore");
@@ -30,30 +30,31 @@ server.start();
 Omitted.
 
 ## 2.1.3. res folder
-这里是所有资源文件的配置。  
-程序启动时，这里配置一个 json 文件夹，配置程序所必需的配置项目。  
+Put all configure files, resources files here.
+Create a json folder here before run the program. 
 
-具体说明参考 **[2.2. 程序配置](#22-程序配置)**
+The Detail look at: **[2.2. Program Configure](#22-Program-Configure)**
 
 ## 2.2.4. src folder
-这里是程序的代码文件。
+This folder sve all source files.
 
-具体说明参考 **[2.3. 第一个程序](#23-第一个程序)**
+The Detail look at: **[2.3. The first program](#23-The-first-pgoram)**
 
-## 2.2. 程序配置
-程序所有的配置都方在 `/res/json/app.json` 这个文件里。 
+## 2.2. Program Configure
+the configure of mircore all saved in the file named `/res/json/app.json`.
 
-**这些配置都由 mircore 来实现，不用开发者自己写代码来调用**。
+**These configure are all implemented by mircore.**。
 
-### 2.2.1. 端口号
-开发模式的配置名是 `port` ，如果不配置，默认使用 `9000` 。
+### 2.2.1. Port Number
+In configure file, the valiable name of port number is `port`, and the default value is `9000`.
 
 启动程序后，可以通过 `http://localhost:9000` 来访问网站。
 
-### 2.2.2. 参数分割符
-参数分割符的配置名是 `split-mark` ，如果不配置，默认使用`:`。
+### 2.2.2. Pramaters split mark
+In configure file, the valieable name of paramters split mark is `split-mark`, and the default value is ':'
 
-mircore 支持在 url 中带参数，形式如下： `/controller/action/parameters` 。  
+Mircore support request with pramaters in the url, like ``/controller/action/parameters``.
+
 暂时先关注最后的 `parameters` 。这部分可以由多个参数构成，所以需要一个分割符来区分不同的参数：`/controller/action/p1:p2:p3`。
 关于 mircore 的 url 说明，可以参考 **[2.4. url](#24-url)**
 
