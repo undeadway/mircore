@@ -42,7 +42,7 @@ exports = module.exports = {
 	error: () => {
 		return getContoller(ERROR_NAME);
 	},
-	remove: (name) => {
+	'delete': (name) => {
 		let ctrler = MAPPING[name];
 		delete MAPPING[name];
 		return ctrler;
