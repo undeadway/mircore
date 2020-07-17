@@ -46,7 +46,7 @@ that.start = () => {
 	Object.addAll(require("./core/actions"), that);
 	that.config = require("./util/app-config");
 	that.util = require("./util/utils").publics;
-	that.util.parseView = require("./util/parse-view");
+	that.util.pageTemplate = require("./util/page-template");
 
 	const fs = require("fs");
 	const siteappPath = pathResolve("/src/config/siteapp");

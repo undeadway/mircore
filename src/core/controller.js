@@ -11,7 +11,7 @@ const fs = require("fs");
 const INDEX_STR = 'index';
 const Mark = Coralian.constants.Mark;
 
-const parseView = require("../util/parse-view");
+const parseView = require("../util/page-template");
 const cookies = require("../server/cookies");
 const sessions = require("../server/sessions");
 const caches = require("../server/cache");
