@@ -54,4 +54,4 @@ server.start();
 Apache 2.0
 
 ## Manual
-[Manual](./documents/manual.en.md)
+[Manual](./documents/en/manual.md)
