@@ -73,7 +73,7 @@ function controller() {
 			location = undefined;
 		}
 
-		url = String.trim(url);
+		url = String.trim(String(url));
 
 		switch (typeOf(url)) {
 			case String.TYPE_NAME:
@@ -222,16 +222,9 @@ function controller() {
 			 * modName 是模块名 = 物理路径的第一层 blog
 			 * reqPath 是浏览器请求中的完整 url /blog/create?bid=123456
 			 */
-			reqPath = parse.pathname;
+			reqPath = decodeURIComponent(parse.pathname);
 			realRoute = name.route;
 			modName = realRoute[0];
-
-			// if (modName === Error.TYPE_NAME|| ) {
-			// 	
-			// 	
-			// } else {
-			// 	
-			// }
 
 			Coralian.logger.log(`request route : ${modName}`);
 			if (modName === Error.TYPE_NAME) {
@@ -498,6 +491,9 @@ function controller() {
 		},
 		getRealRoute: function () {
 			return realRoute;
+		},
+		getReqPath: function () {
+			return reqPath;
 		},
 		getModName: function () {
 			return modName;
