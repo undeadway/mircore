@@ -8,61 +8,73 @@ const config = JSON.parse(require("fs").readFileSync(pathResolve("/res/json/app.
 const cache = config.cache;
 const routes = config.routes;
 const routesName = Object.keys(routes);
+const { Mark } = Coralian.constants;
 
-Object.defineProperty(exports, 'port', {
+Object.defineProperty(exports, "port", {
 	value: (config.port || 9000),
 	writable: false
 });
-Object.defineProperty(exports, 'developMode', {
+Object.defineProperty(exports, "developMode", {
 	value: !!config["develop-mode"],
 	writable: false
 });
-Object.defineProperty(exports, 'clusterMode', {
+Object.defineProperty(exports, "clusterMode", {
 	value: !!config["cluster-mode"],
 	writable: false
 });
-Object.defineProperty(exports, 'appName', {
+Object.defineProperty(exports, "appName", {
 	value: config["app-name"],
 	writable: false
 });
-Object.defineProperty(exports, 'splitMark', {
-	value: (config["split-mark"] || ':'),
+Object.defineProperty(exports, "splitMark", {
+	value: (config["split-mark"] || ":"),
 	writable: false
 });
-Object.defineProperty(exports, 'routesName', {
+Object.defineProperty(exports, "routesName", {
 	value: routesName,
 	writable: false
 });
-Object.defineProperty(exports, 'getRoute', {
-	value: function (name) {
-		return routes[name];
+Object.defineProperty(exports, "routes", {
+	value: {
+		get: (name) => {
+			return routes[name];
+		},
+		add:  (name, value) => {
+			if (!routes[name]) return false;
+			routes[name] = value;
+			return true;
+		},
+		del: (name) => {
+			var route = routes[name];
+			delete routes[name];
+			return route;
+		},
+		hasFuzzyMatching:  () => {
+			return !!routes[`${Mark.SLASH}${Mark.ASTERISK}`];
+		}
 	},
 	writable: false
 });
-Object.defineProperty(exports, 'addRoute', {
-	value: (name, value) => {
-		if (!routes[name]) return false;
-		routes[name] = value;
-		return true;
-	},
-	writable: false
-});
-Object.defineProperty(exports, 'delRoute', {
-	value: (name) => {
-		var route = routes[name];
-		delete routes[name];
-		return route;
-	},
-	writable: false
-});
-Object.defineProperty(exports, 'getCache', {
+// Object.defineProperty(exports, "getRoute", {
+// 	value: ,
+// 	writable: false
+// });
+// Object.defineProperty(exports, "addRoute", {
+// 	value:,
+// 	writable: false
+// });
+// Object.defineProperty(exports, "delRoute", {
+// 	value: ,
+// 	writable: false
+// });
+Object.defineProperty(exports, "getCache", {
 	value: function (name) {
 		if (!cache) return null;
 		return cache[name] || null;
 	},
 	writable: false
 });
-Object.defineProperty(exports, 'getConfig', {
+Object.defineProperty(exports, "getConfig", {
 	value: (name) => {
 		return config.config[name];
 	},
