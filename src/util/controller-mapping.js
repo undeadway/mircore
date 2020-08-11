@@ -1,11 +1,11 @@
 const MAPPING = {};
-const SLASH = "/";
+const { Mark } = Coralian.constants;
 const ERROR_NAME = "/error";
 
 function putContoller(ctrlerName, ctrler) {
 	let instance = ctrler;
 
-	let route = ctrlerName.split(SLASH);
+	let route = ctrlerName.split(Mark.SLASH);
 	let outRoute = [];
 
 	for (let i = 0, len = route.length; i < len; i++) {

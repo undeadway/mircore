@@ -27,11 +27,8 @@ function controller() {
 	// 这些都要经过 juddeExe 才处理后才会赋值
 	let req, res, parse, method, query, realRoute, reqRoute, typeName, modName, actionName, reqCookie, client, reqPath;
 	// 这些都是已经初始化好的值
-	let attrs = {},
-		actions = {},
+	let attrs = {}, actions = {}, paras = null, isLogged = false,
 		httpStatusCode = HttpStatusCode.OK,
-		paras = null,
-		isLogged = false,
 		resCookie = cookies();
 
 	function renderOnError(error, code = HttpStatusCode.INTERNAL_SERVER_ERROR) {
