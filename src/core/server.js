@@ -129,11 +129,12 @@ function request(req, res) {
 
 	parse.cookies = cookies;
 
-	if (parse.pathname.indexOf(POINT) > -1) {
-		res.end();
-	} else {
-		filter(req, res);
-	}
+	filter(req, res);
+	// if (parse.pathname.indexOf(POINT) > -1) {
+	// 	res.end();
+	// } else {
+	// 	filter(req, res);
+	// }
 }
 
 /*
