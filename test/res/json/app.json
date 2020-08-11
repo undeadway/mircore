@@ -12,6 +12,7 @@
 		"/second": "/next",
 		"/err": "/eooo",
 		"/method": "/method",
-		"/nono": "/nono"
+		"/nono": "/nono",
+		"/*": "/test"
 	}
 }
