@@ -37,9 +37,11 @@ function getController(req, route) {
 			name.pop();
 		} else {
 			ctrlerWrapper = getControllerWrapper(ctrlerName);
-			if (ctrlerWrapper === null) {
-				name.pop();
+			if (ctrlerWrapper !== null) {
+				return ctrlerWrapper;
 			}
+
+			name.pop();
 			// ctrlerWrapper = CONTROLLER_MAPPING.get(ctrlerName);
 
 			// if (ctrlerWrapper) { // 若 CONTROLLER_MAPPING 中已包含请求路径，则直接返回所对应的 Controller
