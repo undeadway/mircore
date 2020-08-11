@@ -8,7 +8,7 @@ const CONTROLLER_PATH = pathResolve("/src/modules{?}/controller");
 const INDEX = '/index';
 const Mark = Coralian.constants.Mark;
 const { errorCast } = Error;
-const { getRoute } = require("../util/app-config");
+const { routes } = require("../util/app-config");
 const fileExistsSync = require("fs").existsSync,
 	getGlobalInspectors = require("../util/utils").privates.getGlobalInspectors;
 const CONTROLLER_MAPPING = require("./../util/controller-mapping");
@@ -31,32 +31,52 @@ function getController(req, route) {
 
 	for (; count >= 0; count--) {
 
-		let ctrlerName = getRoute(Mark.SLASH + name.join(Mark.SLASH));
+		let ctrlerName = routes.get(Mark.SLASH + name.join(Mark.SLASH));
 
 		if (ctrlerName === undefined) { // 非已注册的路径则判断非法路径，不做请求处理，进入下一轮循环
 			name.pop();
 		} else {
-			ctrlerWrapper = CONTROLLER_MAPPING.get(ctrlerName);
-
-			if (ctrlerWrapper) { // 若 CONTROLLER_MAPPING 中已包含请求路径，则直接返回所对应的 Controller
-				return ctrlerWrapper;
-			}
-			// 通过请求的 URL 来动态分析当前环境下所对应的 Controller 路径
-			let ctrlerPath = CONTROLLER_PATH.replace("{?}", ctrlerName);
-			if (fileExistsSync(ctrlerPath + ".js")) {
-				return CONTROLLER_MAPPING.put(ctrlerName, require(ctrlerPath));
-			} else { // 当解析 Controller 路径不存在的时候，认为该请求路径非法，进入下一轮循环
+			ctrlerWrapper = getControllerWrapper(ctrlerName);
+			if (ctrlerWrapper === null) {
 				name.pop();
 			}
+			// ctrlerWrapper = CONTROLLER_MAPPING.get(ctrlerName);
+
+			// if (ctrlerWrapper) { // 若 CONTROLLER_MAPPING 中已包含请求路径，则直接返回所对应的 Controller
+			// 	return ctrlerWrapper;
+			// }
+			// // 通过请求的 URL 来动态分析当前环境下所对应的 Controller 路径
+			// let ctrlerPath = CONTROLLER_PATH.replace("{?}", ctrlerName);
+			// if (fileExistsSync(ctrlerPath + ".js")) {
+			// 	return CONTROLLER_MAPPING.put(ctrlerName, require(ctrlerPath));
+			// } else { // 当解析 Controller 路径不存在的时候，认为该请求路径非法，进入下一轮循环
+			// 	name.pop();
+			// }
 		}
 	}
 
 	if (!ctrlerWrapper && count === 0) {
 		return CONTROLLER_MAPPING.put(INDEX, require(CONTROLLER_PATH.replace("{?}", INDEX)));
-	} else {
-		req.parse.error = 404;
-		return CONTROLLER_MAPPING.error();
+	} else if (routes.hasFuzzyMatching()) {
+		let ctrlerName = routes.get(`${Mark.SLASH}${Mark.ASTERISK}`);
+		ctrlerWrapper = getControllerWrapper(ctrlerName);
+		return ctrlerWrapper;
 	}
+	req.parse.error = 404;
+	return CONTROLLER_MAPPING.error();
+}
+
+function getControllerWrapper (ctrlerName, callback) {
+	let ctrlerWrapper = CONTROLLER_MAPPING.get(ctrlerName);
+	if (ctrlerWrapper) {
+		return ctrlerWrapper;
+	}
+	let ctrlerPath = CONTROLLER_PATH.replace("{?}", ctrlerName);
+	if (fileExistsSync(ctrlerPath + ".js")) {
+		return CONTROLLER_MAPPING.put(ctrlerName, require(ctrlerPath));
+	}
+
+	return null;
 }
 
 function invokeController(req, res, route) {
