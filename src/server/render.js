@@ -1,7 +1,7 @@
 /**
- * 把渲染独立出来作为一个单独的模块处理
+ * 把渲染处理独立出来
+ * 作为一个单独的模块
  */
-
 const fs = require("fs");
 const imageinfo = require("imageinfo");
 const contollerMapping = require("../util/controller-mapping");
@@ -39,20 +39,6 @@ function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 	 * 所有 JSON或者其他 plain 形式的显示都交给 plain 函数来实现
 	 */
 	function render({code = HttpStatusCode.OK, url, location, renderType, mimeType = MimeType.HTML}) {
-
-		// if (arguments.length === 1) {
-		// 	url = code;
-		// 	code = httpStatusCode;
-		// }
-		// if (arguments.length === 2 && typeIs(url, Boolean.TYPE_NAME)) {
-		// 	renderType = url;
-		// 	url = code;
-		// }
-
-		// if (arguments.length === 3 && typeIs(location, Boolean.TYPE_NAME)) {
-		// 	renderType = location;
-		// 	location = undefined;
-		// }
 
 		url = String.trim(String(url));
 
@@ -160,7 +146,7 @@ function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 
 	/*
 	 * 提供文件下载用
-	 * 现在尚未实现
+	 * 目前只能准确判断是否是图片，其余类型尚无准确的判断方法
 	 */
 	function renderFile({url, fileName, mime =  MimeType.OCTET_STREAM}) {
 		url = pathResolve(url);
