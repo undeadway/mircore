@@ -12,8 +12,8 @@ const Mark = Coralian.constants.Mark;
 
 const cookies = require("../server/cookies");
 const sessions = require("../server/sessions");
+const Render = require("../server/render");
 const { splitMark } = require("../util/app-config");
-const Render = require("./render");
 
 const { HttpStatusCode, HttpRequestMethod } = Coralian.constants;
 const { unsupportedOperation, unsupportedType } = Error;
@@ -21,7 +21,7 @@ const { unsupportedOperation, unsupportedType } = Error;
 function controller() {
 
 	// 这些都要经过 juddeExe 才处理后才会赋值
-	let req, res, parse, method, query, realRoute, reqRoute, typeName, modName, actionName, reqCookie, client, reqPath;
+	let parse, method, query, realRoute, reqRoute, typeName, modName, actionName, reqCookie, client, reqPath;
 	// 这些都是已经初始化好的值
 	let attrs = {}, actions = {}, paras = null, isLogged = false, resCookie = cookies();
 
@@ -32,19 +32,9 @@ function controller() {
 		 */
 		judgeExecute: function (request, response, name) {
 
-			const render = Render(request, response, {reqRoute, typeName, resCookie, attrs});
-			Object.addAll(render, this);
-			// this.render = render.render,
-			// renderOnError: render.renderOnError,
-			// plain: render.plain,
-			// renderFile: render.renderFile,
-			// renderJSON: render.renderJSON,
-			// end: render.end,
-
 			// 初期设置
-			req = request, res = response;
-			parse = req.parse, method = req.method;
-			query = parse.query, reqCookie = parse.cookies, typeName = name.type, client = req.client;
+			parse = request.parse, method = request.method;
+			query = parse.query, reqCookie = parse.cookies, typeName = name.type, client = request.client;
 
 			/**
 			 * realRoute = name.path 是对应文件物理路径 : [blog,read]
@@ -125,6 +115,9 @@ function controller() {
 						Error.unsupportedType(err);
 				}
 			}
+
+			const render = Render(request, response, {reqRoute, typeName, resCookie, attrs});
+			Object.addAll(render, this);
 
 			return true;
 		},
