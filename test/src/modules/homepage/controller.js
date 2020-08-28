@@ -12,7 +12,7 @@ function indexAction() {
 		ctrler.setAttr("name", ctrler.getModName());
 		ctrler.setAttr("link", getLink());
 
-		ctrler.render(PAGE);
+		ctrler.render({url: PAGE});
 	};
 
 	return action;

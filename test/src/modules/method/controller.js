@@ -9,7 +9,7 @@ function indexAction() {
 	action.execute = () => {
 
 		const ctrler = action.controller;
-		ctrler.render(PAGE);
+		ctrler.render({url: PAGE});
 	};
 
 	return action;

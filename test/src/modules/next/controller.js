@@ -13,7 +13,7 @@ function indexAction() {
 		ctrler.setAttr("name", ctrler.getReqRoute());
 		ctrler.setAttr("link", getLink());
 
-		ctrler.render(PAGE);
+		ctrler.render({url: PAGE});
 	};
 
 	return action;

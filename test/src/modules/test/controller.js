@@ -8,7 +8,7 @@ function indexAction() {
 
 	action.execute = () => {
 		const ctrler = action.controller;
-		ctrler.render(ctrler.getReqPath());
+		ctrler.render({url: ctrler.getReqPath()});
 	};
 
 	return action;
