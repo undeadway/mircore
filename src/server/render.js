@@ -164,8 +164,8 @@ function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 	 */
 	function renderFile({url, fileName, mime =  MimeType.OCTET_STREAM}) {
 		url = pathResolve(url);
+		fileName = fileName || url.split(Mark.SLASH).pop();
 		let file = fs.readFileSync(url, "binary");
-		let fileName = fileName || url.split(Mark.SLASH).pop();
 		let imgInfo = imageinfo(file);
 
 		if (imgInfo) { // 判断是否是图片
