@@ -13,6 +13,7 @@
 		"/err": "/eooo",
 		"/method": "/method",
 		"/nono": "/nono",
+		"/image": "/image",
 		"/*": "/test"
 	}
 }
