@@ -35,7 +35,7 @@ const USING_TAG_START = "<using:",
 const USING_TAG_START_LEN = USING_TAG_START.length;
 const { errorStatement, noSuchProperty } = Error;
 const { replaceElement, replaceLoop } = Coralian.ReplaceHolder;
-const { Mark } = Coralian.contains;
+const { Mark } = Coralian.constants;
 const HTML_FILE_MAP = {};
 const pageCache = require("../util/app-config").getCache("page");
 
