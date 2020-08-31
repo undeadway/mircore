@@ -33,7 +33,7 @@ function ajaxAction() {
 	let action = baseAction();
 
 	action.execute = function (renderType = AjaxRenderType_JSON) {
-		action.renderAjax = action.controller['render' + renderType];
+		action.renderAjax = action.controller[`render${renderType}`];
 		action.query(); // 这个方法需要子类覆盖重写
 	};
 
