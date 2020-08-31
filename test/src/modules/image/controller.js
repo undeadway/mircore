@@ -6,7 +6,7 @@ function nonoController() {
 	const ctrler = controller();
 
 	ctrler.addAction(() => {
-		ctrler.renderFile({url: file});
+		ctrler.renderFile({file: file});
 	});
 
 	return ctrler;
