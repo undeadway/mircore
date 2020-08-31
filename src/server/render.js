@@ -7,10 +7,11 @@ const imageinfo = require("imageinfo");
 const contollerMapping = require("../util/controller-mapping");
 const parseView = require("../util/page-template");
 const caches = require("./cache");
-const { MimeType, Mark, HttpStatusCode, HttpRequestMethod } = Coralian.constants;
+const { MimeType, Mark, HttpStatusCode } = Coralian.constants;
 const JSONstringify = JSON.stringify;
 const ROUTE_ERROR = "/error";
 const STR_BINARY = "binary";
+const METHOD_GET = Coralian.constants.HttpRequestMethod.GET;
 
 function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 
@@ -27,7 +28,7 @@ function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 			error.code = code;
 			req.parse.error = error;
 		}
-		req.method = HttpRequestMethod.GET; // controller 中执行错误页面的时候，改成 get 模式
+		req.method = METHOD_GET; // controller 中执行错误页面的时候，改成 get 模式
 		if (ctrler.judgeExecute(req, res, errorCtrler.name)) {
 			ctrler.execute();
 		}
@@ -37,7 +38,7 @@ function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 	 * render 只负责实现 HTML 的显示
 	 * 所有 JSON或者其他 plain 形式的显示都交给 plain 函数来实现
 	 */
-	function render({code = HttpStatusCode.OK, url, location, renderType, mimeType = MimeType.HTML}) {
+	function render({code = HttpStatusCode.OK, url, location, renderType}) {
 
 		url = String.trim(String(url));
 
@@ -49,7 +50,7 @@ function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 				 * 解析HTML，并将 PARA 中的参数赋值到 页面中
 				 */
 				let header = {
-					"Content-Type": mimeType,
+					"Content-Type": MimeType.HTML,
 					"Set-Cookie": resCookie.print()
 				}
 				let page = String.BLANK;
@@ -61,7 +62,7 @@ function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 				res.writeHead(code, header);
 
 				if (fs.existsSync(absoluteUrl)) {
-					if (!String.isEmpty(url)) {
+					if (!String.isEmpty(url)) { // 这里忘了为什么要做空判断了
 
 						if (!renderType) {
 							url = absoluteUrl;
