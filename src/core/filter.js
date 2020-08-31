@@ -4,14 +4,15 @@
  * 如果是已注册的路径（可用模块），
  * 则返回请求该路径所对应的controller，否则返回 404 。
  */
-const CONTROLLER_PATH = pathResolve("/src/modules{?}/controller");
 const INDEX = '/index';
-const Mark = Coralian.constants.Mark;
+const { Mark } = Coralian.constants;
 const { errorCast } = Error;
 const { routes } = require("../util/app-config");
 const fileExistsSync = require("fs").existsSync,
 	getGlobalInspectors = require("../util/utils").privates.getGlobalInspectors;
 const CONTROLLER_MAPPING = require("./../util/controller-mapping");
+const QUESTION_REP_MARK = "{?}", JS_FILE_EXT =  ".js";
+const CONTROLLER_PATH = pathResolve(`/src/modules${QUESTION_REP_MARK}/controller`);
 
 function getController(req, route) {
 
@@ -46,7 +47,7 @@ function getController(req, route) {
 	}
 
 	if (!ctrlerWrapper && count === 0) {
-		return CONTROLLER_MAPPING.put(INDEX, require(CONTROLLER_PATH.replace("{?}", INDEX)));
+		return CONTROLLER_MAPPING.put(INDEX, require(CONTROLLER_PATH.replace(QUESTION_REP_MARK, INDEX)));
 	} else if (routes.hasFuzzyMatching()) {
 		let ctrlerName = routes.get(`${Mark.SLASH}${Mark.ASTERISK}`);
 		ctrlerWrapper = getControllerWrapper(ctrlerName);
@@ -61,8 +62,8 @@ function getControllerWrapper (ctrlerName, callback) {
 	if (ctrlerWrapper) {
 		return ctrlerWrapper;
 	}
-	let ctrlerPath = CONTROLLER_PATH.replace("{?}", ctrlerName);
-	if (fileExistsSync(ctrlerPath + ".js")) {
+	let ctrlerPath = CONTROLLER_PATH.replace(QUESTION_REP_MARK, ctrlerName);
+	if (fileExistsSync(ctrlerPath + JS_FILE_EXT)) {
 		return CONTROLLER_MAPPING.put(ctrlerName, require(ctrlerPath));
 	}
 
