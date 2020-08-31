@@ -13,26 +13,7 @@ const ROUTE_ERROR = "/error";
 const STR_BINARY = "binary";
 const METHOD_GET = Coralian.constants.HttpRequestMethod.GET;
 
-function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
-
-	function renderOnError(error, code = HttpStatusCode.INTERNAL_SERVER_ERROR) {
-
-		let errorCtrler = contollerMapping.get(ROUTE_ERROR);
-		let ctrler = errorCtrler.instance();
-
-		if (typeIs(error, Number.TYPE_NAME)) {
-			let newErr = new Error();
-			newErr.code = error;
-			req.parse.error = newErr;
-		} else {
-			error.code = code;
-			req.parse.error = error;
-		}
-		req.method = METHOD_GET; // controller 中执行错误页面的时候，改成 get 模式
-		if (ctrler.judgeExecute(req, res, errorCtrler.name)) {
-			ctrler.execute();
-		}
-	}
+function Render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 
 	/*
 	 * render 只负责实现 HTML 的显示
@@ -141,31 +122,6 @@ function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 	}
 
 	/*
-	 * 提供文件下载用
-	 * 目前只能准确判断是否是图片，其余类型尚无准确的判断方法
-	 */
-	function renderFile({file, name, mime =  MimeType.OCTET_STREAM}) {
-		if (typeIs(file, String.TYPE_NAME)) {
-			let url = pathResolve(url);
-			file = fs.readFileSync(url, STR_BINARY);
-		}
-		name = name || url.split(Mark.SLASH).pop();
-		let imgInfo = imageinfo(file);
-
-		if (imgInfo) { // 判断是否是图片
-			mime = imgInfo.mimeType;
-		}
-
-		res.writeHead(HttpStatusCode.OK, {
-			"Content-Type": mime,
-			'Content-Disposition': `attachment;filename=${name}`,
-			"Set-Cookie": resCookie.print()
-		});
-		res.write(file, STR_BINARY);
-		end();
-	}
-
-	/*
 	 * 在这里暂时只做关闭 res 处理，之后再补充其他功能
 	 */
 	function end() {
@@ -175,13 +131,59 @@ function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 
 	return {
 		render,
-		renderFile,
+		/*
+		 * 提供文件下载用
+		 * 目前只能准确判断是否是图片，其余类型尚无准确的判断方法
+		 */
+		renderFile: ({file, name, mime =  MimeType.OCTET_STREAM}) {
+			if (typeIs(file, String.TYPE_NAME)) {
+				let url = pathResolve(url);
+				file = fs.readFileSync(url, STR_BINARY);
+			}
+			name = name || url.split(Mark.SLASH).pop();
+			let imgInfo = imageinfo(file);
+	
+			if (imgInfo) { // 判断是否是图片
+				mime = imgInfo.mimeType;
+			}
+	
+			res.writeHead(HttpStatusCode.OK, {
+				"Content-Type": mime,
+				'Content-Disposition': `attachment;filename=${name}`,
+				"Set-Cookie": resCookie.print()
+			});
+			res.write(file, STR_BINARY);
+			end();
+		},
+		/*
+		 * 输出错误页面
+		 */
+		renderOnError: (error, code = HttpStatusCode.INTERNAL_SERVER_ERROR) {
+
+			let errorCtrler = contollerMapping.get(ROUTE_ERROR);
+			let ctrler = errorCtrler.instance();
+	
+			if (typeIs(error, Number.TYPE_NAME)) {
+				let newErr = new Error();
+				newErr.code = error;
+				req.parse.error = newErr;
+			} else {
+				error.code = code;
+				req.parse.error = error;
+			}
+			req.method = METHOD_GET; // controller 中执行错误页面的时候，改成 get 模式
+			if (ctrler.judgeExecute(req, res, errorCtrler.name)) {
+				ctrler.execute();
+			}
+		},
+		/*
+		 * JSON 输出
+		 */
 		renderJSON: (data) => {
 			plain(data, HttpStatusCode.OK, MimeType.JSON);
 		},
-		renderOnError,
 		plain
 	}
 }
 
-module.exports = exports = render;
+module.exports = exports = Render;
