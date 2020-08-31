@@ -39,7 +39,7 @@ function indexAction() {
 			Coralian.logger.log(error.errormsg);
 		}
 
-		ctrler.render({code: errorcode, url: ERROR_HTML_FILE, isAbsPath: true});
+		ctrler.render({code: errorcode, url: ERROR_HTML_FILE});
 	}
 
 	return action;
