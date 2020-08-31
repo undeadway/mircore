@@ -137,10 +137,10 @@ function Render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 		 */
 		renderFile: ({file, name, mime =  MimeType.OCTET_STREAM}) => {
 			if (typeIs(file, String.TYPE_NAME)) {
-				let url = pathResolve(url);
+				let url = pathResolve(file);
 				file = fs.readFileSync(url, STR_BINARY);
+				name = name || url.split(Mark.SLASH).pop();
 			}
-			name = name || url.split(Mark.SLASH).pop();
 			let imgInfo = imageinfo(file);
 	
 			if (imgInfo) { // 判断是否是图片
