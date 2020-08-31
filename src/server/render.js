@@ -148,12 +148,12 @@ function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 	 * 提供文件下载用
 	 * 目前只能准确判断是否是图片，其余类型尚无准确的判断方法
 	 */
-	function renderFile({file, fileName, mime =  MimeType.OCTET_STREAM}) {
+	function renderFile({file, name, mime =  MimeType.OCTET_STREAM}) {
 		if (typeIs(file, 'string')) {
 			let url = pathResolve(url);
 			file = fs.readFileSync(url, "binary");
 		}
-		fileName = fileName || url.split(Mark.SLASH).pop();
+		name = name || url.split(Mark.SLASH).pop();
 		let imgInfo = imageinfo(file);
 
 		if (imgInfo) { // 判断是否是图片
@@ -162,7 +162,7 @@ function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 
 		res.writeHead(HttpStatusCode.OK, {
 			"Content-Type": mime,
-			'Content-Disposition': `attachment;filename=${fileName}`,
+			'Content-Disposition': `attachment;filename=${name}`,
 			"Set-Cookie": resCookie.print()
 		});
 		res.write(file,"binary");
