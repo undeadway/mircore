@@ -82,10 +82,8 @@ function invokeController(req, res, route) {
 		 * 在正常执行时，需要先执行 Global 级的 inspector 再执行 Filter 级的 inspector
 		 * 非正常执行时，直接在 Controller 中 调用错误处理，所以在 filter 中不用做额外处理
 		 */
-		if (instance.judgeExecute(req, res, ctrler.name)) {
-			// 全局 inspector 的执行
-			invokeGlobalInspectors(instance, getFilterInvocation(instance, req, res, ctrler.inspectors));
-		}
+		// 全局 inspector 的执行
+		invokeGlobalInspectors({ instance, name: ctrler.name }, req, res, getFilterInvocation(instance, req, res, ctrler.inspectors));
 	} catch (e) {
 		e.code = Coralian.constants.HttpStatusCode.INTERNAL_SERVER_ERROR;
 		Coralian.logger.err(e);
@@ -98,7 +96,7 @@ function invokeController(req, res, route) {
 	}
 }
 
-function invokeGlobalInspectors(ctrler, fi) {
+function invokeGlobalInspectors({ instance, name }, req, res, fi) {
 
 	let inspectors = getGlobalInspectors();
 	let count = inspectors.length,
@@ -111,13 +109,15 @@ function invokeGlobalInspectors(ctrler, fi) {
 	// 因为 所有的 inspector 都要用得到 controller 所以将 GlobalInvocation 放在这里实现
 	({ // GlobalInvocation
 		getController: function () {
-			return ctrler;
+			return instance;
 		},
 		execute: function () {
 			if (index < count) {
 				inspectors[index++].inspect(this);
 			} else if (index++ === count) {
-				fi.execute(); // 当 global  inspector 被执行完时，执行 filter inspector
+				if (instance.judgeExecute(req, res, name)) {
+					fi.execute(); // 当 global  inspector 被执行完时，执行 filter inspector
+				}
 				end();
 			}
 		},
