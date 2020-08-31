@@ -148,10 +148,12 @@ function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 	 * 提供文件下载用
 	 * 目前只能准确判断是否是图片，其余类型尚无准确的判断方法
 	 */
-	function renderFile({url, fileName, mime =  MimeType.OCTET_STREAM}) {
-		url = pathResolve(url);
+	function renderFile({file, fileName, mime =  MimeType.OCTET_STREAM}) {
+		if (typeIs(file, 'string')) {
+			let url = pathResolve(url);
+			file = fs.readFileSync(url, "binary");
+		}
 		fileName = fileName || url.split(Mark.SLASH).pop();
-		let file = fs.readFileSync(url, "binary");
 		let imgInfo = imageinfo(file);
 
 		if (imgInfo) { // 判断是否是图片
