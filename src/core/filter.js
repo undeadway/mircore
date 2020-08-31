@@ -4,22 +4,23 @@
  * 如果是已注册的路径（可用模块），
  * 则返回请求该路径所对应的controller，否则返回 404 。
  */
-const INDEX = '/index';
+
+const fs = require("fs");
+const { routes } = require("../util/app-config");
+const { getGlobalInspectors } = require("../util/utils").privates;
+const CONTROLLER_MAPPING = require("./../util/controller-mapping");
 const { Mark } = Coralian.constants;
 const { errorCast } = Error;
-const { routes } = require("../util/app-config");
-const fileExistsSync = require("fs").existsSync,
-	getGlobalInspectors = require("../util/utils").privates.getGlobalInspectors;
-const CONTROLLER_MAPPING = require("./../util/controller-mapping");
 const QUESTION_REP_MARK = "{?}", JS_FILE_EXT =  ".js";
 const CONTROLLER_PATH = pathResolve(`/src/modules${QUESTION_REP_MARK}/controller`);
+const ROUTE_INDEX = '/index';
 
 function getController(req, route) {
 
 	let ctrlerWrapper, name = route;
 
 	if (name === Mark.SLASH) {
-		name = INDEX;
+		name = ROUTE_INDEX;
 	}
 
 	name = name.split(Mark.SLASH);
@@ -47,7 +48,7 @@ function getController(req, route) {
 	}
 
 	if (!ctrlerWrapper && count === 0) {
-		return CONTROLLER_MAPPING.put(INDEX, require(CONTROLLER_PATH.replace(QUESTION_REP_MARK, INDEX)));
+		return CONTROLLER_MAPPING.put(ROUTE_INDEX, require(CONTROLLER_PATH.replace(QUESTION_REP_MARK, ROUTE_INDEX)));
 	} else if (routes.hasFuzzyMatching()) {
 		let ctrlerName = routes.get(`${Mark.SLASH}${Mark.ASTERISK}`);
 		ctrlerWrapper = getControllerWrapper(ctrlerName);
@@ -63,7 +64,7 @@ function getControllerWrapper (ctrlerName, callback) {
 		return ctrlerWrapper;
 	}
 	let ctrlerPath = CONTROLLER_PATH.replace(QUESTION_REP_MARK, ctrlerName);
-	if (fileExistsSync(ctrlerPath + JS_FILE_EXT)) {
+	if (fs.existsSync(ctrlerPath + JS_FILE_EXT)) {
 		return CONTROLLER_MAPPING.put(ctrlerName, require(ctrlerPath));
 	}
 
@@ -83,7 +84,7 @@ function invokeController(req, res, route) {
 		 * 非正常执行时，直接在 Controller 中 调用错误处理，所以在 filter 中不用做额外处理
 		 */
 		// 全局 inspector 的执行
-		invokeGlobalInspectors({ instance, name: ctrler.name }, req, res, getFilterInvocation(instance, req, res, ctrler.inspectors));
+		invokeGlobalInspectors({ instance, name: ctrler.name }, req, res, getFilterInvocation({ instance, inspectors: ctrler.inspectors }, req, res));
 	} catch (e) {
 		e.code = Coralian.constants.HttpStatusCode.INTERNAL_SERVER_ERROR;
 		Coralian.logger.err(e);
@@ -125,7 +126,7 @@ function invokeGlobalInspectors({ instance, name }, req, res, fi) {
 	}).execute();
 }
 
-function getFilterInvocation(ctrler, req, res, inspectors) {
+function getFilterInvocation({ instance, inspectors }, req, res) {
 
 	let count = inspectors.length,
 		index = 0;
@@ -134,22 +135,22 @@ function getFilterInvocation(ctrler, req, res, inspectors) {
 		index = count + 1;
 	}
 
-
 	let fi = { // 这里的对象就是 ControllerInvocation
 		execute: function () {
 			if (index < count) {
 				inspectors[index++].inspect(this); // 执行递归，进行下一轮检查
 			} else if (index++ === count) {
-				ctrler.execute(); // 当inspector 被执行完时，执行 controller
+				instance.execute(); // 当inspector 被执行完时，执行 controller
 				end();
 			}
 		},
-		redirect: ctrler.redirect,
+		redirect: instance.redirect,
 		getController: function () {
-			return ctrler;
+			return instance;
 		},
 		/* 
-		 * 当目标请求的 controller 被逻辑拒绝的时候，调用这个方法来更替 controller 以及执行后续操作
+		 * 当目标请求的 controller 被逻辑拒绝的时候，
+		 * 调用这个方法来更替 controller 以及执行后续操作
 		 */
 		resetController: function (rename) {
 			if ('string' !== typeof rename) {
@@ -160,9 +161,7 @@ function getFilterInvocation(ctrler, req, res, inspectors) {
 			invokeController(req, res, rename);
 			end();
 		},
-		/*
-		 * 强制结束 ci 递归调用的函数
-		 */
+		// 强制结束 ci 递归调用的函数
 		end: end
 	};
 
