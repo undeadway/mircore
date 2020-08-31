@@ -7,16 +7,14 @@
  * 
  * 通过 controller 可以完成对页面进行渲染、重定向等所有 request 和 response 的操作
  */
-const INDEX_STR = 'index';
-const Mark = Coralian.constants.Mark;
-
 const cookies = require("../server/cookies");
 const sessions = require("../server/sessions");
 const Render = require("../server/render");
 const { splitMark } = require("../util/app-config");
 
-const { HttpStatusCode, HttpRequestMethod } = Coralian.constants;
+const { HttpStatusCode, HttpRequestMethod, Mark } = Coralian.constants;
 const { unsupportedOperation, unsupportedType } = Error;
+const STR_INDEX = 'index';
 
 function controller() {
 
@@ -64,7 +62,7 @@ function controller() {
 				}
 
 				if (path === Mark.SLASH) {
-					path += INDEX_STR;
+					path += STR_INDEX;
 				}
 
 				let url = path.split(Mark.SLASH); // 到这里， path 就不含任何 和 路径无关的东西了
@@ -84,19 +82,19 @@ function controller() {
 				} else if (url.length === 1 // [route]
 					|| path === Mark.SLASH + realRoute.join(Mark.SLASH)) { // [route...] 所请求的不包含 action、paras，只有 route
 					reqRoute = lastUrl;
-					actionName = INDEX_STR;
+					actionName = STR_INDEX;
 				} else { // [...., paras]
 					let lastSecond = Array.last(url, 2); // 取得倒数第二个
 					if (url.length > 2 && actions[`${reqMethod}_${lastSecond}`]) {  // [route..., action, paras]
 						actionName = lastSecond;
 					} else { // [route..., paras]
-						actionName = INDEX_STR;
+						actionName = STR_INDEX;
 					}
 					reqRoute = lastName;
 					paras = lastUrl.split(splitMark);
 				}
 			} else {
-				actionName = INDEX_STR;
+				actionName = STR_INDEX;
 				let err = parse.error;
 				switch (typeOf(err)) {
 					case Object.TYPE_NAME:
@@ -245,7 +243,7 @@ function controller() {
 						}
 
 						action = name;
-						name = INDEX_STR;
+						name = STR_INDEX;
 					}
 					break;
 				case 3:
@@ -260,7 +258,7 @@ function controller() {
 					break;
 			}
 			method = method.toLowerCase();
-			name = name || INDEX_STR;
+			name = name || STR_INDEX;
 			addAction(actions, `${method}_${name}`, action, inspectors);
 		},
 		getAction: function (name) {
@@ -280,7 +278,7 @@ function controller() {
 			render(code, String.BLANK, location);
 		},
 		isIndex: function () {
-			return pathName === INDEX_STR || String.isEmpty(pathName);
+			return pathName === STR_INDEX || String.isEmpty(pathName);
 		},
 		method: function (name) {
 			return (!name) ? method : (method.toUpperCase() === name.toUpperCase());

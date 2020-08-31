@@ -8,10 +8,10 @@ const contollerMapping = require("../util/controller-mapping");
 const parseView = require("../util/page-template");
 const caches = require("./cache");
 const { MimeType, Mark, HttpStatusCode } = Coralian.constants;
+const METHOD_GET = Coralian.constants.HttpRequestMethod.GET;
 const JSONstringify = JSON.stringify;
 const ROUTE_ERROR = "/error";
 const STR_BINARY = "binary";
-const METHOD_GET = Coralian.constants.HttpRequestMethod.GET;
 
 function Render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 
