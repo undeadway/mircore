@@ -116,6 +116,7 @@ function controller() {
 				}
 			}
 
+			// 将 render 绑定到 controller
 			const render = Render(request, response, {reqRoute, typeName, resCookie, attrs});
 			Object.addAll(render, this);
 
@@ -127,13 +128,6 @@ function controller() {
 		execute: function () {
 			invokeAction(actions, method.toLowerCase(), actionName, this);
 		},
-		// Render 处理
-		// render: render.render,
-		// renderOnError: render.renderOnError,
-		// plain: render.plain,
-		// renderFile: render.renderFile,
-		// renderJSON: render.renderJSON,
-		// end: render.end,
 		// 各种参数处理
 		// 获得数组形式的 para
 		getParas: function () {
