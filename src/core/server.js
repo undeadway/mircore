@@ -237,7 +237,7 @@ module.exports = exports = () => {
 	if (clusterMode && !developMode) {
 		/*
 		 * 这段代码当时是从网上抄来的，据说对服务器稳定有好处
-		 * 但从实际运行来看，好像没什么变化，可能是我自己的环境问题
+		 * 但从实际运行来看，好像没什么变化，暂时保留
 		 */
 		let cluster = require('cluster');
 
