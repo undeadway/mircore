@@ -38,7 +38,7 @@ function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 	 * render 只负责实现 HTML 的显示
 	 * 所有 JSON或者其他 plain 形式的显示都交给 plain 函数来实现
 	 */
-	function render({code = HttpStatusCode.OK, url, location, renderType}) {
+	function render({code = HttpStatusCode.OK, url, location}) {
 
 		url = String.trim(String(url));
 
@@ -62,36 +62,32 @@ function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 				res.writeHead(code, header);
 
 				if (fs.existsSync(absoluteUrl)) {
-					if (!String.isEmpty(url)) { // 这里忘了为什么要做空判断了
 
-						if (!renderType) {
-							url = absoluteUrl;
-						}
+					url = absoluteUrl;
 
-						// 这里的缓存处理只是为了不每次都进行页面模板解析而进行的处理
-						if (caches.cacheUsed('page')) {
-							let pageCache = caches.get('page');
-							/*
-							* 判断使用 cache 的标准
-							* 1. cache 必须打开（被定义）
-							* 2. cache 必须至少有一个定义值
-							* 3. cache 内必须有可对应的route
-							*/
-							if (pageCache !== null && pageCache.isUsed(reqRoute)) {
-								Coralian.logger.log(reqRoute + " use page cache.");
-								let cacheObj = pageCache.get(reqRoute);
-								if (!cacheObj) {
-									page = parseView(url, attrs);
-									pageCache.save(reqRoute, page);
-								} else {
-									page = cacheObj;
-								}
-							} else {
+					// 这里的缓存处理只是为了不每次都进行页面模板解析而进行的处理
+					if (caches.cacheUsed('page')) {
+						let pageCache = caches.get('page');
+						/*
+						* 判断使用 cache 的标准
+						* 1. cache 必须打开（被定义）
+						* 2. cache 必须至少有一个定义值
+						* 3. cache 内必须有可对应的route
+						*/
+						if (pageCache !== null && pageCache.isUsed(reqRoute)) {
+							Coralian.logger.log(reqRoute + " use page cache.");
+							let cacheObj = pageCache.get(reqRoute);
+							if (!cacheObj) {
 								page = parseView(url, attrs);
+								pageCache.save(reqRoute, page);
+							} else {
+								page = cacheObj;
 							}
 						} else {
 							page = parseView(url, attrs);
 						}
+					} else {
+						page = parseView(url, attrs);
 					}
 				} else {
 					page = url; // 如果不存在对应的文件，则把该请求的内容直接显示在页面上
