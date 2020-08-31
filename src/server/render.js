@@ -10,10 +10,9 @@ const caches = require("./cache");
 const { MimeType, Mark, HttpStatusCode, HttpRequestMethod } = Coralian.constants;
 const JSONstringify = JSON.stringify;
 const ROUTE_ERROR = "/error";
+const STR_BINARY = "binary";
 
 function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
-	
-	// let httpStatusCode = HttpStatusCode.OK;
 
 	function renderOnError(error, code = HttpStatusCode.INTERNAL_SERVER_ERROR) {
 
@@ -149,9 +148,9 @@ function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 	 * 目前只能准确判断是否是图片，其余类型尚无准确的判断方法
 	 */
 	function renderFile({file, name, mime =  MimeType.OCTET_STREAM}) {
-		if (typeIs(file, 'string')) {
+		if (typeIs(file, String.TYPE_NAME)) {
 			let url = pathResolve(url);
-			file = fs.readFileSync(url, "binary");
+			file = fs.readFileSync(url, STR_BINARY);
 		}
 		name = name || url.split(Mark.SLASH).pop();
 		let imgInfo = imageinfo(file);
@@ -165,12 +164,8 @@ function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 			'Content-Disposition': `attachment;filename=${name}`,
 			"Set-Cookie": resCookie.print()
 		});
-		res.write(file,"binary");
+		res.write(file, STR_BINARY);
 		end();
-	}
-
-	function renderJSON(data) {
-		plain(data, HttpStatusCode.OK, MimeType.JSON);
 	}
 
 	/*
@@ -184,7 +179,9 @@ function render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 	return {
 		render,
 		renderFile,
-		renderJSON,
+		renderJSON: (data) => {
+			plain(data, HttpStatusCode.OK, MimeType.JSON);
+		},
 		renderOnError,
 		plain
 	}
