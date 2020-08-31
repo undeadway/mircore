@@ -14,7 +14,7 @@ const { splitMark } = require("../util/app-config");
 
 const { HttpStatusCode, HttpRequestMethod, Mark } = Coralian.constants;
 const { unsupportedOperation, unsupportedType } = Error;
-const STR_INDEX = 'index';
+const STR_INDEX = 'index', STR_ACTION = "Action";
 
 function controller() {
 
@@ -46,7 +46,7 @@ function controller() {
 
 			Coralian.logger.log(`request route : ${modName}`);
 			if (modName === Error.TYPE_NAME) {
-				if ((parse.error && typeIs(parse.error, 'number'))) {
+				if ((parse.error && typeIs(parse.error, Number.TYPE_NAME))) {
 					Coralian.logger.log(`Error code : ${parse.error}`);
 				} else {
 					Coralian.logger.err(parse.error);
@@ -165,7 +165,7 @@ function controller() {
 			if (typeIs(k, Function.TYPE_NAME)) {
 				v = k;
 				k = Function.getName(v);
-				if (String.isEmpty(k)) unsupportedOperation('函数名不能为空');
+				if (String.isEmpty(k)) unsupportedOperation("函数名不能为空");
 
 			} else if (v === undefined) {
 				v = String.BLANK;
@@ -231,14 +231,14 @@ function controller() {
 			switch (arguments.length) {
 				case 1: // [action]
 					action = name;
-					name = Function.getName(action).replace("Action", String.BLANK);
+					name = Function.getName(action).replace(STR_ACTION, String.BLANK);
 					break;
 				case 2:
-					if (typeIs(name, "function")) {
+					if (typeIs(name, Function.TYPE_NAME)) {
 						
-						if (typeIs(action, "string")) { // [action, method]
+						if (typeIs(action, String.TYPE_NAME)) { // [action, method]
 							method = action;
-						} else if (typeIs(action, "array")) { // [action, inspectors]
+						} else if (typeIs(action, Array.TYPE_NAME)) { // [action, inspectors]
 							inspectors = action;
 						}
 
@@ -247,7 +247,7 @@ function controller() {
 					}
 					break;
 				case 3:
-					if (typeIs(method, 'array')) { // [name, action, inspectors]
+					if (typeIs(method, Array.TYPE_NAME)) { // [name, action, inspectors]
 						inspectors = method;
 						method = HttpRequestMethod.GET;
 					}
@@ -325,7 +325,7 @@ function addAction(actions, name, instance, inspectors = []) {
 	let actionName = Function.getName(instance);
 
 	actions[name] = {
-		isAction: String.contains(actionName, "Action"),
+		isAction: String.contains(actionName, STR_ACTION),
 		instance: instance,
 		inspectors: inspectors,
 		getActionName: function () {
