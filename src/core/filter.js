@@ -42,18 +42,6 @@ function getController(req, route) {
 			}
 
 			name.pop();
-			// ctrlerWrapper = CONTROLLER_MAPPING.get(ctrlerName);
-
-			// if (ctrlerWrapper) { // 若 CONTROLLER_MAPPING 中已包含请求路径，则直接返回所对应的 Controller
-			// 	return ctrlerWrapper;
-			// }
-			// // 通过请求的 URL 来动态分析当前环境下所对应的 Controller 路径
-			// let ctrlerPath = CONTROLLER_PATH.replace("{?}", ctrlerName);
-			// if (fileExistsSync(ctrlerPath + ".js")) {
-			// 	return CONTROLLER_MAPPING.put(ctrlerName, require(ctrlerPath));
-			// } else { // 当解析 Controller 路径不存在的时候，认为该请求路径非法，进入下一轮循环
-			// 	name.pop();
-			// }
 		}
 	}
 
