@@ -225,10 +225,10 @@ module.exports = exports = () => {
 	isStarted = true;
 
 	/*
-	* 这里用来捕获进程级错误，只将错误信息打印出来，但不具体解决错误
-	* 理论上到这里的时候，所有错误都应该已经被解决
-	* 这里捕捉到的错误都是隐藏的比较深的bug触发的
-	*/
+	 * 这里用来捕获进程级错误，只将错误信息打印出来，但不具体解决错误
+	 * 理论上到这里的时候，所有错误都应该已经被解决
+	 * 这里捕捉到的错误都是隐藏的比较深的bug触发的
+	 */
 	process.on("uncaughtException", (err) => {
 		Coralian.logger.log("程序发生未捕获异常！");
 		Coralian.logger.err(err);
