@@ -275,7 +275,7 @@ function controller() {
 				code = 302;
 			}
 
-			render(code, String.BLANK, location);
+			this.render(code, String.BLANK, location);
 		},
 		isIndex: function () {
 			return pathName === STR_INDEX || String.isEmpty(pathName);
