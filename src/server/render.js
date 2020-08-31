@@ -135,7 +135,7 @@ function Render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 		 * 提供文件下载用
 		 * 目前只能准确判断是否是图片，其余类型尚无准确的判断方法
 		 */
-		renderFile: ({file, name, mime =  MimeType.OCTET_STREAM}) {
+		renderFile: ({file, name, mime =  MimeType.OCTET_STREAM}) => {
 			if (typeIs(file, String.TYPE_NAME)) {
 				let url = pathResolve(url);
 				file = fs.readFileSync(url, STR_BINARY);
@@ -158,7 +158,7 @@ function Render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 		/*
 		 * 输出错误页面
 		 */
-		renderOnError: (error, code = HttpStatusCode.INTERNAL_SERVER_ERROR) {
+		renderOnError: (error, code = HttpStatusCode.INTERNAL_SERVER_ERROR) => {
 
 			let errorCtrler = contollerMapping.get(ROUTE_ERROR);
 			let ctrler = errorCtrler.instance();
