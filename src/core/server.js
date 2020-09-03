@@ -56,7 +56,7 @@ function router(req, res) {
 				_postData += chunk;
 			}).on("end", function () {
 				switch (method) {
-					case HttpRequestMethod.DELETE: // PUT、DELETE 都采用 POST 的实现
+					case HttpRequestMethod.DELETE: // PUT、DELETE 都采用和 POST 一样的实现
 					case HttpRequestMethod.PUT:
 					case HttpRequestMethod.POST:
 						Object.addAll(qs.parse(_postData), parse.query);
