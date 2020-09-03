@@ -7,7 +7,7 @@
 
 const fs = require("fs");
 const { routes } = require("../util/app-config");
-const { getGlobalInspectors } = require("../util/utils").privates;
+const { getGlobalInspectors } = require("../util/private-utils");
 const CONTROLLER_MAPPING = require("./../util/controller-mapping");
 const { Mark } = Coralian.constants;
 const { errorCast } = Error;

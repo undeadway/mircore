@@ -20,7 +20,6 @@ const { Mark } = Coralian.constants;
 
 const HTML_FILE_MAP = {};
 const STR_UTF8 = "utf-8";
-const USING_TAG_START_LEN = USING_TAG_START.length;
 const SHAPE_INCLUDE = "<#include file=\"",
 	INCLUDE_END = " />",
 	COMMENT_START = "<?!--",
@@ -39,6 +38,8 @@ const PARA_START = "&{",
 const USING_TAG_START = "<using:",
 	USING_TAG_END = "</using:",
 	USING_START = "{using:";
+
+const USING_TAG_START_LEN = USING_TAG_START.length;
 
 function replaceComment(str) {
 

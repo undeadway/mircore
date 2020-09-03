@@ -10,7 +10,7 @@ const url = require("url"), qs = require("querystring");
 const cookieNewInstance = require("../server/cookies"),
 	filter = require("./filter");
 const { port, appName, developMode, clusterMode } = require("../util/app-config");
-const { clientDisAccessable } = require("../util/utils").privates;
+const { clientDisAccessable } = require("../util/private-utils");
 
 const { HttpStatusCode, HttpRequestMethod, Mark } = Coralian.constants;
 const { formatString } = Coralian.Formatter;

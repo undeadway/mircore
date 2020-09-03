@@ -5,7 +5,7 @@
  * 本类只定义 getRequestRoute 这个最原始的方法，其他方法都要靠子类来实现
  * execute 是个抽象方法，需要其他子类实现
  */
-const AjaxRenderType_JSON = require("../util/utils").publics.constants.AjaxRenderType.JSON;
+const AjaxRenderType_JSON = require("../util/public-utils").constants.AjaxRenderType.JSON;
 const STR_CTRLER = "Controller";
 
 function baseAction() {

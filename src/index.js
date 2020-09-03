@@ -49,7 +49,7 @@ that.start = () => {
 	that.cookies = require("./server/cookies");
 	Object.addAll(require("./core/actions"), that);
 	that.config = require("./util/app-config");
-	that.util = require("./util/utils").publics;
+	that.util = require("./util/public-utils");
 	that.util.pageTemplate = require("./util/page-template");
 
 	const fs = require("fs");
