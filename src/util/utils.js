@@ -2,13 +2,15 @@
  * mircore 的工具库
  * 其中 publics 是外部可使用，privates是只供 mircore 自己使用
  */
+const fs = require("fs");
+const process = require('child_process');
+const nodemailer = require("nodemailer");
+
+const { getConfig } = require("../util/app-config");
+
 const publics = {}, privates = {};
 const statuses = {}, fileObjects = {};
 const constants = {};
-const process = require('child_process');
-const nodemailer = require("nodemailer");
-const fs = require("fs");
-const { getConfig } = require("../util/app-config");
 
 //////////////////////////// publics ////////////////////////////
 publics.runShell = (shellCmd) => {

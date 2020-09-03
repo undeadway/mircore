@@ -5,8 +5,7 @@
  * 也就是说，server 这里要完成的是 nodejs 没有实现，但是整个应用程序却需要的功能
  * 更接近于服务器的设置
  */
-const url = require("url"),
-	qs = require("querystring");
+const url = require("url"), qs = require("querystring");
 
 const cookieNewInstance = require("../server/cookies"),
 	filter = require("./filter");

@@ -5,8 +5,7 @@
  */
 
 const config = JSON.parse(require("fs").readFileSync(pathResolve("/res/json/app.json"), "utf-8"));
-const cache = config.cache;
-const routes = config.routes;
+const { cache, routes } = config;
 const routesName = Object.keys(routes);
 const { Mark } = Coralian.constants;
 
