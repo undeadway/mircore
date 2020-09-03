@@ -1,6 +1,6 @@
 /*
  * mircore 的工具库
- * 其中 publics 是外部可使用，privates是只供 mircore 自己使用
+ * 其中 publics 是外部可使用，privates 是只供 mircore 自己使用
  */
 const fs = require("fs");
 const process = require('child_process');
@@ -12,7 +12,7 @@ const publics = {}, privates = {};
 const statuses = {}, fileObjects = {};
 const constants = {};
 
-//////////////////////////// publics ////////////////////////////
+//////////////////////////// publics START ////////////////////////////
 publics.runShell = (shellCmd) => {
 	Coralian.logger.log(`run ${shellCmd} start.`);
 	process.exec(shellCmd, (err, stdout, stderr) => {
@@ -80,8 +80,8 @@ Object.defineProperty(publics, 'constants', {
 	writeable: false
 });
 
-//////////////////////////// publics ////////////////////////////
-//////////////////////////// privates ////////////////////////////
+//////////////////////////// publics END ////////////////////////////
+//////////////////////////// privates START ////////////////////////////
 
 const clients = getConfig("limited-clients") || {};
 const GLOBAL_INSPECTOR_FOLDER = pathResolve("/src/inspector/global", true);
@@ -133,7 +133,7 @@ privates.clientDisAccessable = function (input) {
 	Coralian.logger.log(`Client ${input} has banned.`);
 	return true;
 };
-//////////////////////////// privates ////////////////////////////
+//////////////////////////// privates END ////////////////////////////
 
 module.exports = exports = {
 	publics, privates
