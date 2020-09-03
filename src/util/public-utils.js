@@ -1,4 +1,6 @@
-
+/**
+ * 开放给外部的辅助功能
+ */
 const process = require('child_process');
 const nodemailer = require("nodemailer");
 

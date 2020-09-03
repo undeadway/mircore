@@ -1,3 +1,6 @@
+/**
+ * 只供 mircore 内部使用的辅助功能
+ */
 const fs = require("fs");
 
 const { getConfig } = require("../util/app-config");
