@@ -14,7 +14,22 @@ function cookies() {
 
 	function add(key, value) {
 
-		if (!typeIs(key, String.TYPE_NAME)) unsupportedType(key);
+		switch (typeOf(key)) {
+			case Date.TYPE_NAME:
+			case Number.TYPE_NAME:
+			case Boolean.TYPE_NAME:
+				key = (key).toString();
+				break;
+			case Object.TYPE_NAME:
+			case Array.TYPE_NAME:
+				key = JSON.stringify(key);
+				break;
+			case String.TYPE_NAME:
+				break;
+			default: 
+				unsupportedType(key);
+		}
+
 		if (!key || value === null || value === undefined) return;
 
 		if (!typeIs(value, String.TYPE_NAME)) {
@@ -26,6 +41,7 @@ function cookies() {
 
 	function addAll(input) {
 		if (!input) return;
+		if (!typeIs(input, Object.TYPE_NAME)) unsupportedType(input);
 
 		for (let k in input) {
 			if (input.hasOwnProperty(k)) {
@@ -141,9 +157,7 @@ module.exports = {
 			getAll: () => {
 				return instance.getValues();
 			},
-			isEmpty: () => {
-				return instance.isEmpty();
-			}
+			isEmpty: instance.isEmpty
 		}
 	},
 	createResponseCookies: () => {
@@ -155,12 +169,8 @@ module.exports = {
 			set: (k, v) => {
 				instance.add(k, v);
 			},
-			clear: () => {
-				instance.clear();
-			},
-			print: () => {
-				return cookies.print();
-			}
+			clear: instance.clear,
+			print: cookies.print
 		}
 	},
 	newInstance: () => {
