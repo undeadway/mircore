@@ -13,7 +13,7 @@ const JSONstringify = JSON.stringify;
 const ROUTE_ERROR = "/error";
 const STR_BINARY = "binary";
 
-function Render (req, res, {reqRoute, typeName, resCookie, attrs}) {
+function Render (req, res, {reqRoute, typeName, cookies, attrs}) {
 
 	/*
 	 * render 只负责实现 HTML 的显示
@@ -32,7 +32,7 @@ function Render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 				 */
 				let header = {
 					"Content-Type": MimeType.HTML,
-					"Set-Cookie": resCookie.print()
+					"Set-Cookie": cookies.print()
 				}
 				let page = String.BLANK;
 				let absoluteUrl = pathResolve(url);
@@ -97,7 +97,7 @@ function Render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 		mime = mime || MimeType.TEXT;
 		res.writeHead(hsc, {
 			"Content-Type": mime,
-			"Set-Cookie": resCookie.print()
+			"Set-Cookie": cookies.print()
 		});
 		switch (typeOf(data)) {
 			case Object.TYPE_NAME:
@@ -150,7 +150,7 @@ function Render (req, res, {reqRoute, typeName, resCookie, attrs}) {
 			res.writeHead(HttpStatusCode.OK, {
 				"Content-Type": mime,
 				'Content-Disposition': `attachment;filename=${name}`,
-				"Set-Cookie": resCookie.print()
+				"Set-Cookie": cookies.print()
 			});
 			res.write(file, STR_BINARY);
 			end();

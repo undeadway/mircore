@@ -19,7 +19,7 @@ const STR_INDEX = 'index', STR_ACTION = "Action";
 function controller() {
 
 	// 这些都要经过 juddeExe 才处理后才会赋值
-	let parse, method, query, realRoute, reqRoute, typeName, modName, actionName, reqCookie, client, reqPath;
+	let parse, method, query, realRoute, reqRoute, typeName, modName, actionName, cookies, client, reqPath;
 	// 这些都是已经初始化好的值
 	let attrs = {}, actions = {}, paras = null, isLogged = false, resCookie = cookies();
 
@@ -30,9 +30,9 @@ function controller() {
 		 */
 		judgeExecute: function (request, response, name) {
 
-			// 初期设置
+			// 初始化设置
 			parse = request.parse, method = request.method;
-			query = parse.query, reqCookie = parse.cookies, typeName = name.type, client = request.client;
+			query = parse.query, cookies = parse.cookies, typeName = name.type, client = request.client;
 
 			/**
 			 * realRoute = name.path 是对应文件物理路径 : [blog,read]
@@ -73,7 +73,7 @@ function controller() {
 				}
 
 				let reqMethod = method.toLowerCase();
-				let lastUrl = Array.last(url); // 获取 url 中最后一个
+				let lastUrl = Array.last(url); // 获取 url 中最后一节
 				let lastName = Array.last(realRoute);
 
 				if (actions[`${reqMethod}_${lastUrl}`]) { // [route..., action]
@@ -115,13 +115,13 @@ function controller() {
 			}
 
 			// 将 render 绑定到 controller
-			const render = Render(request, response, {reqRoute, typeName, resCookie, attrs});
+			const render = Render(request, response, {reqRoute, typeName, cookies: cookies.res, attrs});
 			Object.addAll(render, this);
 
 			return true;
 		},
 		/*
-		 * 暂时只是对action的处理（包括inspector和之后的执行 action
+		 * 暂时只是对action的处理（包括inspector和之后的执行 action ）
 		 */
 		execute: function () {
 			invokeAction(actions, method.toLowerCase(), actionName, this);
@@ -206,23 +206,20 @@ function controller() {
 		},
 		// Cookie 处理
 		getCookie: function (key) {
-			return reqCookie.getValue(key);
+			return cookies.req.get(key);
 		},
-		// 这个方法是专门将有需要的 cookies 写到 前台去的
-		writeCookies: function (object) {
-			resCookie.addAll(object);
+		isEmptyCookie: () => {
+			return	cookies.req.isEmpty();
 		},
-		clearCookies: function () {
-			resCookie.clear();
-		},
+		// 除了获得 cookie ，所有对 cookie 的操作全都是往前台写的 cookie 操作
 		setCookies: function (obj) {
-			resCookie.addAll(obj);
+			cookies.res.setAll(key);
 		},
 		setCookie: function (key, value) {
-			resCookie.add(key, value);
+			cookies.res.set(key, value);
 		},
-		isEmptyCookie: function () {
-			return Object.isEmpty(reqCookie);
+		clearCookies: () => {
+			cookies.res.clear();
 		},
 		// Action 处理
 		// 添加 action 用的函数

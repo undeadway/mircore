@@ -131,4 +131,39 @@ function changeToUnicodeCode(val) {
 	return output;
 }
 
-module.exports = cookies;
+module.exports = {
+	createRequestCookies: () => {
+		const instance = cookies();
+		return {
+			get: (k) => {
+				return instance.getValue(k);
+			},
+			getAll: () => {
+				return instance.getValues();
+			},
+			isEmpty: () => {
+				return instance.isEmpty();
+			}
+		}
+	},
+	createResponseCookies: () => {
+		const instance = cookies();
+		return {
+			setAll: (obj) => {
+				instance.addAll(obj);
+			},
+			set: (k, v) => {
+				instance.add(k, v);
+			},
+			clear: () => {
+				instance.clear();
+			},
+			print: () => {
+				return cookies.print();
+			}
+		}
+	},
+	newInstance: () => {
+		return cookies();
+	}
+};
