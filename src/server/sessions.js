@@ -116,7 +116,7 @@ function clear(session, sid) {
 (function () {
 
 	let now = new Date();
-	let nextZero = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0); // 次日零点
+	let nextZero = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0).getTime(); // 次日零点
 
 	setTimeout(function () {
 		setInterval(function () {
@@ -131,6 +131,6 @@ function clear(session, sid) {
 			// global.gc();
 
 		}, ONE_DAY);
-	}, nextZero.getTime() - now.getTime());
+	}, nextZero - now.getTime());
 	//	global.gc(); // TODO
 })();
