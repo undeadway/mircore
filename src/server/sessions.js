@@ -21,10 +21,12 @@ function session(sid) {
 		getSessionId: function () {
 			return sid;
 		},
-		getValueNames: function () {
+		getNames: function () {
+			renew();
 			return Object.key(session);
 		},
 		getValue: function (key) {
+			renew();
 			return session[key];
 		},
 		putValue: function (key, value) {
@@ -40,6 +42,9 @@ function session(sid) {
 		hasValue: function (key) {
 			return !!session[key];
 		},
+		isEmpty: () => {
+			return Object.isEmpty(session);
+		},
 		isValid: function () {
 			if (timeout === timeout) {
 				return timeout < Date.now();
@@ -47,7 +52,7 @@ function session(sid) {
 				return false;
 			}
 		},
-		getLastAccessedTime: function () {
+		getTimeOut: function () {
 			return timeout;
 		},
 		timeout: function () {
