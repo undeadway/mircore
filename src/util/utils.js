@@ -53,19 +53,19 @@ publics.mail = () => {
 	}
 };
 
-publics.getFileObject = function (fn) {
+// publics.getFileObject = function (fn) {
 
-	let status = fs.statSync(fn), result;
+// 	let status = fs.statSync(fn), result;
 
-	if (!Object.equals(status, statuses[fn])) {
-		statuses[fn] = status;
-		fileObjects[fn] = result = fs.readFileSync(fn, "utf-8");
-	} else {
-		result = fileObjects[fn];
-	}
+// 	if (!Object.equals(status, statuses[fn])) {
+// 		statuses[fn] = status;
+// 		fileObjects[fn] = result = fs.readFileSync(fn, "utf-8");
+// 	} else {
+// 		result = fileObjects[fn];
+// 	}
 
-	return result;
-};
+// 	return result;
+// };
 
 Object.defineProperty(constants, 'AjaxRenderType', {
 	value: {
