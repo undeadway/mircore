@@ -70,18 +70,6 @@ function cookies() {
 		return output;
 	}
 
-	function setMaxAge(second) {
-
-		if (second === null || second === undefined) return;
-		if (!Number.isNumber(second)) unsupportedType(second);
-
-		maxAge = second;
-
-		expire = new Date();
-
-		expire.setTime(expire.getTime() + maxAge * 1000);
-	}
-
 	return {
 		getValues: function () {
 			let result = {};
@@ -101,15 +89,11 @@ function cookies() {
 			}
 		},
 		addAll: addAll,
-		setMaxAge: setMaxAge,
 		setPath: function (str) {
 			if (str === null || str === undefined) {
 				return;
 			}
 			path = str;
-		},
-		setCookieTimeout: function () {
-			setMaxAge(-1);
 		},
 		toString: print,
 		print: print,
@@ -117,7 +101,6 @@ function cookies() {
 			return Object.isEmpty(instance);
 		},
 		clear: function () {
-			setMaxAge(0);
 			instance = {};
 		}
 	};
