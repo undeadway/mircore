@@ -18,6 +18,7 @@ function cookies() {
 			case Date.TYPE_NAME:
 			case Number.TYPE_NAME:
 			case Boolean.TYPE_NAME:
+			case RegExp.TYPE_NAME:
 				key = (key).toString();
 				break;
 			case Object.TYPE_NAME:
