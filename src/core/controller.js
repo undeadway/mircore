@@ -21,7 +21,7 @@ function controller() {
 	// 这些都要经过 juddeExe 才处理后才会赋值
 	let parse, method, query, realRoute, reqRoute, typeName, modName, actionName, cookies, client, reqPath;
 	// 这些都是已经初始化好的值
-	let attrs = {}, actions = {}, paras = null, isLogged = false, cookies = Cookies();
+	let attrs = {}, actions = {}, paras = null, isLogged = false;
 
 	return {
 		/* 

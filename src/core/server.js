@@ -7,7 +7,7 @@
  */
 const url = require("url"), qs = require("querystring");
 
-const cookies = require("../server/cookies"),
+const Cookies = require("../server/cookies"),
 	filter = require("./filter");
 const { port, appName, developMode, clusterMode } = require("../util/app-config");
 const { clientDisAccessable } = require("../util/private-utils");
@@ -122,7 +122,7 @@ function router(req, res) {
 function request(req, res) {
 
 	let parse = req.parse,
-		cookies = cookies.createRequestCookies();
+		cookies = Cookies.createRequestCookies();
 	cookies.addFromRequest(req.headers.cookie);
 
 	parse.cookies = {req: cookies, res: cookies.createResponseCookies()()};
