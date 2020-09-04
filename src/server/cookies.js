@@ -134,6 +134,14 @@ module.exports = {
 	createRequestCookies: () => {
 		const instance = cookies();
 		return {
+			addFromRequest: function (string) {
+				if (string) {
+					Object.forEach(string.split(';'), function (i, obj) {
+						let tmp = obj.split('=');
+						instance.add(tmp[0], tmp[1]);
+					});
+				}
+			},
 			get: (k) => {
 				return instance.getValue(k);
 			},
@@ -153,7 +161,7 @@ module.exports = {
 				instance.add(k, v);
 			},
 			clear: instance.clear,
-			print: cookies.print
+			print: instance.print
 		}
 	},
 	newInstance: () => {

@@ -125,7 +125,7 @@ function request(req, res) {
 		cookies = Cookies.createRequestCookies();
 	cookies.addFromRequest(req.headers.cookie);
 
-	parse.cookies = {req: cookies, res: cookies.createResponseCookies()()};
+	parse.cookies = {req: cookies, res: Cookies.createResponseCookies()};
 
 	filter(req, res);
 }
