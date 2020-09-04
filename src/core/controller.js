@@ -7,9 +7,9 @@
  * 
  * 通过 controller 可以完成对页面进行渲染、重定向等所有 request 和 response 的操作
  */
-const cookies = require("../server/cookies");
 const sessions = require("../server/sessions");
 const Render = require("../server/render");
+const Cookies = require("../server/cookies");
 const { splitMark } = require("../util/app-config");
 
 const { HttpStatusCode, HttpRequestMethod, Mark } = Coralian.constants;
@@ -21,7 +21,7 @@ function controller() {
 	// 这些都要经过 juddeExe 才处理后才会赋值
 	let parse, method, query, realRoute, reqRoute, typeName, modName, actionName, cookies, client, reqPath;
 	// 这些都是已经初始化好的值
-	let attrs = {}, actions = {}, paras = null, isLogged = false, resCookie = cookies();
+	let attrs = {}, actions = {}, paras = null, isLogged = false, cookies = Cookies();
 
 	return {
 		/* 
