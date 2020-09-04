@@ -46,7 +46,7 @@ that.start = () => {
 	that.controller = require("./core/controller");
 	that.sessions = require("./server/sessions");
 	that.cache = require("./server/cache");
-	that.cookies = require("./server/cookies");
+	// that.cookies = require("./server/cookies");
 	Object.addAll(require("./core/actions"), that);
 	that.config = require("./util/app-config");
 	that.util = require("./util/public-utils");
