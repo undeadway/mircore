@@ -15,6 +15,7 @@ function cookies() {
 	function add(key, value) {
 
 		switch (typeOf(key)) {
+			case String.TYPE_NAME:
 			case Date.TYPE_NAME:
 			case Number.TYPE_NAME:
 			case Boolean.TYPE_NAME:
@@ -24,8 +25,6 @@ function cookies() {
 			case Object.TYPE_NAME:
 			case Array.TYPE_NAME:
 				key = JSON.stringify(key);
-				break;
-			case String.TYPE_NAME:
 				break;
 			default: 
 				unsupportedType(key);
