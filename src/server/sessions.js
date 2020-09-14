@@ -4,8 +4,8 @@
  * 每个 session 对象都可以保持30分钟，超过30分钟就会自动对过期处理
  * 每 24 对过期的 session 进行清理
  */
-const TIME_OUT = 1000 * 60 * 30;
-const ONE_DAY = 1000 * 60 * 60 * 24;
+const NUM_TIME_OUT = 1000 * 60 * 30;
+const NUM_ONE_DAY = 1000 * 60 * 60 * 24;
 const sessions = {};
 
 function session(sid) {
@@ -13,7 +13,7 @@ function session(sid) {
 	let timeout, session = {};
 
 	function renew() {
-		timeout = Date.now() + TIME_OUT;
+		timeout = Date.now() + NUM_TIME_OUT;
 	}
 	renew();
 
@@ -135,7 +135,7 @@ function clear(session, sid) {
 
 			// global.gc();
 
-		}, ONE_DAY);
+		}, NUM_ONE_DAY);
 	}, nextZero - now.getTime());
 	//	global.gc(); // TODO
 })();
