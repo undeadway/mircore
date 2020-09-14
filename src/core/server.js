@@ -25,7 +25,7 @@ let isStarted = false;
  * 这个函数只会在初始化服务器的时候才会调用一次
  */
 function listen(name) {
-	let httpServer = require("http").createServer(router);
+	const httpServer = require("http").createServer(router);
 	httpServer.listen(port);
 	Coralian.logger.log(`${name} Server started`);
 }
