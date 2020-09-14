@@ -8,7 +8,7 @@ const contollerMapping = require("../util/controller-mapping");
 const parseView = require("../util/page-template");
 const caches = require("./cache");
 const { MimeType, Mark, HttpStatusCode } = Coralian.constants;
-const METHOD_GET = Coralian.constants.HttpRequestMethod.GET;
+const HTTP_REQUEST_METHOD_GET = Coralian.constants.HttpRequestMethod.GET;
 const JSONstringify = JSON.stringify;
 const ROUTE_ERROR = "/error";
 const STR_BINARY = "binary";
@@ -171,7 +171,7 @@ function Render (req, res, {reqRoute, typeName, cookies, attrs}) {
 				error.code = code;
 				req.parse.error = error;
 			}
-			req.method = METHOD_GET; // controller 中执行错误页面的时候，改成 get 模式
+			req.method = HTTP_REQUEST_METHOD_GET; // controller 中执行错误页面的时候，改成 get 模式
 			if (ctrler.judgeExecute(req, res, errorCtrler.name)) {
 				ctrler.execute();
 			}
