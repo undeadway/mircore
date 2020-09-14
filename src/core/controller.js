@@ -9,7 +9,6 @@
  */
 const sessions = require("../server/sessions");
 const Render = require("../server/render");
-const Cookies = require("../server/cookies");
 const { splitMark } = require("../util/app-config");
 
 const { HttpStatusCode, HttpRequestMethod, Mark } = Coralian.constants;
