@@ -13,14 +13,14 @@ const { Mark } = Coralian.constants;
 const { errorCast } = Error;
 const QUESTION_REP_MARK = "{?}", JS_FILE_EXT =  ".js";
 const CONTROLLER_PATH = pathResolve(`/src/modules${QUESTION_REP_MARK}/controller`);
-const ROUTE_INDEX = '/index';
+const STR_ROUTE_INDEX = '/index';
 
 function getController(req, route) {
 
 	let ctrlerWrapper, name = route;
 
 	if (name === Mark.SLASH) {
-		name = ROUTE_INDEX;
+		name = STR_ROUTE_INDEX;
 	}
 
 	name = name.split(Mark.SLASH);
@@ -48,7 +48,7 @@ function getController(req, route) {
 	}
 
 	if (!ctrlerWrapper && count === 0) {
-		return CONTROLLER_MAPPING.put(ROUTE_INDEX, require(CONTROLLER_PATH.replace(QUESTION_REP_MARK, ROUTE_INDEX)));
+		return CONTROLLER_MAPPING.put(STR_ROUTE_INDEX, require(CONTROLLER_PATH.replace(QUESTION_REP_MARK, STR_ROUTE_INDEX)));
 	} else if (routes.hasFuzzyMatching()) {
 		let ctrlerName = routes.get(`${Mark.SLASH}${Mark.ASTERISK}`);
 		ctrlerWrapper = getControllerWrapper(ctrlerName);
