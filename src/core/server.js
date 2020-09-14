@@ -40,7 +40,7 @@ function router(req, res) {
 	let parse = req.parse = url.parse(req.url, true);
 	let method = req.method = req.method.toUpperCase();
 
-	let _postData = String.BLANK;
+	let _postData = [];
 	req.setEncoding("utf8");
 
 	setClientInfo(req);
@@ -53,13 +53,13 @@ function router(req, res) {
 		req.on(Error.TYPE_NAME, onError)
 			.on("data", function (chunk) {
 				// TODO 现在这里只处理 post 上来的字符串，二进制格式要怎么弄还要再研究
-				_postData += chunk;
+				_postData.push(chunk);
 			}).on("end", function () {
 				switch (method) {
 					case HttpRequestMethod.DELETE: // PUT、DELETE 都采用和 POST 一样的实现
 					case HttpRequestMethod.PUT:
 					case HttpRequestMethod.POST:
-						Object.addAll(qs.parse(_postData), parse.query);
+						Object.addAll(qs.parse(_postData.join(String.BLANK)), parse.query);
 					// 因为都要调用 request 方法，所以这里 switch 贯穿掉
 					case HttpRequestMethod.GET:
 						request(req, res);
@@ -69,7 +69,6 @@ function router(req, res) {
 					case HttpRequestMethod.OPTIONS:
 					case HttpRequestMethod.TRACE:
 					case HttpRequestMethod.PATCH:
-						break;
 					default:
 						unsupportedOperation(method);
 				}
