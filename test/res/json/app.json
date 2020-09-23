@@ -5,6 +5,11 @@
 	"app-name": "mircore-demo",
 	"config" : {
 	},
+	"cache": {
+		"global": {
+			"expire": 30
+		}
+	},
 	"routes": {
 		"/index": "/homepage",
 		"/first": "/homepage",

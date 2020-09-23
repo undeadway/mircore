@@ -8,6 +8,7 @@ const config = JSON.parse(require("fs").readFileSync(pathResolve("/res/json/app.
 const { cache, routes } = config;
 const routesName = Object.keys(routes);
 const { Mark } = Coralian.constants;
+const STR_GLOBAL = "global";
 
 Object.defineProperty(exports, "port", {
 	value: (config.port || 9000),
@@ -66,13 +67,17 @@ Object.defineProperty(exports, "routes", {
 // 	value: ,
 // 	writable: false
 // });
-Object.defineProperty(exports, "getCache", {
-	value: function (name) {
+Object.defineProperty(exports, "getCacheConfig", {
+	value: (name) => {
 		if (!cache) return null;
+		if (!name) {
+			return cach[STR_GLOBAL] || null;
+		}
 		return cache[name] || null;
 	},
 	writable: false
 });
+
 Object.defineProperty(exports, "getConfig", {
 	value: (name) => {
 		return config.config[name];

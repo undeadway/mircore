@@ -7,87 +7,58 @@
  * 从而避免全局配置的 cache 污染。
  */
 
-const _getCache = require("../util/app-config").getCache;
-const CACHES = {};
+const Cache = require("cache");
+const { getCacheConfig } = require("../util/app-config");
 const { unsupportedOperation } = Error;
 
-function cacheUsed(space) {
-	return _getCache(space);
+const caches = {};
+const STR_GLOBAL = "global";
+
+function usedCheck(name = STR_GLOBAL) {
+	let config = getCacheConfig(name)
+	if (config === null) {
+		unsupportedOperation(name + " 的 cache 没有被启用，无法创建对应空间");
+	}
+	return config;
 }
 
-this.cacheUsed = cacheUsed;
+this.put = (space, key ,val) => {
 
-function create(space) {
-	let isUsed = cacheUsed(space);
+	let config = usedCheck(space);
 
-	if (!isUsed) {
-		unsupportedOperation(space + " 的 cache 没有被启用，无法创建对应空间");
+	let cache = caches[space];
+	if (!cache) {
+		cache = caches[space] = new Cache((config.expire || 15) * 1000 * 60);
 	}
 
-	let cacheObj = CACHES[space];
-	if (!cacheObj) {
-		Coralian.logger.log("create " + space + " cache space.");
-		CACHES[space] = cacheObj = {};
-	} else {
-		unsupportedOperation(space + " 的 cache 空间已经创建，请勿重复创建");
+	cache.put(key, value);
+
+};
+
+this.get = (space = STR_GLOBAL, name) => {
+
+	let config = usedCheck(space);
+
+	let cache = caches[space];
+	if (!cache) {
+		cache = caches[space] = new Cache((config.expire || 15) * 1000 * 60);
 	}
 
-	return getCache(isUsed, cacheObj);
-}
+	return cache.get(name);
 
-this.remove = function (space) {
-	let cacheObj = CACHES[space]
-	delete CACHES[space];
-	return cacheObj;
-}
+};
 
-this.get = function (space) {
+this.del = (space = STR_GLOBAL, name) => {
+	let config = usedCheck(space);
 
-	let cacheObj = CACHES[space];
-	if (!cacheObj) cacheObj = create(space);
+	let cache = caches[space];
+	if (!cache) {
+		return null;
+	}
 
-	return getCache(_getCache(space), cacheObj);
-}
+	let obj = cache[name];
 
-this.isUsed = getCache;
+	delete cache[name];
 
-function getCache(routes, cacheObj) {
-
-	// routes 必须有值才算开启
-	let isUsed = (routes) ? (!Array.isEmpty(routes)) : false;
-
-	Coralian.logger.log("routes : " + routes);
-
-	return {
-		isUsed: function (route) {
-
-			Coralian.logger.log("Now route : " + route);
-
-			if (isUsed) {
-				for (let i = 0; i < routes.length; i++) {
-					if (String.contains(route, routes[i])) {
-						return true;
-					}
-				}
-			}
-			return false;
-		},
-		get: function (key) {
-			if (!isUsed) {
-				unsupportedOperation(space + " 的 cache 没有被启用，无法从对应空间中获取数据");
-			}
-			return cacheObj[key];
-		},
-		save: function (key, value) {
-			if (!isUsed) {
-				unsupportedOperation(space + " 的 cache 没有被启用，无法将数据存入对应空间");
-			}
-			cacheObj[key] = value;
-		},
-		remove: function (key) {
-			let obj = cacheObj[key];
-			delete cacheObj[key];
-			return obj;
-		}
-	};
-}
+	return obj;
+};
