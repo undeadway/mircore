@@ -13,6 +13,7 @@ const { unsupportedOperation } = Error;
 
 const caches = {};
 const STR_GLOBAL = "global";
+const NUM_DETAULE_EXPIRE = 30;
 
 function usedCheck(name = STR_GLOBAL) {
 	let config = getCacheConfig(name)
@@ -28,10 +29,10 @@ this.put = (space, key ,val) => {
 
 	let cache = caches[space];
 	if (!cache) {
-		cache = caches[space] = new Cache((config.expire || 15) * 1000 * 60);
+		cache = caches[space] = new Cache((config.expire || NUM_DETAULE_EXPIRE) * 1000 * 60);
 	}
 
-	cache.put(key, value);
+	cache.put(key, val);
 
 };
 
