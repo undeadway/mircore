@@ -38,11 +38,9 @@ this.put = (space, key ,val) => {
 
 this.get = (space = STR_GLOBAL, name) => {
 
-	let config = usedCheck(space);
-
 	let cache = caches[space];
 	if (!cache) {
-		cache = caches[space] = new Cache((config.expire || 15) * 1000 * 60);
+		return null;
 	}
 
 	return cache.get(name);
@@ -50,7 +48,6 @@ this.get = (space = STR_GLOBAL, name) => {
 };
 
 this.del = (space = STR_GLOBAL, name) => {
-	let config = usedCheck(space);
 
 	let cache = caches[space];
 	if (!cache) {
