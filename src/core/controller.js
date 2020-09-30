@@ -53,7 +53,7 @@ function controller() {
 			}
 
 			if (!parse.error) { // 如果传入的 parse 对象中未包含 error 对象，则正常执行
-				let path = reqPath.split(Mark.QUESTION);
+				let path = parse.href.split(Mark.QUESTION);
 				paras = path[1];
 				path = path[0];
 				if (!Object.isEmpty(paras)) {
