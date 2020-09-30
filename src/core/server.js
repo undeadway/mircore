@@ -59,12 +59,7 @@ function router(req, res) {
 					case HttpRequestMethod.DELETE: // PUT、DELETE 都采用和 POST 一样的实现
 					case HttpRequestMethod.PUT:
 					case HttpRequestMethod.POST:
-						let postData = _postData.join(String.BLANK);
-						try {
-							Object.addAll(JSON.parse(postData), parse.query); // 先用 json 解析
-						} catch {
-							Object.addAll(qs.parse(postData), parse.query); // 不然用 qs 来解析
-						}
+						Object.addAll(qs.parse( _postData.join(String.BLANK)), parse.query);
 					// 因为都要调用 request 方法，所以这里 switch 贯穿掉
 					case HttpRequestMethod.GET:
 						request(req, res);
