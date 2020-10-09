@@ -10,7 +10,7 @@
   "main": "./src/index.js",
   "dependencies": {
     "cache": "^2.3.1",
-    "coralian": "0.0.19",
+    "coralian": "0.0.21",
     "imageinfo": "^1.0.4",
     "nodemailer": "2.7.2"
   },
