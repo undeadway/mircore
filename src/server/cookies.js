@@ -6,7 +6,10 @@
  * 在 controller 中设置的 cookie 都是准备写到客户端去的
  */
 const { unsupportedType } = Error;
+const { Mark } = Coralian.constants;
 const asUnicodeEndode = Coralian.util.CharUtil.asUnicodeEncode;
+const cookie = require("cookie");
+// const cookieSignature = require("cookie-signature");
 
 function cookies() {
 
@@ -16,6 +19,7 @@ function cookies() {
 
 		switch (typeOf(key)) {
 			case String.TYPE_NAME:
+				break;
 			case Date.TYPE_NAME:
 			case Number.TYPE_NAME:
 			case Boolean.TYPE_NAME:
@@ -59,14 +63,15 @@ function cookies() {
 			if (instance.hasOwnProperty(key)) {
 				let value = instance[key];
 				if (!typeIs(value, Function.TYPE_NAME)) {
-					result.push(key + "=" + changeToUnicodeCode(instance[key]));
+					// result.push(key + "=" + changeToUnicodeCode(instance[key]));
+					result.push(cookie.serialize(key, changeToUnicodeCode(instance[key])));
 				} else {
 					unsupportedType(value);
 				}
 			}
 		}
 
-		let output = result.join(";");
+		let output = result.join(Mark.SEMICOLON);
 		return output;
 	}
 
@@ -82,8 +87,8 @@ function cookies() {
 		add: add,
 		addFromRequest: function (string) {
 			if (string) {
-				Object.forEach(string.split(';'), function (i, obj) {
-					let tmp = obj.split('=');
+				Object.forEach(string.split(Mark.SEMICOLON), function (i, obj) {
+					let tmp = obj.split(Mark.EQUALS);
 					add(tmp[0], tmp[1]);
 				});
 			}
@@ -136,10 +141,12 @@ module.exports = {
 		return {
 			addFromRequest: function (string) {
 				if (string) {
-					Object.forEach(string.split(';'), function (i, obj) {
-						let tmp = obj.split('=');
-						instance.add(tmp[0], tmp[1]);
-					});
+					let cookies = cookie.parse(string);
+					instance.addAll(cookies);
+					// Object.forEach(string.split(Mark.SEMICOLON), function (i, obj) {
+					// 	let tmp = obj.split(Mark.EQUALS);
+					// 	instance.add(tmp[0], tmp[1]);
+					// });
 				}
 			},
 			get: (k) => {
