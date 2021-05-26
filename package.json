@@ -11,7 +11,7 @@
   "dependencies": {
     "cookie": "0.4.0",
     "cache": "^2.3.1",
-    "coralian": "0.0.21",
+    "coralian": "0.0.22",
     "imageinfo": "^1.0.4",
     "nodemailer": "2.7.2"
   },
