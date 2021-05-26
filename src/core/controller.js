@@ -8,7 +8,7 @@
  * 通过 controller 可以完成对页面进行渲染、重定向等所有 request 和 response 的操作
  */
 const sessions = require("../server/sessions");
-const Render = require("../server/render");
+const Render = require("./render");
 const { splitMark } = require("../util/app-config");
 
 const { HttpStatusCode, HttpRequestMethod, Mark } = Coralian.constants;

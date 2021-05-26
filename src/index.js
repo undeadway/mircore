@@ -47,7 +47,7 @@ that.start = () => {
 	that.sessions = require("./server/sessions");
 	that.cache = require("./server/cache");
 	// Object.addAll(require("./core/actions"), that);
-	that.action = require("./server/actions");
+	that.action = require("./core/actions");
 	that.config = require("./util/app-config");
 	that.util = require("./util/public-utils");
 	that.util.pageTemplate = require("./util/page-template");
