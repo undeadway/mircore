@@ -5,7 +5,7 @@
 const fs = require("fs");
 const imageinfo = require("imageinfo");
 const contollerMapping = require("../util/controller-mapping");
-const parseView = require("../util/page-template");
+const pageTemplate = require("../util/page-template");
 const caches = require("../server/cache");
 const { MimeType, Mark, HttpStatusCode } = Coralian.constants;
 const HTTP_REQUEST_METHOD_GET = Coralian.constants.HttpRequestMethod.GET;
@@ -59,16 +59,16 @@ function Render (req, res, {reqRoute, typeName, cookies, attrs}) {
 							Coralian.logger.log(reqRoute + " use page cache.");
 							let cacheObj = pageCache.get(reqRoute);
 							if (!cacheObj) {
-								page = parseView(url, attrs);
+								page = pageTemplate(url, attrs);
 								pageCache.save(reqRoute, page);
 							} else {
 								page = cacheObj;
 							}
 						} else {
-							page = parseView(url, attrs);
+							page = pageTemplate(url, attrs);
 						}
 					} else {
-						page = parseView(url, attrs);
+						page = pageTemplate(url, attrs);
 					}
 				} else {
 					page = url; // 如果不存在对应的文件，则把该请求的内容直接显示在页面上
