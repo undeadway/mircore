@@ -13,7 +13,7 @@ const JSONstringify = JSON.stringify;
 const ROUTE_ERROR = "/error";
 const STR_BINARY = "binary";
 
-function Render (req, res, {reqRoute, typeName, cookies, attrs}) {
+function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 
 	/*
 	 * render 只负责实现 HTML 的显示
@@ -186,4 +186,4 @@ function Render (req, res, {reqRoute, typeName, cookies, attrs}) {
 	}
 }
 
-module.exports = exports = Render;
+module.exports = exports = render;
