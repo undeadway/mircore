@@ -10,6 +10,7 @@ const url = require("url"), qs = require("querystring");
 const Cookies = require("../server/cookies"),
 	filter = require("./filter");
 const { port, appName, developMode, clusterMode } = require("../util/app-config");
+const { clientDisAccessable } = privateUtils;
 
 const { HttpStatusCode, HttpRequestMethod, Mark } = Coralian.constants;
 const { formatString } = Coralian.Formatter;
@@ -44,7 +45,7 @@ function router(req, res) {
 
 	setClientInfo(req);
 
-	if (privateUtils.clientDisAccessable(req.client.USERAGENT)) { // 客户端被拒绝，返回403
+	if (clientDisAccessable(req.client.USERAGENT)) { // 客户端被拒绝，返回403
 		res.writeHead(403);
 		res.end();
 		return;
