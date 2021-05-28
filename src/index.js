@@ -1,4 +1,5 @@
 require("coralian"); // 预载入 coralian
+global.mixin = require('merge-descriptors');
 
 function pathResolve(name, isFolder) {
 

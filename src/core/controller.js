@@ -115,7 +115,8 @@ function controller() {
 
 			// 将 render 绑定到 controller
 			const render = render(request, response, {reqRoute, typeName, cookies: cookies.res, attrs});
-			Object.addAll(render, this);
+			// Object.addAll(render, this);
+			mixin(this, render);
 
 			return true;
 		},
@@ -175,7 +176,8 @@ function controller() {
 				if (!value) {
 					attrs[k] = value = {};
 				}
-				Object.addAll(v, value);
+				// Object.addAll(v, value);
+				mixin(value, v);
 			} else {
 				attrs[k] = v;
 			}
@@ -191,7 +193,8 @@ function controller() {
 					attrs[name] = target = {};
 				}
 			}
-			Object.addAll(obj, target);
+			// Object.addAll(obj, target);
+			mixin(target, obj);
 		},
 		getAttr: function (k) {
 			return attrs[k];
