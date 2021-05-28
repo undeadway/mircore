@@ -7,7 +7,6 @@
 
 const fs = require("fs");
 const { routes } = require("../util/app-config");
-const { getGlobalInspectors } = require("../util/private-utils");
 const CONTROLLER_MAPPING = require("./../util/controller-mapping");
 const { Mark } = Coralian.constants;
 const { errorCast } = Error;
@@ -99,7 +98,7 @@ function invokeController(req, res, route) {
 
 function invokeGlobalInspectors({ instance, name }, req, res, fi) {
 
-	let inspectors = getGlobalInspectors();
+	let inspectors = privateUtils.getGlobalInspectors();
 	let count = inspectors.length,
 		index = 0;
 
