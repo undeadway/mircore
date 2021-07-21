@@ -176,7 +176,7 @@ function initUserAgendAndOS(headers, client) {
 		userAgent = "Safari";
 	} else if (String.contains(input, "apple")) {
 		userAgent = "Safari";
-	} else if (String.contains(input, "gekko") || String.contains(input, "mozilla")) {
+	} else if (String.contains(input, "gekko") || String.contains(input, "quantum") || String.contains(input, "mozilla")) {
 		userAgent = "Firefox";
 	} else if (String.contains(input, "curl")) {
 		userAgent = "curl";
