@@ -61,12 +61,12 @@ function router(req, res) {
 					case HttpRequestMethod.POST:
 						Object.addAll(qs.parse( _postData.join(String.BLANK)), parse.query);
 					// 因为都要调用 request 方法，所以这里 switch 贯穿掉
+					case HttpRequestMethod.HEAD:
+					case HttpRequestMethod.OPTIONS: // 这里主要考虑到有跨域请求
 					case HttpRequestMethod.GET:
 						request(req, res);
 						break;
-					case HttpRequestMethod.HEAD: // TODO 下面这些暂时不做实现
-					case HttpRequestMethod.CONNECT:
-					case HttpRequestMethod.OPTIONS:
+					case HttpRequestMethod.CONNECT: // TODO 下面这些暂时不做实现
 					case HttpRequestMethod.TRACE:
 					case HttpRequestMethod.PATCH:
 					default:
