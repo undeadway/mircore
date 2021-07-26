@@ -48,7 +48,8 @@ function getController(req, route) {
 	}
 
 	if (!ctrlerWrapper && count === 0) {
-		return CONTROLLER_MAPPING.put(STR_ROUTE_INDEX, require(CONTROLLER_PATH.replace(QUESTION_REP_MARK, STR_ROUTE_INDEX)));
+		return CONTROLLER_MAPPING.put(STR_ROUTE_INDEX,
+			require(CONTROLLER_PATH.replace(QUESTION_REP_MARK, STR_ROUTE_INDEX)));
 	} else if (routes.hasFuzzyMatching()) {
 		let ctrlerName = routes.get(`${Mark.SLASH}${Mark.ASTERISK}`);
 		ctrlerWrapper = getControllerWrapper(ctrlerName);
@@ -84,7 +85,8 @@ function invokeController(req, res, route) {
 		 * 非正常执行时，直接在 Controller 中 调用错误处理，所以在 filter 中不用做额外处理
 		 */
 		// 全局 inspector 的执行
-		invokeGlobalInspectors({ instance, name: ctrler.name }, req, res, getFilterInvocation({ instance, inspectors: ctrler.inspectors }, req, res));
+		invokeGlobalInspectors({ instance, name: ctrler.name }, req, res,
+			getFilterInvocation({ instance, inspectors: ctrler.inspectors }, req, res));
 	} catch (e) {
 		e.code = Coralian.constants.HttpStatusCode.INTERNAL_SERVER_ERROR;
 		Coralian.logger.err(e);

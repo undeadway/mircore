@@ -225,7 +225,8 @@ function controller() {
 		},
 		// Action 处理
 		// 添加 action 用的函数
-		addAction: function (name, action, method = HttpRequestMethod.GET, inspectors = []) { // 添加一个对应请求方法的参数，可以 RESTFul 化处理
+		// 添加一个对应请求方法的参数，可以 RESTFul 化处理
+		addAction: function (name, action, method = HttpRequestMethod.GET, inspectors = []) {
 
 			switch (arguments.length) {
 				case 1: // [action]
