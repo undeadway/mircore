@@ -16,7 +16,7 @@ const STR_GLOBAL = "global";
 const NUM_DETAULE_EXPIRE = 30;
 
 function usedCheck(name = STR_GLOBAL) {
-	let config = getCacheConfig(name)
+	let config = getCacheConfig(name);
 	if (config === null) {
 		unsupportedOperation(name + " 的 cache 没有被启用，无法创建对应空间");
 	}
@@ -44,7 +44,6 @@ this.get = (space = STR_GLOBAL, name) => {
 	}
 
 	return cache.get(name);
-
 };
 
 this.del = (space = STR_GLOBAL, name) => {
@@ -59,4 +58,9 @@ this.del = (space = STR_GLOBAL, name) => {
 	delete cache[name];
 
 	return obj;
+};
+
+this.cacheUsed = (name = STR_GLOBAL) => {
+	let config = getCacheConfig(name);
+	return !!config;
 };

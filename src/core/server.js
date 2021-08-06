@@ -7,9 +7,9 @@
  */
 const url = require("url"), qs = require("querystring");
 
-const Cookies = require("../server/cookies"),
+const Cookies = require("../components/cookies"),
 	filter = require("./filter"),
-	file = require("./file");
+	file = require("../components/file");
 const { port, appName, developMode, clusterMode } = require("../util/app-config");
 const { clientDisAccessable } = privateUtils;
 
@@ -40,6 +40,7 @@ function router(req, res) {
 
 	let parse = req.parse = url.parse(req.url, true);
 	let method = req.method = req.method.toUpperCase();
+	let _file = file();
 
 	let _postData = [], buferSize = 0;
 	req.setEncoding("utf8");
@@ -55,13 +56,13 @@ function router(req, res) {
 			.on("data", function (chunk) {
 				// TODO 现在这里只处理 post 上来的字符串，二进制格式要怎么弄还要再研究
 				_postData.push(chunk);
-				file.push(chunk);
+				_file.push(chunk);
 			}).on("end", function () {
-				parse.files = file.get(_postData);
 				switch (method) {
 					case HttpRequestMethod.DELETE: // PUT、DELETE 都采用和 POST 一样的实现
 					case HttpRequestMethod.PUT:
 					case HttpRequestMethod.POST:
+						parse.files = _file.get();
 						Object.addAll(qs.parse( _postData.join(String.BLANK)), parse.query);
 					// 因为都要调用 request 方法，所以这里 switch 贯穿掉
 					case HttpRequestMethod.HEAD:

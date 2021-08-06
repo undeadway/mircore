@@ -1,4 +1,5 @@
-const { controller, baseAction } = mircore;
+const { controller, actions } = mircore;
+const { baseAction } = actions;
 const { getLink } = require("./../../util/util");
 const { HttpRequestMethod } = Coralian.constants;
 const PAGE = "/res/html/page.html"

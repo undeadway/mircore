@@ -1,5 +1,5 @@
-const controller = require("./../../../../src/core/controller");
-const { baseAction } = require("./../../../../src/core/actions");
+const { controller, actions } = mircore;
+const { baseAction } = actions;
 const { HttpRequestMethod } = Coralian.constants;
 
 function indexAction() {

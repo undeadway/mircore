@@ -7,7 +7,7 @@
  * 
  * 通过 controller 可以完成对页面进行渲染、重定向等所有 request 和 response 的操作
  */
-const sessions = require("../server/sessions");
+const sessions = require("../components/sessions");
 const render = require("./render");
 const { splitMark } = require("../util/app-config");
 
@@ -18,7 +18,7 @@ const STR_INDEX = 'index', STR_ACTION = "Action";
 function controller() {
 
 	// 这些都要经过 juddeExe 才处理后才会赋值
-	let parse, method, query, realRoute, reqRoute, typeName, modName, actionName, cookies, client, reqPath;
+	let parse, files, method, query, realRoute, reqRoute, typeName, modName, actionName, cookies, client, reqPath;
 	// 这些都是已经初始化好的值
 	let attrs = {}, actions = {}, paras = null, isLogged = false;
 
@@ -31,7 +31,7 @@ function controller() {
 
 			// 初始化设置
 			parse = request.parse, method = request.method;
-			query = parse.query, cookies = parse.cookies, typeName = name.type, client = request.client;
+			query = parse.query, cookies = parse.cookies, typeName = name.type, client = request.client, files = parse.files;
 
 			/**
 			 * realRoute = name.path 是对应文件物理路径 : [blog,read]
@@ -114,9 +114,9 @@ function controller() {
 			}
 
 			// 将 render 绑定到 controller
-			const render = render(request, response, {reqRoute, typeName, cookies: cookies.res, attrs});
+			const _render = render(request, response, {reqRoute, typeName, cookies: cookies.res, attrs});
 			// Object.addAll(render, this);
-			mixin(this, render);
+			mixin(this, _render);
 
 			return true;
 		},
@@ -209,6 +209,9 @@ function controller() {
 		// Cookie 处理
 		getCookie: function (key) {
 			return cookies.req.get(key);
+		},
+		getFile: () => {
+			return files;
 		},
 		isEmptyCookie: () => {
 			return	cookies.req.isEmpty();

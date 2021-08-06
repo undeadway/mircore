@@ -1,4 +1,5 @@
-const { controller, baseAction, ajaxAction } = mircore;
+const { controller, actions } = mircore;
+const { baseAction, ajaxAction } = actions;
 const { splitMark } = mircore.config;
 const { HttpRequestMethod } = Coralian.constants;
 const PAGE = "/res/html/method.html"
