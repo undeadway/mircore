@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"name": "mircore",
+			"path": "."
+		},
+		{
+			"name": "test",
+			"path": "test"
+		},
+		{
+			"name": "src",
+			"path": "src"
+		}
+	],
+	"settings": {}
+}
