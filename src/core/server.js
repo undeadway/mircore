@@ -55,9 +55,9 @@ function router(req, res) {
 			.on("data", function (chunk) {
 				// TODO 现在这里只处理 post 上来的字符串，二进制格式要怎么弄还要再研究
 				_postData.push(chunk);
-				bufferSize += chunk.length;
+				file.push(chunk);
 			}).on("end", function () {
-				file.init(parse, _postData);
+				parse.files = file.get(_postData);
 				switch (method) {
 					case HttpRequestMethod.DELETE: // PUT、DELETE 都采用和 POST 一样的实现
 					case HttpRequestMethod.PUT:
