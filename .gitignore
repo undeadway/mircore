@@ -1,5 +1,4 @@
-src/node_modules
-src/package-lock.json
-src/yarn.lock
+node_modules
+package-lock.json
 test/node_modules
 test/pack-lock.json

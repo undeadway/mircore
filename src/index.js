@@ -1,9 +1,5 @@
 require("coralian"); // 预载入 coralian
 
-// 导入全局设置
-global.mixin = require('merge-descriptors');
-global.privateUtils = require("./util/private-utils");
-
 function pathResolve(name, isFolder) {
 
 	if (String.startsWith(name, __dirname)) {
@@ -21,6 +17,10 @@ const that = module.exports = exports = {};
 function requireModule(input) {
 	require(input);
 }
+
+// 导入全局设置
+global.mixin = require('merge-descriptors');
+global.privateUtils = require("./util/private-utils");
 
 that.requireModule = requireModule;
 that.requireModules = (... input) => {
