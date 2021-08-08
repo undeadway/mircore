@@ -7,14 +7,13 @@
  */
 const Cookies = require("../components/cookies"),
 	filter = require("./filter"),
-	// file = require("../components/file");
 	parse = require("./../components/parse");
 const { port, appName, developMode, clusterMode } = require("../util/app-config");
 const { clientDisAccessable } = privateUtils;
 
-const { HttpStatusCode, HttpRequestMethod, Mark } = Coralian.constants;
+const { HttpStatusCode, Mark } = Coralian.constants;
 const { formatString } = Coralian.Formatter;
-const { unsupportedOperation } = Error;
+
 const TIMEOUT = 20000,
 	ERROR_ROUTE_FORMAT = "/error/%s";
 let isStarted = false;
@@ -37,7 +36,6 @@ function listen(name) {
  */
 function router(req, res) {
 
-	let method = req.method = req.method.toUpperCase();
 	let __parse = parse();
 
 	req.setEncoding("utf8");
@@ -54,25 +52,10 @@ function router(req, res) {
 			.on("data", function (chunk) {
 				// TODO 现在这里只处理 post 上来的字符串，二进制格式要怎么弄还要再研究
 				__parse.push(chunk);
-			}).on("end", function () {
-				__parse.end();
-				switch (method) {
-					case HttpRequestMethod.DELETE: // PUT、DELETE 都采用和 POST 一样的实现
-					case HttpRequestMethod.PUT:
-					case HttpRequestMethod.POST:
-					// 因为都要调用 request 方法，所以这里 switch 贯穿掉
-					case HttpRequestMethod.HEAD:
-					case HttpRequestMethod.OPTIONS: // 这里主要考虑到有跨域请求
-					case HttpRequestMethod.GET:
-						request(req, res);
-						break;
-					case HttpRequestMethod.CONNECT: // TODO 下面这些暂时不做实现
-					case HttpRequestMethod.TRACE:
-					case HttpRequestMethod.PATCH:
-					default:
-						unsupportedOperation(method);
-				}
-			}).setTimeout(TIMEOUT, function () {
+			}).on("end", () => {
+				__parse.end(request);
+			})
+			.setTimeout(TIMEOUT, function () {
 				if (developMode) return; // 开发模式的情况下，无视各种超时
 				// req 请求超时，网络不稳定
 				// 408 Request Timeout
