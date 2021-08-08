@@ -10,36 +10,33 @@ const unsupportedOperation = Error.unsupportedOperation;
 
 function parseFormData (str, parse) {
 
-		let arr = str.split("\r\n");
-		let query = {}, files = {}, isFirst = true; // 全局
-		let name = null, data = [], isFile = false, // 单参数
-			contentDisposition = null, contentType = null;
+	let arr = str.split("\r\n");
+	let query = {}, files = {}, isFirst = true; // 全局
+	let name = null, data = [], isFile = false, // 单参数
+		contentDisposition = null, contentType = null;
 
-		let first = arr[0];
+	let first = arr[0]; // 第一行
 
-		for (let i = 0, len = arr.length; i < len; i++) {
-			let line = arr[i];
-			if (String.isEmpty(line)) continue;
+	for (let i = 1, len = arr.length; i < len; i++) {
+		let line = arr[i];
+		if (String.isEmpty(line)) continue;
 
-			if (String.startsWith("Content-Disposition")) {
-				contentDisposition = line;
-			} else if (String.startsWith("Content-Type")) {
-				contentType = line;
-			} else if (String.startsWith(line, first)) { // 这里表示获得到一条完整的数据
-				if (isFirst) { // 第一行，直接跳过
-					isFirst = false;
-				};
-				data = [];
-				isFile = false;
-				if (isFile) {
-					files[name] = file.query(data, contentDisposition, contentType);
-					ifFile = false;
-				}
+		if (String.startsWith("Content-Disposition")) {
+			contentDisposition = line;
+		} else if (String.startsWith("Content-Type")) {
+			contentType = line;
+		} else if (String.startsWith(line, first)) { // 这里表示获得到一条完整的数据
+			data = [];
+			isFile = false;
+			if (isFile) {
+				files[name] = file.query(data, contentDisposition, contentType);
+				ifFile = false;
 			}
 		}
+	}
 
-		parse.query = query;
-		parse.files = files;
+	parse.query = query;
+	parse.files = files;
 }
 
 module.exports = () => {
