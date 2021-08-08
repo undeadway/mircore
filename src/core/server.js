@@ -5,11 +5,10 @@
  * 也就是说，server 这里要完成的是 nodejs 没有实现，但是整个应用程序却需要的功能
  * 更接近于服务器的设置
  */
-const url = require("url"), qs = require("querystring");
-
 const Cookies = require("../components/cookies"),
 	filter = require("./filter"),
-	file = require("../components/file");
+	// file = require("../components/file");
+	parse = require("./../components/parse");
 const { port, appName, developMode, clusterMode } = require("../util/app-config");
 const { clientDisAccessable } = privateUtils;
 
@@ -38,11 +37,9 @@ function listen(name) {
  */
 function router(req, res) {
 
-	let parse = req.parse = url.parse(req.url, true);
 	let method = req.method = req.method.toUpperCase();
-	let _file = file();
+	let __parse = parse();
 
-	let _postData = [], buferSize = 0;
 	req.setEncoding("utf8");
 
 	setClientInfo(req);
@@ -52,18 +49,17 @@ function router(req, res) {
 		res.end();
 		return;
 	} else {
+		__parse.init(req);
 		req.on(Error.TYPE_NAME, onError)
 			.on("data", function (chunk) {
 				// TODO 现在这里只处理 post 上来的字符串，二进制格式要怎么弄还要再研究
-				_postData.push(chunk);
-				_file.push(chunk);
+				__parse.push(chunk);
 			}).on("end", function () {
+				__parse.end();
 				switch (method) {
 					case HttpRequestMethod.DELETE: // PUT、DELETE 都采用和 POST 一样的实现
 					case HttpRequestMethod.PUT:
 					case HttpRequestMethod.POST:
-						parse.files = _file.get();
-						Object.addAll(qs.parse( _postData.join(String.BLANK)), parse.query);
 					// 因为都要调用 request 方法，所以这里 switch 贯穿掉
 					case HttpRequestMethod.HEAD:
 					case HttpRequestMethod.OPTIONS: // 这里主要考虑到有跨域请求
