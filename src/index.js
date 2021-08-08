@@ -63,4 +63,6 @@ that.start = () => {
 
 	const server = require("./core/server");
 	server();
+
+	global.mircore = that; // 将 mircore 绑定到 global 上
 }
