@@ -16,6 +16,15 @@ function file () {
 	};
 }
 
+module.exports = {
+	check: (data) => {
+		for (let k in data) {
+			console.log(`${k}：`);
+			console.log(`\t${data[k]}`);
+		}
+	}
+};
+
 // module.exports = () =>{
 
 // 	let size = 0;

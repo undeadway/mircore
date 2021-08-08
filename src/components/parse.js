@@ -26,8 +26,30 @@ module.exports = () => {
 			size += chunk.length;
 		},
 		end: (request) => {
-			console.log(chunks.join(String.BLANK));
-			Object.addAll(qs.parse(chunks.join(String.BLANK)), parse.query);
+			let str = chunks.join(String.BLANK);
+			if (String.contains(str, "Content-Disposition")) {
+				let arr = str.split("\r\n");
+				let query = {}, files = {};
+				let data = [], isFile = false, contentType = null;
+				let first = arr[0];
+				for (let i = 0, len = arr.length; i < len; i++) {
+					let line = arr[i];
+					console.log(i, line);
+					if (String.isEmpty(line)) continue;
+					if (String.startsWith(line, first)) {
+						data = [];
+						isFile = false;
+					} else if (String.startsWith("Content-Disposition")) {
+
+					} else if (String.startsWith("Content-Type")) {
+
+					}
+				}
+				parse.query = query;
+				parse.files = files;
+			} else {
+				Object.addAll(qs.parse(str), parse.query);
+			}
 
 			switch (method) {
 				case DELETE: // PUT、DELETE 都采用和 POST 一样的实现
