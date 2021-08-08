@@ -17,11 +17,8 @@ function file () {
 }
 
 module.exports = {
-	check: (data) => {
-		for (let k in data) {
-			console.log(`${k}：`);
-			console.log(`\t${data[k]}`);
-		}
+	query: (data, disposition, type) => {
+
 	}
 };
 
