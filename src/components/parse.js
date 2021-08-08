@@ -26,12 +26,17 @@ function parseFormData (str, parse) {
 		} else if (String.startsWith("Content-Type")) {
 			contentType = line;
 		} else if (String.startsWith(line, first)) { // 这里表示获得到一条完整的数据
+			let obj = data.join(String.BLANK);
 			data = [];
-			isFile = false;
+			isFile = (contentType !== null);
 			if (isFile) {
 				files[name] = file.query(data, contentDisposition, contentType);
 				ifFile = false;
+			} else {
+				
 			}
+		} else {
+			data.push(line);
 		}
 	}
 
