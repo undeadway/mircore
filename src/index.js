@@ -48,8 +48,8 @@ that.requireConfigs = (... input) => {
 that.start = () => {
 
 	that.controller = require("./core/controller");
-	that.sessions = require("./server/sessions");
-	that.cache = require("./server/cache");
+	that.sessions = require("./components/sessions");
+	that.cache = require("./components/cache");
 	that.actions = require("./core/actions");
 	that.config = require("./util/app-config");
 	that.util = require("./util/public-utils");
