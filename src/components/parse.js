@@ -12,9 +12,12 @@ module.exports = () => {
 
 	let chunks = [], size = 0;
 	let parse = null, method;
+	let req = null, res = null;
 
 	return {
-		init: (req) => {
+		init: (_req, _res) => {
+			req = _req, res = _res;
+			req.url = req.url.replace(/\/{2,}/, "/");
 			parse = req.parse = url.parse(req.url, true);
 			method = req.method = req.method.toUpperCase();
 		},
