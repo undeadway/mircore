@@ -4,14 +4,15 @@
  */
 const fs = require("fs");
 const imageinfo = require("imageinfo");
-const contollerMapping = require("../util/controller-mapping");
-const pageTemplate = require("../util/page-template");
-const caches = require("../components/cache");
+const contollerMapping = require("../../util/controller-mapping");
+const pageTemplate = require("../../util/page-template");
+const caches = require("../public/cache");
 const { MimeType, Mark, HttpStatusCode } = Coralian.constants;
 const HTTP_REQUEST_METHOD_GET = Coralian.constants.HttpRequestMethod.GET;
 const JSONstringify = JSON.stringify;
 const ROUTE_ERROR = "/error";
 const STR_BINARY = "binary";
+const file = require("../public/file");
 
 function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 
@@ -135,13 +136,26 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 		 * 提供文件下载用
 		 * 目前只能准确判断是否是图片，其余类型尚无准确的判断方法
 		 */
-		renderFile: ({file, name, mime =  MimeType.OCTET_STREAM}) => {
-			if (typeIs(file, String.TYPE_NAME)) {
-				let url = pathResolve(file);
-				file = fs.readFileSync(url, STR_BINARY);
-				name = name || url.split(Mark.SLASH).pop();
+		renderFile: (fileObj) => {
+
+			let fileData, fileName, mime;
+
+			if (file.isFile(fileObj)) {
+				fileData = fileObj.getBinaryData();
+				fileName = fileObj.getFileName();
+				mime = fileObj.getMime();
+			} else {
+				fileData = fileObj.file;
+				fileName = fileObj.name;
+				mime = fileObj.mime || MimeType.OCTET_STREAM
 			}
-			let imgInfo = imageinfo(file);
+
+			if (typeIs(fileData, String.TYPE_NAME)) {
+				let url = pathResolve(fileData);
+				fileData = fs.readFileSync(url, STR_BINARY);
+				fileName = fileName || url.split(Mark.SLASH).pop();
+			}
+			let imgInfo = imageinfo(fileData);
 	
 			if (imgInfo) { // 判断是否是图片
 				mime = imgInfo.mimeType;
@@ -149,10 +163,10 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 	
 			res.writeHead(HttpStatusCode.OK, {
 				"Content-Type": mime,
-				'Content-Disposition': `attachment;filename=${name}`,
+				'Content-Disposition': `attachment;filename=${fileName}`,
 				"Set-Cookie": cookies.print()
 			});
-			res.write(file, STR_BINARY);
+			res.write(fileData, STR_BINARY);
 			end();
 		},
 		/*

@@ -5,9 +5,9 @@
  * 也就是说，server 这里要完成的是 nodejs 没有实现，但是整个应用程序却需要的功能
  * 更接近于服务器的设置
  */
-const Cookies = require("../components/cookies"),
+const Cookies = require("../components/public/cookies"),
 	filter = require("./filter"),
-	parse = require("./../components/parse");
+	parse = require("./../components/private/parse");
 const { port, appName, developMode, clusterMode } = require("../util/app-config");
 const { clientDisAccessable } = privateUtils;
 

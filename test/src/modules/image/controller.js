@@ -1,12 +1,15 @@
-const controller = mircore.controller;
-const file = "/res/file/ttplayer-logo.png";
+const { controller, file } = mircore;
+const file_name = "res/file/ttplayer-logo.png";
 
 function nonoController() {
 
 	const ctrler = controller();
 
 	ctrler.addAction(() => {
-		ctrler.renderFile({file: file});
+
+		file.create("/home/waygc/workspace/mircore/test/" + file_name);
+
+		ctrler.renderFile({file: file_name});
 	});
 
 	return ctrler;

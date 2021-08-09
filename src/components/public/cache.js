@@ -8,7 +8,7 @@
  */
 
 const Cache = require("cache");
-const { getCacheConfig } = require("../util/app-config");
+const { getCacheConfig } = require("../../util/app-config");
 const { unsupportedOperation } = Error;
 
 const caches = {};
