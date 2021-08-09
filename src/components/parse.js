@@ -27,17 +27,18 @@ function parseFormData (str, parse) {
 			contentDisposition = line.slice(CONTENT_DISPOSITION.length + 2);
 		} else if (String.startsWith(line, CONTENT_TYPE)) {
 			contentType = line.slice(CONTENT_TYPE.length + 2);
-			name = contentDisposition.match(/name="(.+?)"/)[1];
 		} else if (String.startsWith(line, first)) { // 这里表示获得到一条完整的数据
-			isFile = (contentType !== null);
+			name = contentDisposition.match(/name="(.+?)"/)[1];
 			let obj = data.join(String.BLANK);
-			if (isFile) {
+			if (contentType !== null) {
+			if (!/filename="(.+?)"/.test(contentDisposition)) continue;
 				files[name] = file.query(obj, contentDisposition, contentType);
-				ifFile = false;
 			} else {
 				query[name] = String.trim(obj);
 			}
 			data = [];
+			contentDisposition = null;
+			contentType = null;
 		} else {
 			data.push(line);
 		}

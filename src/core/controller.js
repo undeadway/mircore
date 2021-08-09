@@ -210,8 +210,8 @@ function controller() {
 		getCookie: function (key) {
 			return cookies.req.get(key);
 		},
-		getFile: () => {
-			return files;
+		getFile: (name) => {
+			return files[name];
 		},
 		isEmptyCookie: () => {
 			return	cookies.req.isEmpty();

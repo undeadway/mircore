@@ -1,3 +1,5 @@
+const file = require("../../../../src/components/file");
+
 const controller = mircore.controller;
 
 function nonoController() {
@@ -5,7 +7,9 @@ function nonoController() {
 	const ctrler = controller();
 
 	ctrler.addAction(() => {
-		ctrler.end();
+		let file = ctrler.getFile("data1");
+		file.saveTo("/home/waygc/temp/", file.getFileName());
+		ctrler.renderFile({file: file.getBinaryData()});
 	}, "post");
 
 	return ctrler;
