@@ -1,5 +1,5 @@
 const { controller, file } = mircore;
-const fs = require("fs");
+const PAGE = "/res/html/image.html"
 
 function nonoController() {
 
@@ -9,8 +9,11 @@ function nonoController() {
 
 		let fd = ctrler.getFile("data1");
 
-		fd.save("/home/waygc/temp/", fd.getFileName());
-		ctrler.renderFile(fd);
+		let mime = fd.getMime(), data = fd.getBase64Data();
+		let base64 = `data:${mime};base64,${data}`;
+		ctrler.setAttr("base64", base64);
+
+		ctrler.render({url: PAGE});
 	}, "post");
 
 	return ctrler;
