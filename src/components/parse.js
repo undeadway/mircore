@@ -4,6 +4,8 @@
 
 const url = require("url"), qs = require("querystring");
 const file = require("./file");
+const CONTENT_DISPOSITION = "Content-Disposition",
+	CONTENT_TYPE = "Content-Type";
 
 const { DELETE, PUT, POST, HEAD, OPTIONS, GET, CONNECT, TRACE, PATCH } = Coralian.constants.HttpRequestMethod;
 const unsupportedOperation = Error.unsupportedOperation;
@@ -21,20 +23,21 @@ function parseFormData (str, parse) {
 		let line = arr[i];
 		if (String.isEmpty(line)) continue;
 
-		if (String.startsWith("Content-Disposition")) {
-			contentDisposition = line;
-		} else if (String.startsWith("Content-Type")) {
-			contentType = line;
+		if (String.startsWith(line, CONTENT_DISPOSITION)) {
+			contentDisposition = line.slice(CONTENT_DISPOSITION.length + 2);
+		} else if (String.startsWith(line, CONTENT_TYPE)) {
+			contentType = line.slice(CONTENT_TYPE.length + 2);
+			name = contentDisposition.match(/name="(.+?)"/)[1];
 		} else if (String.startsWith(line, first)) { // 这里表示获得到一条完整的数据
-			let obj = data.join(String.BLANK);
-			data = [];
 			isFile = (contentType !== null);
+			let obj = data.join(String.BLANK);
 			if (isFile) {
-				files[name] = file.query(data, contentDisposition, contentType);
+				files[name] = file.query(obj, contentDisposition, contentType);
 				ifFile = false;
 			} else {
-				
+				query[name] = String.trim(obj);
 			}
+			data = [];
 		} else {
 			data.push(line);
 		}

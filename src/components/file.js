@@ -1,49 +1,31 @@
+const fs = require("fs");
+const md5 = require("md5");
 
-function file () {
+function file (fn, data) {
 
-	const files = {};
+	const buffer = Buffer.from(data);
+	const has = md5(data);
 
 	return {
-		saveTo: () => {
+		saveTo: (path, name) => {
 
 		},
-		put: (name, _file) => {
-			files[name] = _file;
+		getFileName: () => {
+			return fn;
 		},
-		get: (name) => {
-			return files[name];
+		getBrinaryData: () => {
+			return buffer;
+		},
+		getBase64Data: () => {
+			return buffer.toString("base64");
 		}
 	};
 }
 
 module.exports = {
-	query: (data, disposition, type) => {
+	query: (data, disposition) => {
+		let filename = disposition.match(/filename="(.+?)"/)[1];
 
+		return file(filename, data);
 	}
 };
-
-// module.exports = () =>{
-
-// 	let size = 0;
-// 	const chunks = [];
-
-// 	return {
-// 		push: (chunk) => {
-// 			let arr = chunk.split("\r\n");
-			
-// 			arr.map(item => {
-// 				if (String.contains(item, "---")) return;
-// 				if (String.contains(item, "Content-")) return;
-// 				if (String.isEmpty(item)) return;
-// 				chunks.push(item);
-// 				size += item.length;
-// 			});
-// 		},
-// 		get: (parse) => {
-// 			// let buffer = Buffer.concat(chunks , size);
-	
-// 			let _f = file();
-// 			return _f;
-// 		}
-// 	};
-// };
