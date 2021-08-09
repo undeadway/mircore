@@ -48,8 +48,7 @@ function router(req, res) {
 		return;
 	} else {
 		__parse.init(req, res);
-		req.on(Error.TYPE_NAME, onError)
-			.on("data", function (chunk) {
+		req.on("data", function (chunk) {
 				// TODO 现在这里只处理 post 上来的字符串，二进制格式要怎么弄还要再研究
 				__parse.push(chunk);
 			}).on("end", () => {
@@ -63,7 +62,8 @@ function router(req, res) {
 				req.url = formatString(ERROR_ROUTE_FORMAT, HttpStatusCode.REQUEST_TIMEOUT);
 				req.parse = url.parse(req.url, true);
 				request(req, res);
-			});
+			})
+			.on(Error.TYPE_NAME, onError);
 		res.on(Error.TYPE_NAME, onError)
 			.setTimeout(TIMEOUT, function () {
 				if (developMode) return; // 开发模式的情况下，无视各种超时
