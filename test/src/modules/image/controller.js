@@ -7,9 +7,9 @@ function nonoController() {
 
 	ctrler.addAction(() => {
 
-		file.create("/home/waygc/workspace/mircore/test/" + file_name);
+		let f = file.create("/home/waygc/workspace/mircore/test/" + file_name);
 
-		ctrler.renderFile({file: file_name});
+		ctrler.renderFile(f);
 	});
 
 	return ctrler;

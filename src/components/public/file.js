@@ -3,6 +3,9 @@ const md5 = require("md5");
 
 let _mimeTypes = null
 const getMIMEType = (type) => {
+
+	type = type.toLowerCase();
+
 	if (_mimeTypes) return _mimeTypes[type]
 	_mimeTypes = {}
 	const mimeTypes = {
@@ -154,11 +157,15 @@ module.exports = {
 		return obj instanceof File;
 	},
 	create: (path) => {
+		let fn = path.split("/");
+		fn = fn[fn.length - 1];
 		let buffer = fs.readFileSync(path);
-		return buffer;
+		let str = buffer.toString();
+		let type = str.slice(1, str.indexOf("\r\n"));
+		return new File(fn, buffer, type);
 	},
 	query: (filename, buffer, type) => {
 
-		return new File(filename, buffer, type.toLowerCase());
+		return new File(filename, buffer, type);
 	}
 };
