@@ -8,6 +8,7 @@ demo 文件夹下是服务器的一个简单案例。
 ## 实现功能
 * 可以进行路由控制；
 * 拒绝指定客户端访问；
+* 文件上传；
 
 ## 启动
 ```
@@ -20,7 +21,7 @@ server.start();
 * [道亦会](http://daoyiclub.com)
 
 ## TODO
-* 文件处理
+* 更高级的 http 处理；
 
 ## 教程
 [教程](./documents/cn/manual.md)
@@ -36,6 +37,7 @@ The demo folder holds a simple instance of mircore.
 ## Supported
 * Router control;
 * To reject the request of specified clinets;
+* File uploads/downloads;
 
 ## Start
 ```
@@ -48,7 +50,7 @@ server.start();
 * [道亦会](http://daoyiclub.com)
 
 ## TODO
-* file uploads/downloads
+* more http supports;
 
 ## License
 Apache 2.0
