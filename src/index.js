@@ -47,6 +47,7 @@ that.requireConfigs = (... input) => {
 
 that.start = () => {
 
+	that.md5 = require("md5");
 	that.controller = require("./core/controller");
 	that.actions = require("./core/actions");
 	that.config = require("./util/app-config");
