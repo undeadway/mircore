@@ -59,7 +59,7 @@ module.exports = () => {
 	return {
 		init: (_req, _res) => {
 			req = _req, res = _res;
-			req.setEncoding("binary");
+			req.setEncoding("binary"); // TODO 这里改成 binary 不知道会不会对其他类型的提交造成影响
 			req.url = req.url.replace(/\/{2,}/g, "/");
 			parse = req.parse = url.parse(req.url, true);
 			method = req.method = req.method.toUpperCase();
