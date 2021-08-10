@@ -144,6 +144,11 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 				fileData = fileObj.getBinaryData();
 				fileName = fileObj.getFileName();
 				mime = fileObj.getMime();
+			} else if (typeIs(fileObj, 'string')) {
+				let _file = file.create(fileObj);
+				fileData = _file.getBinaryData();
+				fileName = _file.getFileName();
+				mime = _file.getMime();
 			} else {
 				fileData = fileObj.file;
 				fileName = fileObj.name;

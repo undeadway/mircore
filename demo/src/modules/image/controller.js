@@ -1,5 +1,5 @@
 const { controller, file } = mircore;
-const file_name = "/home/waygc/workspace/mircore/test/res/file/ttplayer-logo.png";
+const file_name = "/home/waygc/workspace/mircore/demo/res/file/ttplayer-logo.png";
 
 function nonoController() {
 
@@ -7,9 +7,7 @@ function nonoController() {
 
 	ctrler.addAction(() => {
 
-		let f = file.create(file_name);
-
-		ctrler.renderFile(f);
+		ctrler.renderFile(file_name);
 	});
 
 	return ctrler;
