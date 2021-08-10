@@ -2,8 +2,6 @@ const { controller, actions } = mircore;
 const { baseAction } = actions;
 const { HttpRequestMethod } = Coralian.constants;
 
-let index = 0;
-
 function indexAction() {
 	const action = baseAction();
 
