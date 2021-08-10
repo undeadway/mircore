@@ -48,9 +48,6 @@ that.requireConfigs = (... input) => {
 that.start = () => {
 
 	that.controller = require("./core/controller");
-	// that.sessions = require("./components/sessions");
-	// that.cache = require("./components/cache");
-	// that.file = require("./components/file");
 	that.actions = require("./core/actions");
 	that.config = require("./util/app-config");
 	that.util = require("./util/public-utils");
@@ -62,7 +59,8 @@ that.start = () => {
 		that.config.site = require(siteappPath);
 	}
 
-	let files = fs.readdirSync(pathResolve("/src/components/public"));
+	console.log(__dirname);
+	let files = fs.readdirSync(`${__dirname}/components/public`);
 	files.map(file => {
 		modName = file.slice(0, file.length - 3);
 		that[modName] = require(`./components/public/${file}`);
