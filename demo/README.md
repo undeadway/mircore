@@ -1,6 +1,6 @@
 # 说明
 
-test 是 mircore 的测试用工程，包含 mircore 的最基本功能的测试。
+test 是 mircore 的 demo 工程，包含 mircore 的最基本功能的测试。
 
 ## /index /next /first /second
 以上几个接口是基本的页面，可以在数个页面之间跳转。
