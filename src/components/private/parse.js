@@ -3,7 +3,6 @@
  */
 
 const url = require("url"), qs = require("querystring");
-const fs = require("fs");
 const file = require("../public/file");
 const CONTENT_TYPE = "Content-Type";
 
@@ -13,7 +12,6 @@ const unsupportedOperation = Error.unsupportedOperation;
 function parseFormData (str, parse) {
 
 	let query = {}, files = {}; // 全局设置
-	let data = []; // 单参数
 
 	let first = str.slice(0, str.indexOf("\r\n")); // 获得第一行（报头样式）
 	let arr = str.split(first); // 根据报头样式分割数据
@@ -38,12 +36,12 @@ function parseFormData (str, parse) {
 				}
 			}
 
-			let fileBuffer = item.slice(rems[3] + 2, item.length - 2);
+			let data = item.slice(rems[3] + 2, item.length - 2);
 			let type = item.slice(rems[3] + 3, rems[4]);
 			let filename = item.match(/filename="(.+?)"/)[1];
-			files[name] = file.query(filename, fileBuffer, type);
+			files[name] = file.create({ filename, data, type });
 		} else {
-			data = item.split("\r\n");
+			let data = item.split("\r\n");
 			query[name] = data[data.length - 2];
 		}
 	}

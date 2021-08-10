@@ -1,13 +1,12 @@
 const fs = require("fs");
 const md5 = require("md5");
 
-let _mimeTypes = null
-const getMIMEType = (type) => {
+const { MimeType } = Coralian.constants;
 
-	type = type.toLowerCase();
+const getMIMEType = (() => {
 
-	if (_mimeTypes) return _mimeTypes[type]
-	_mimeTypes = {}
+	const _mimeTypes = {}
+
 	const mimeTypes = {
 		// Image formats.
 		'jpg|jpeg|jpe': 'image/jpeg',
@@ -112,20 +111,25 @@ const getMIMEType = (type) => {
 		'numbers': 'application/vnd.apple.numbers',
 		'pages': 'application/vnd.apple.pages'
 	}
+
 	const keys = Object.keys(mimeTypes);
+
 	keys.forEach(key => {
 		const arr = key.split('|');
 		arr.forEach(k2 => {
 			_mimeTypes[k2] = mimeTypes[key]
 		});
 	})
-	return _mimeTypes[type];
-}
 
-function File (fn, data, type) {
+	return (type) => {
+		return _mimeTypes[type];
+	};
+})();
 
-	const buffer = Buffer.from(data),
-		hash = md5(data);
+function File (fillename, buffer, type = MimeType.OCTET_STREAM) {
+
+	const hash = md5(buffer.toString());
+	fillename = fillename || hash;
 
 	const mime = getMIMEType(type);
 
@@ -136,7 +140,7 @@ function File (fn, data, type) {
 	}
 
 	this.getFileName = () => {
-		return fn;
+		return fillename;
 	};
 
 	this.getBinaryData = () => {
@@ -156,16 +160,22 @@ module.exports = {
 	isFile: (obj) => {
 		return obj instanceof File;
 	},
-	create: (path) => {
-		let fn = path.split("/");
-		fn = fn[fn.length - 1];
-		let buffer = fs.readFileSync(path);
-		let str = buffer.toString();
-		let type = str.slice(1, str.indexOf("\r\n"));
-		return new File(fn, buffer, type);
-	},
-	query: (filename, buffer, type) => {
+	create: (input) => {
 
+		let filename, buffer, type;
+
+		if (typeIs(input, 'string')) {
+			let fn = path.split("/");
+			buffer = fs.readFileSync(path);
+			let str = buffer.toString();
+
+			filename = fn[fn.length - 1];
+			type = str.slice(1, str.indexOf("\r\n"));
+		} else {
+			filename = input.filename;
+			buffer = Buffer.from(input.data, "binary");
+			type = input.type;
+		}
 		return new File(filename, buffer, type);
 	}
 };
