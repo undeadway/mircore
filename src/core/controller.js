@@ -7,6 +7,8 @@
  * 
  * 通过 controller 可以完成对页面进行渲染、重定向等所有 request 和 response 的操作
  */
+const mixin = require('merge-descriptors');
+
 const sessions = require("./../components/public/sessions");
 const render = require("./../components/private/render");
 const { splitMark } = require("../util/app-config");

@@ -16,10 +16,6 @@ function requireModule(input) {
 	require(input);
 }
 
-// 导入全局设置
-global.mixin = require('merge-descriptors');
-global.privateUtils = require("./util/private-utils");
-
 const that = module.exports = exports = {};
 
 that.requireModule = requireModule;
@@ -48,6 +44,8 @@ that.requireConfigs = (... input) => {
 that.start = () => {
 
 	that.md5 = require("md5");
+	that.mixin = require('merge-descriptors');
+
 	that.controller = require("./core/controller");
 	that.actions = require("./core/actions");
 	that.config = require("./util/app-config");

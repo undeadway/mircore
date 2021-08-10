@@ -9,7 +9,7 @@ const Cookies = require("../components/public/cookies"),
 	filter = require("./filter"),
 	parse = require("./../components/private/parse");
 const { port, appName, developMode, clusterMode } = require("../util/app-config");
-const { clientDisAccessable } = privateUtils;
+const { clientDisAccessable } = require("./../util/private-utils");;
 
 const { HttpStatusCode, Mark } = Coralian.constants;
 const { formatString } = Coralian.Formatter;
