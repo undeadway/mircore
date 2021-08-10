@@ -13,8 +13,6 @@ const unsupportedOperation = Error.unsupportedOperation;
 
 function parseFormData (str, parse) {
 
-	// let arr = str.split("\r\n");
-
 	let query = {}, files = {}; // 全局设置
 	let name = null, data = []; // 单参数
 		contentDisposition = null, contentType = null;
@@ -51,35 +49,6 @@ function parseFormData (str, parse) {
 			query[name] = data[data.length - 2];
 		}
 	}
-
-
-	// let first = arr[0]; // 第一行
-
-	// for (let i = 1, len = arr.length; i < len; i++) {
-	// 	let line = arr[i];
-	// 	if (String.isEmpty(line)) continue;
-
-	// 	if (String.startsWith(line, CONTENT_DISPOSITION)) {
-	// 		contentDisposition = line.slice(CONTENT_DISPOSITION.length + 2);
-	// 	} else if (String.startsWith(line, CONTENT_TYPE)) {
-	// 		contentType = line.slice(CONTENT_TYPE.length + 2);
-	// 	} else if (String.startsWith(line, first)) { // 这里表示获得到一条完整的数据
-	// 		name = contentDisposition.match(/name="(.+?)"/)[1];
-	// 		let tmp = data.join("\r\n");
-	// 		if (contentType !== null) {
-	// 		if (!/filename="(.+?)"/.test(contentDisposition)) continue;
-	// 			files[name] = file.query(data, contentDisposition, contentType);
-	// 		} else {
-	// 			query[name] = String.trim(data);
-	// 		}
-	// 		data = [];
-	// 		contentDisposition = null;
-	// 		contentType = null;
-	// 	} else {
-	// 		console.log(Buffer.from(line, "binary"));
-	// 		data.push(line);
-	// 	}
-	// }
 
 	parse.query = query;
 	parse.files = files;
