@@ -5,7 +5,7 @@
 const fs = require("fs");
 const imageinfo = require("imageinfo");
 const contollerMapping = require("../../util/controller-mapping");
-const pageTemplate = require("../../util/page-template");
+const pageTemplate = require("../public/page-template");
 const caches = require("../public/cache");
 const { MimeType, Mark, HttpStatusCode } = Coralian.constants;
 const HTTP_REQUEST_METHOD_GET = Coralian.constants.HttpRequestMethod.GET;

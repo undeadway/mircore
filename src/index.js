@@ -50,7 +50,7 @@ that.start = () => {
 	that.actions = require("./core/actions");
 	that.config = require("./util/app-config");
 	that.util = require("./util/public-utils");
-	that.util.pageTemplate = require("./util/page-template");
+	that.util.pageTemplate = require("./components/public/page-template");
 
 	const fs = require("fs");
 	const siteappPath = pathResolve("/src/config/siteapp");

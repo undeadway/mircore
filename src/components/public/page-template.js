@@ -13,7 +13,7 @@
  */
 const { readFileSync } = require("fs");
 
-const pageCache = require("../util/app-config").getCacheConfig("page");
+const pageCache = require("../../util/app-config").getCacheConfig("page");
 const { errorStatement, noSuchProperty } = Error;
 const { replaceElement, replaceLoop } = Coralian.ReplaceHolder;
 const { Mark } = Coralian.constants;
