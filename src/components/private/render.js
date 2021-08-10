@@ -148,17 +148,15 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 				fileData = fileObj.file;
 				fileName = fileObj.name;
 				mime = fileObj.mime || MimeType.OCTET_STREAM
-			}
-
-			if (typeIs(fileData, String.TYPE_NAME)) {
 				let url = pathResolve(fileData);
 				fileData = fs.readFileSync(url, STR_BINARY);
 				fileName = fileName || url.split(Mark.SLASH).pop();
-			}
-			let imgInfo = imageinfo(fileData);
+
+				let imgInfo = imageinfo(fileData);
 	
-			if (imgInfo) { // 判断是否是图片
-				mime = imgInfo.mimeType;
+				if (imgInfo) { // 判断是否是图片
+					mime = imgInfo.mimeType;
+				}
 			}
 	
 			res.writeHead(HttpStatusCode.OK, {
