@@ -50,7 +50,6 @@ that.start = () => {
 	that.actions = require("./core/actions");
 	that.config = require("./util/app-config");
 	that.util = require("./util/public-utils");
-	that.util.pageTemplate = require("./components/public/page-template");
 
 	const fs = require("fs");
 	const siteappPath = pathResolve("/src/config/siteapp");
@@ -61,6 +60,9 @@ that.start = () => {
 	let files = fs.readdirSync(`${__dirname}/components/public`);
 	files.map(file => {
 		modName = file.slice(0, file.length - 3);
+		if (String.contains(modName, "-")) {
+			modName = String.lowerCamelCase(modName);
+		}
 		that[modName] = require(`./components/public/${file}`);
 	});
 
