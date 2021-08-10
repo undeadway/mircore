@@ -1,7 +1,5 @@
 const { controller, file } = mircore;
 const PAGE = "/res/html/image.html"
-const file_name = "/home/waygc/Desktop/ttplayer-logo(1).png";
-
 
 function nonoController() {
 
@@ -10,16 +8,14 @@ function nonoController() {
 	ctrler.addAction(() => {
 
 		let fd = ctrler.getFile("data1");
-		let lfg = file.create(file_name);
+
+		fd.save();
 
 		let data = fd.getBase64Data();
 		let base64 = `data:${data}`;
-		let base2 = lfg.getBase64Data();
-		let base642 = `data:${base2}`;
-		ctrler.setAttr("base64", base642);
+		ctrler.setAttr("base64", base64);
 
-		// ctrler.render({url: PAGE});
-		ctrler.renderFile(lfg);
+		ctrler.render({url: PAGE});
 	}, "post");
 
 	return ctrler;
