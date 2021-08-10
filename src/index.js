@@ -58,7 +58,6 @@ that.start = () => {
 		that.config.site = require(siteappPath);
 	}
 
-	console.log(__dirname);
 	let files = fs.readdirSync(`${__dirname}/components/public`);
 	files.map(file => {
 		modName = file.slice(0, file.length - 3);
