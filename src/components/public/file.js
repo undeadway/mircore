@@ -138,6 +138,10 @@ function File (fillename, buffer, type) {
 		fs.writeFileSync(`${path}/${name}`, buffer, "binary");
 	}
 
+	this.getHash = () => {
+		return hash;
+	};
+
 	this.getFileName = () => {
 		return fillename;
 	};
@@ -177,18 +181,6 @@ module.exports = {
 		} else {
 			filename = input.filename;
 			buffer = Buffer.from(input.data, "binary");
-			// let b2 = fs.readFileSync(file_name);
-			// let b2s = b2.toString("binary");
-			// console.log(input.data === b2s);
-			// console.log(b2.length, Buffer.from(input.data, "binary").length);
-			// let output = [];
-			// let l1 = buffer.length, l2 = b2.length;
-			// console.log(l1, l2);
-			// let len = (l1 < l2) ? l2 : l1;
-			// for (let i = 0; i < len; i++) {
-			// 	output.push([buffer[i], b2[i]].join());
-			// }
-			// fs.writeFileSync("/home/waygc/temp/output.csv", output.join("\n"), "utf-8");
 			type = input.type;
 		}
 		return new File(filename, buffer, type.toLowerCase());

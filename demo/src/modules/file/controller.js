@@ -11,6 +11,7 @@ function nonoController() {
 
 		let data = fd.getBase64Data();
 		let base64 = `data:${data}`;
+		ctrler.setAttr("hash", fd.getHash());
 		ctrler.setAttr("base64", base64);
 
 		ctrler.render({url: PAGE});
