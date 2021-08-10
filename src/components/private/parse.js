@@ -5,8 +5,7 @@
 const url = require("url"), qs = require("querystring");
 const fs = require("fs");
 const file = require("../public/file");
-const CONTENT_DISPOSITION = "Content-Disposition",
-	CONTENT_TYPE = "Content-Type";
+const CONTENT_TYPE = "Content-Type";
 
 const { DELETE, PUT, POST, HEAD, OPTIONS, GET, CONNECT, TRACE, PATCH } = Coralian.constants.HttpRequestMethod;
 const unsupportedOperation = Error.unsupportedOperation;
@@ -14,8 +13,7 @@ const unsupportedOperation = Error.unsupportedOperation;
 function parseFormData (str, parse) {
 
 	let query = {}, files = {}; // 全局设置
-	let name = null, data = []; // 单参数
-		contentDisposition = null, contentType = null;
+	let data = []; // 单参数
 
 	let first = str.slice(0, str.indexOf("\r\n")); // 获得第一行（报头样式）
 	let arr = str.split(first); // 根据报头样式分割数据
