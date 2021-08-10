@@ -1,7 +1,6 @@
 const fs = require("fs");
 const md5 = require("md5");
-
-const { MimeType } = Coralian.constants;
+// const file_name = "/home/waygc/Desktop/ttplayer-logo(1).png";
 
 const getMIMEType = (() => {
 
@@ -126,7 +125,7 @@ const getMIMEType = (() => {
 	};
 })();
 
-function File (fillename, buffer, type = MimeType.OCTET_STREAM) {
+function File (fillename, buffer, type) {
 
 	const hash = md5(buffer.toString());
 	fillename = fillename || hash;
@@ -134,21 +133,25 @@ function File (fillename, buffer, type = MimeType.OCTET_STREAM) {
 	const mime = getMIMEType(type);
 
 	this.save = (path, name) => {
-		path = path || `${__dirname}/temp`;
-		name = name || hash;
-		fs.writeFileSync(`${path}/${name}`, buffer);
+		path = path || `/home/waygc/temp`;
+		name = name || `${hash}.${type}`;
+		fs.writeFileSync(`${path}/${name}`, buffer, "binary");
 	}
 
 	this.getFileName = () => {
 		return fillename;
 	};
+	this.getFileNameWithType = () => {
+		return `${filename}.${type}`;
+	}
 
 	this.getBinaryData = () => {
 		return buffer;
 	};
 
 	this.getBase64Data = () => {
-		return buffer.toString("base64");
+		let data = buffer.toString("base64");
+		return `${mime};base64,${data}`;
 	}
 
 	this.getMime = () => {
@@ -165,8 +168,8 @@ module.exports = {
 		let filename, buffer, type;
 
 		if (typeIs(input, 'string')) {
-			let fn = path.split("/");
-			buffer = fs.readFileSync(path);
+			let fn = input.split("/");
+			buffer = fs.readFileSync(input);
 			let str = buffer.toString();
 
 			filename = fn[fn.length - 1];
@@ -174,8 +177,20 @@ module.exports = {
 		} else {
 			filename = input.filename;
 			buffer = Buffer.from(input.data, "binary");
+			// let b2 = fs.readFileSync(file_name);
+			// let b2s = b2.toString("binary");
+			// console.log(input.data === b2s);
+			// console.log(b2.length, Buffer.from(input.data, "binary").length);
+			// let output = [];
+			// let l1 = buffer.length, l2 = b2.length;
+			// console.log(l1, l2);
+			// let len = (l1 < l2) ? l2 : l1;
+			// for (let i = 0; i < len; i++) {
+			// 	output.push([buffer[i], b2[i]].join());
+			// }
+			// fs.writeFileSync("/home/waygc/temp/output.csv", output.join("\n"), "utf-8");
 			type = input.type;
 		}
-		return new File(filename, buffer, type);
+		return new File(filename, buffer, type.toLowerCase());
 	}
 };

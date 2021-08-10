@@ -38,8 +38,6 @@ function router(req, res) {
 
 	let __parse = parse();
 
-	req.setEncoding("utf8");
-
 	setClientInfo(req);
 
 	if (clientDisAccessable(req.client.USERAGENT)) { // 客户端被拒绝，返回403
