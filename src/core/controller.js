@@ -22,7 +22,7 @@ function controller() {
 	// 这些都要经过 juddeExe 才处理后才会赋值
 	let parse, files, method, query, realRoute, reqRoute, typeName, modName, actionName, cookies, client, reqPath;
 	// 这些都是已经初始化好的值
-	let attrs = {}, actions = {}, paras = null, isLogged = false;
+	let attrs = {}, actions = {}, paras = null; //, isLogged = false;
 
 	return {
 		/* 
@@ -294,15 +294,16 @@ function controller() {
 		getTypeName: function () {
 			return typeName;
 		},
-		login: function () {
-			isLogged = true;
-		},
-		logout: function () {
-			isLogged = false;
-		},
-		isLogged: function () {
-			return isLogged;
-		},
+		// TODO 框架中是否要判断登录，待定
+		// login: function () {
+		// 	isLogged = true;
+		// },
+		// logout: function () {
+		// 	isLogged = false;
+		// },
+		// isLogged: function () {
+		// 	return isLogged;
+		// },
 		getClientInfo: function (name) {
 			return client[name.toUpperCase()];
 		},
