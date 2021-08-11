@@ -55,18 +55,7 @@ Object.defineProperty(exports, "routes", {
 	},
 	writable: false
 });
-// Object.defineProperty(exports, "getRoute", {
-// 	value: ,
-// 	writable: false
-// });
-// Object.defineProperty(exports, "addRoute", {
-// 	value:,
-// 	writable: false
-// });
-// Object.defineProperty(exports, "delRoute", {
-// 	value: ,
-// 	writable: false
-// });
+
 Object.defineProperty(exports, "getCacheConfig", {
 	value: (name) => {
 		if (!cache) return null;

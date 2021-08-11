@@ -63,7 +63,6 @@ exports.mail = () => {
 
 Object.defineProperty(constants, 'AjaxRenderType', {
 	value: {
-		//File : 'File',
 		JSON: 'JSON'
 	},
 	writeable: false
