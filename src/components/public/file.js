@@ -133,7 +133,7 @@ function File (fillename, buffer, type) {
 	const mime = getMIMEType(type);
 
 	this.save = (path, name) => {
-		path = path || `/home/waygc/temp`;
+		path = path || process.cwd() + `/temp`;
 		name = name || `${hash}.${type}`;
 		fs.writeFileSync(`${path}/${name}`, buffer, "binary");
 	}
