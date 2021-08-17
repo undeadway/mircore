@@ -1,6 +1,5 @@
 const fs = require("fs");
 const md5 = require("md5");
-// const file_name = "/home/waygc/Desktop/ttplayer-logo(1).png";
 
 const getMIMEType = (() => {
 

@@ -133,9 +133,14 @@ function clear(session, sid) {
 				}
 			}
 
+			/**
+			 * 实际调用 global.gc 的时候会有问题，提示：
+			 * TypeError: global.gc is not a function
+			 * 也不知道为什么，所以暂时注释掉
+			 */
+			// TODO
 			// global.gc();
 
 		}, NUM_ONE_DAY);
 	}, nextZero - now.getTime());
-	//	global.gc(); // TODO
 })();

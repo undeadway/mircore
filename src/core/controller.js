@@ -178,7 +178,6 @@ function controller() {
 				if (!value) {
 					attrs[k] = value = {};
 				}
-				// Object.addAll(v, value);
 				mixin(value, v);
 			} else {
 				attrs[k] = v;
@@ -195,7 +194,6 @@ function controller() {
 					attrs[name] = target = {};
 				}
 			}
-			// Object.addAll(obj, target);
 			mixin(target, obj);
 		},
 		getAttr: function (k) {

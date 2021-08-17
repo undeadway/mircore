@@ -9,7 +9,6 @@ const { unsupportedType } = Error;
 const { Mark } = Coralian.constants;
 const asUnicodeEndode = Coralian.util.CharUtil.asUnicodeEncode;
 const cookie = require("cookie");
-// const cookieSignature = require("cookie-signature");
 
 function cookies() {
 
@@ -63,7 +62,6 @@ function cookies() {
 			if (instance.hasOwnProperty(key)) {
 				let value = instance[key];
 				if (!typeIs(value, Function.TYPE_NAME)) {
-					// result.push(key + "=" + changeToUnicodeCode(instance[key]));
 					result.push(cookie.serialize(key, changeToUnicodeCode(instance[key])));
 				} else {
 					unsupportedType(value);
@@ -143,10 +141,6 @@ module.exports = {
 				if (string) {
 					let cookies = cookie.parse(string);
 					instance.addAll(cookies);
-					// Object.forEach(string.split(Mark.SEMICOLON), function (i, obj) {
-					// 	let tmp = obj.split(Mark.EQUALS);
-					// 	instance.add(tmp[0], tmp[1]);
-					// });
 				}
 			},
 			get: (k) => {
