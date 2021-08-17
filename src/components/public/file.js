@@ -172,7 +172,7 @@ module.exports = {
 
 		if (typeIs(input, 'string')) {
 			let fn = input.split("/");
-			buffer = fs.readFileSync(input);
+			buffer = fs.readFileSync(input, "binary");
 			let str = buffer.toString();
 
 			filename = fn[fn.length - 1];
