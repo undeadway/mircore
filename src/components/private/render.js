@@ -150,18 +150,9 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 				fileName = _file.getFileName();
 				mime = _file.getMime();
 			} else {
-				fileData = fileObj.file;
-				fileName = fileObj.name;
-				mime = fileObj.mime || MimeType.OCTET_STREAM
-				let url = pathResolve(fileData);
-				fileData = fs.readFileSync(url, STR_BINARY);
-				fileName = fileName || url.split(Mark.SLASH).pop();
-
-				let imgInfo = imageinfo(fileData);
-	
-				if (imgInfo) { // 判断是否是图片
-					mime = imgInfo.mimeType;
-				}
+				fileData = _file.create(pathResolve(fileObj.file));
+				mime = _file.getMime();
+				fileName = fileObj.name || fileObj.getFileName();
 			}
 	
 			res.writeHead(HttpStatusCode.OK, {
