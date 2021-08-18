@@ -3,22 +3,20 @@
  * 作为一个单独的模块
  */
 const fs = require("fs");
-const imageinfo = require("imageinfo");
 const contollerMapping = require("../../util/controller-mapping");
 const pageTemplate = require("../public/page-template");
 const caches = require("../public/cache");
-const { MimeType, Mark, HttpStatusCode } = Coralian.constants;
-const HTTP_REQUEST_METHOD_GET = Coralian.constants.HttpRequestMethod.GET;
+const file = require("../public/file");
+const { MimeType,  HttpStatusCode, HttpRequestMethod } = Coralian.constants;
 const JSONstringify = JSON.stringify;
 const ROUTE_ERROR = "/error";
 const STR_BINARY = "binary";
-const file = require("../public/file");
 
 function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 
 	/*
 	 * render 只负责实现 HTML 的显示
-	 * 所有 JSON或者其他 plain 形式的显示都交给 plain 函数来实现
+	 * 所有 JSON 或者其他 plain 形式的显示都交给 plain 函数来实现
 	 */
 	function render({code = HttpStatusCode.OK, url, location}) {
 
@@ -43,7 +41,7 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 				}
 				res.writeHead(code, header);
 
-				if (fs.existsSync(absoluteUrl)) {
+				if (fs.accessSync(absoluteUrl)) {
 
 					url = absoluteUrl;
 
@@ -173,7 +171,7 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 				error.code = code;
 				req.parse.error = error;
 			}
-			req.method = HTTP_REQUEST_METHOD_GET; // controller 中执行错误页面的时候，改成 get 模式
+			req.method = HttpRequestMethod.GET; // controller 中执行错误页面的时候，改成 get 模式
 			if (ctrler.judgeExecute(req, res, errorCtrler.name)) {
 				ctrler.execute();
 			}
