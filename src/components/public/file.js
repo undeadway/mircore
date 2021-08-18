@@ -171,15 +171,18 @@ module.exports = {
 
 		if (typeIs(input, 'string')) {
 			let fn = input.split("/");
-			if (!fs.accessSync(input)) {
-				// 当对象文件不存在或无法处理时，返回 null，而不抛出错误
-				return null; 
-			}
-			buffer = fs.readFileSync(input, "binary");
-			let str = buffer.toString();
+			try {
+				fs.accessSync(input, fs.constants.R_OK);
 
-			filename = fn[fn.length - 1];
-			type = str.slice(1, str.indexOf("\r\n"));
+				buffer = fs.readFileSync(input, "binary");
+				let str = buffer.toString();
+	
+				filename = fn[fn.length - 1];
+				type = str.slice(1, str.indexOf("\r\n"));
+			} catch {
+				// 当对象文件不存在或无法处理时，返回 null，而不抛出错误
+				return null;
+			}
 		} else {
 			filename = input.filename;
 			buffer = Buffer.from(input.data, "binary");

@@ -41,7 +41,8 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 				}
 				res.writeHead(code, header);
 
-				if (fs.accessSync(absoluteUrl)) {
+				try {
+					fs.accessSync(absoluteUrl, fs.constants.R_OK);
 
 					url = absoluteUrl;
 
@@ -69,7 +70,7 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 					} else {
 						page = pageTemplate(url, attrs);
 					}
-				} else {
+				} catch {
 					page = url; // 如果不存在对应的文件，则把该请求的内容直接显示在页面上
 				}
 				res.write(page);
@@ -128,6 +129,25 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 		res.end();
 	}
 
+	function renderOnError (error, code = HttpStatusCode.INTERNAL_SERVER_ERROR) {
+
+		let errorCtrler = contollerMapping.get(ROUTE_ERROR);
+		let ctrler = errorCtrler.instance();
+
+		if (typeIs(error, Number.TYPE_NAME)) {
+			let newErr = new Error();
+			newErr.code = error;
+			req.parse.error = newErr;
+		} else {
+			error.code = code;
+			req.parse.error = error;
+		}
+		req.method = HttpRequestMethod.GET; // controller 中执行错误页面的时候，改成 get 模式
+		if (ctrler.judgeExecute(req, res, errorCtrler.name)) {
+			ctrler.execute();
+		}
+	}
+
 	return {
 		render,
 		/*
@@ -158,24 +178,7 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 		/*
 		 * 输出错误页面
 		 */
-		renderOnError: (error, code = HttpStatusCode.INTERNAL_SERVER_ERROR) => {
-
-			let errorCtrler = contollerMapping.get(ROUTE_ERROR);
-			let ctrler = errorCtrler.instance();
-	
-			if (typeIs(error, Number.TYPE_NAME)) {
-				let newErr = new Error();
-				newErr.code = error;
-				req.parse.error = newErr;
-			} else {
-				error.code = code;
-				req.parse.error = error;
-			}
-			req.method = HttpRequestMethod.GET; // controller 中执行错误页面的时候，改成 get 模式
-			if (ctrler.judgeExecute(req, res, errorCtrler.name)) {
-				ctrler.execute();
-			}
-		},
+		renderOnError: renderOnError,
 		/*
 		 * JSON 输出
 		 */
