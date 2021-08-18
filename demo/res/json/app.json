@@ -19,6 +19,7 @@
 		"/method": "/method",
 		"/nono": "/nono",
 		"/image": "/image",
+		"/no-image": "/image/no",
 		"/file": "/file",
 		"/*": "/test"
 	}
