@@ -171,6 +171,10 @@ module.exports = {
 
 		if (typeIs(input, 'string')) {
 			let fn = input.split("/");
+			if (!fs.accessSync(input)) {
+				// 当对象文件不存在或无法处理时，返回 null，而不抛出错误
+				return null; 
+			}
 			buffer = fs.readFileSync(input, "binary");
 			let str = buffer.toString();
 
