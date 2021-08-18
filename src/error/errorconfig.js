@@ -13,7 +13,7 @@ const ERR_OBJ = {
 	[HttpStatusCode.INTERNAL_SERVER_ERROR]: "服务器遇到了一个未曾预料的状况，导致了它无法完成对请求的处理。", // 500
 	[HttpStatusCode.NOT_IMPLEMENTED]: "服务器不支持当前请求所需要的某个功能。", // 501
 	[HttpStatusCode.SERVICE_UNAVAILABLE]: "由于服务器维护或者过载，无法处理当前请求。", // 503
-	[HttpStatusCode.GATEWAY_TIMEOUT]: "服务器相应超时" // 504
+	[HttpStatusCode.GATEWAY_TIMEOUT]: "服务器响应超时" // 504
 };
 
 this.getError = function (code) {
