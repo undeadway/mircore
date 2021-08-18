@@ -78,7 +78,6 @@ module.exports = {
 		let filename, buffer;
 
 		if (typeIs(input, "string")) {
-			let fn = input.split("/");
 			try {
 				fs.accessSync(input, fs.constants.R_OK);
 
