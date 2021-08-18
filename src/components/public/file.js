@@ -3,11 +3,21 @@ const md5 = require("md5");
 const mime = require('mime');
 const extname = require('path').extname;
 
-function File (fillename, buffer, type) {
+function File (fillename /* 带有后缀 */, buffer) {
+
+	const [hash, type] = (() => {
+		let str = buffer.toString();
+
+		if (str === buffer) { // 文本格式
+			type = extname(filename).slice(1);
+		} else {
+			type = str.slice(1, str.indexOf("\r\n"));
+		}
+
+		return [md5(str), type];
+	})();
 
 	const _mime = mime.getType(type);
-	const hash = md5(buffer.toString());
-	fillename = fillename || hash;
 
 	this.save = (path, name) => {
 		path = path || process.cwd() + `/temp`;
@@ -22,9 +32,6 @@ function File (fillename, buffer, type) {
 	this.getFileName = () => {
 		return fillename;
 	};
-	this.getFileNameWithType = () => {
-		return `${filename}.${type}`;
-	}
 
 	this.getBinaryData = () => {
 		return buffer;
@@ -46,7 +53,7 @@ module.exports = {
 	},
 	create: (input) => {
 
-		let filename, buffer, type;
+		let filename, buffer;
 
 		if (typeIs(input, "string")) {
 			let fn = input.split("/");
@@ -54,14 +61,7 @@ module.exports = {
 				fs.accessSync(input, fs.constants.R_OK);
 
 				buffer = fs.readFileSync(input, "binary");
-				let str = buffer.toString();
-	
 				filename = fn[fn.length - 1];
-				if (str === buffer) { // 文本格式
-					type = extname(filename).slice(1);
-				} else {
-					type = str.slice(1, str.indexOf("\r\n"));
-				}
 			} catch {
 				// 当对象文件不存在或无法处理时，返回 null，而不抛出错误
 				return null;
@@ -69,8 +69,7 @@ module.exports = {
 		} else {
 			filename = input.filename;
 			buffer = Buffer.from(input.data, "binary");
-			type = input.type;
 		}
-		return new File(filename, buffer, type.toLowerCase());
+		return new File(filename, buffer);
 	}
 };
