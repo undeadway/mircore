@@ -1,5 +1,5 @@
 const { controller, file } = mircore;
-const file_name = "/home/waygc/workspace/mircore/demo/res/file/ttplayer-logo.png";
+const file_name = "/home/waygc/workspace/mircore/demo/res/file/mylogo.svg";
 
 function nonoController() {
 
