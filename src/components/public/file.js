@@ -1,6 +1,8 @@
 const fs = require("fs");
 const md5 = require("md5");
 const mime = require('mime');
+const extname = require('path').extname;
+
 function File (fillename, buffer, type) {
 
 	const _mime = mime.getType(type);
@@ -56,10 +58,7 @@ module.exports = {
 	
 				filename = fn[fn.length - 1];
 				if (str === buffer) { // 文本格式
-					// TODO 这里判断文件后缀的办法还要再改
-					let types = filename.split(".");
-					type = types[types.length - 1];
-					type = type || "txt"; // 如果没有文件后缀，则全部设置为 txt
+					type = extname(filename).slice(1);
 				} else {
 					type = str.slice(1, str.indexOf("\r\n"));
 				}
