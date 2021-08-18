@@ -56,7 +56,9 @@ module.exports = {
 	
 				filename = fn[fn.length - 1];
 				if (str === buffer) { // 文本格式
-					type = filename.split(".")[1];
+					// TODO 这里判断文件后缀的办法还要再改
+					let types = filename.split(".");
+					type = types[types.length - 1];
 					type = type || "txt"; // 如果没有文件后缀，则全部设置为 txt
 				} else {
 					type = str.slice(1, str.indexOf("\r\n"));
