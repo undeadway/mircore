@@ -134,26 +134,14 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 		render,
 		/*
 		 * 提供文件下载用
-		 * 目前只能准确判断是否是图片，其余类型尚无准确的判断方法
 		 */
-		renderFile: (fileObj) => {
+		renderFile: (input) => {
 
-			let fileData, fileName, mime;
+			let _file = file.isFile(input) ? input: file.create(input);
 
-			if (file.isFile(fileObj)) {
-				fileData = fileObj.getBinaryData();
-				fileName = fileObj.getFileName();
-				mime = fileObj.getMime();
-			} else if (typeIs(fileObj, 'string')) {
-				let _file = file.create(fileObj);
-				fileData = _file.getBinaryData();
-				fileName = _file.getFileName();
+			let fileData = _file.getBinaryData(),
+				fileName = _file.getFileName(),
 				mime = _file.getMime();
-			} else {
-				fileData = _file.create(pathResolve(fileObj.file));
-				mime = _file.getMime();
-				fileName = fileObj.name || fileObj.getFileName();
-			}
 	
 			res.writeHead(HttpStatusCode.OK, {
 				"Content-Type": mime,
