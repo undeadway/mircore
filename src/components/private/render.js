@@ -141,18 +141,19 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 
 			if (_file === null) {
 				renderOnError(404);
-			} else {
-				let fileData = _file.getBinaryData(),
+				return;
+			}
+
+			let fileData = _file.getBinaryData(),
 				fileName = _file.getFileName(),
 				mime = _file.getMime();
 	
-				res.writeHead(HttpStatusCode.OK, {
-					"Content-Type": mime,
-					'Content-Disposition': `attachment;filename=${fileName}`,
-					"Set-Cookie": cookies.print()
-				});
-				res.write(fileData, STR_BINARY);
-			}
+			res.writeHead(HttpStatusCode.OK, {
+				"Content-Type": mime,
+				'Content-Disposition': `attachment;filename=${fileName}`,
+				"Set-Cookie": cookies.print()
+			});
+			res.write(fileData, STR_BINARY);
 
 			end();
 		},
