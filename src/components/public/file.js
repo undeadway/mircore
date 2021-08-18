@@ -126,10 +126,9 @@ const getMIMEType = (() => {
 
 function File (fillename, buffer, type) {
 
+	const mime = getMIMEType(type);
 	const hash = md5(buffer.toString());
 	fillename = fillename || hash;
-
-	const mime = getMIMEType(type);
 
 	this.save = (path, name) => {
 		path = path || process.cwd() + `/temp`;
