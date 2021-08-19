@@ -12,10 +12,9 @@ const extname = require('path').extname;
 /*
  * 该函数来源于：https://github.com/hellosean1025/study/blob/master/function.js
  */
-function isTextFile(filepath, length) {
+function isTextFile(filepath, length = 1000) {
 
 	let fd = fs.openSync(filepath, "r");
-	length = length || 1000;
 	for( let i = 0; i < length; i++ ) {
 		let buf = new Buffer( 1 );
 		let bytes = fs.readSync( fd, buf, 0, 1, i );
