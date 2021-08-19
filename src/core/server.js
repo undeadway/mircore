@@ -2,7 +2,7 @@
  * 服务器基础模块。
  * 接收来自客户端的请求，然后根据，不同的请求作出不同的响应。
  * 预先将 cookie 、session 这些内容都处理掉，然后再交给后面的模块调用
- * 也就是说，server 这里要完成的是 nodejs 没有实现，但是整个应用程序却需要的功能
+ * 也就是说， server 这里要完成的是 nodejs 没有实现，但是整个应用程序却需要的功能
  * 更接近于服务器的设置
  */
 const Cookies = require("../components/public/cookies"),

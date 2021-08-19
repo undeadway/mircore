@@ -72,7 +72,7 @@ module.exports = () => {
 			let str = chunks.join(String.BLANK);
 
 			switch (method) {
-				case DELETE: // PUT、DELETE 都采用和 POST 一样的实现
+				case DELETE: // PUT 、DELETE 都采用和 POST 一样的实现
 				case PUT:
 				case POST:
 					if (String.contains(str, "Content-Disposition")) { // TODO 这里的处理可能还要再分其他情况

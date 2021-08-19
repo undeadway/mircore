@@ -27,7 +27,7 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 
 				/*
 				 * 数据类型是 字符串，则认为是一个 可被显示 的 HTML 文件路径
-				 * 解析HTML，并将 PARA 中的参数赋值到 页面中
+				 * 解析 HTML ，并将 para 中的参数赋值到页面中
 				 */
 				let header = {
 					"Content-Type": MimeType.HTML,
