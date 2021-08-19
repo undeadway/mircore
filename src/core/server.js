@@ -20,7 +20,7 @@ let isStarted = false;
 
 /*
  * 初始化完毕，执行 listen 函数启动 http 服务器
- * 因为 nodejs实现了 http 服务器，所以不用自己实现相关功能
+ * 因为 nodejs 实现了 http 服务器，所以不用自己实现相关功能
  * 这个函数只会在初始化服务器的时候才会调用一次
  */
 function listen(name) {
