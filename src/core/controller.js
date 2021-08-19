@@ -7,7 +7,7 @@
  * 
  * 通过 controller 可以完成对页面进行渲染、重定向等所有 request 和 response 的操作
  */
-const mixin = require('merge-descriptors');
+const mergeDescriptors = require('merge-descriptors');
 
 const sessions = require("./../components/public/sessions");
 const render = require("./../components/private/render");
@@ -118,7 +118,7 @@ function controller() {
 			// 将 render 绑定到 controller
 			const _render = render(request, response, {reqRoute, typeName, cookies: cookies.res, attrs});
 			// Object.addAll(render, this);
-			mixin(this, _render);
+			mergeDescriptors(this, _render);
 
 			return true;
 		},
@@ -178,7 +178,7 @@ function controller() {
 				if (!value) {
 					attrs[k] = value = {};
 				}
-				mixin(value, v);
+				mergeDescriptors(value, v);
 			} else {
 				attrs[k] = v;
 			}
@@ -194,7 +194,7 @@ function controller() {
 					attrs[name] = target = {};
 				}
 			}
-			mixin(target, obj);
+			mergeDescriptors(target, obj);
 		},
 		getAttr: function (k) {
 			return attrs[k];
