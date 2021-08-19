@@ -33,13 +33,15 @@ function cookies() {
 				unsupportedType(key);
 		}
 
-		if (!key || value === null || value === undefined) return;
+		key = String.trim(key);
+
+		if (String.isEmpty(key) || value === null || value === undefined) return;
 
 		if (!typeIs(value, String.TYPE_NAME)) {
 			value = (value).toString();
 		}
 
-		instance[String.trim(key)] = String.trim(value);
+		instance[key] = String.trim(value);
 	}
 
 	function addAll(input) {
