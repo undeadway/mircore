@@ -31,7 +31,7 @@ function putContoller(ctrlerName, ctrler) {
 function getContoller(ctrlerName) {
 	let ctrler = MAPPING[ctrlerName];
 	if (ctrlerName === ERROR_NAME && !ctrler) {
-		ctrler = putContoller(ctrlerName, require("../../error/controller"))
+		ctrler = putContoller(ctrlerName, require("../error/controller"))
 	}
 	return ctrler;
 }

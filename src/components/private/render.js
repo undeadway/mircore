@@ -3,7 +3,7 @@
  * 作为一个单独的模块
  */
 const fs = require("fs");
-const contollerMapping = require("./controller-mapping");
+const contollerMapping = require("./../../util/controller-mapping");
 const pageTemplate = require("../public/page-template");
 const caches = require("../public/cache");
 const file = require("../public/file");

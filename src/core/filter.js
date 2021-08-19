@@ -8,7 +8,7 @@
 const fs = require("fs");
 const { routes } = require("../util/app-config");
 const { getGlobalInspectors } = require("./../util/private-utils");
-const CONTROLLER_MAPPING = require("./../components/private/controller-mapping");
+const CONTROLLER_MAPPING = require("./../util/controller-mapping");
 const { Mark } = Coralian.constants;
 const { errorCast } = Error;
 const QUESTION_REP_MARK = "{?}", JS_FILE_EXT =  ".js";
