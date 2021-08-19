@@ -5,7 +5,7 @@
  * 则返回请求该路径所对应的 controller ，否则返回 404 。
  */
 
-const fs = require("fs");
+const file = require("./../components/public/file");
 const { routes } = require("../util/app-config");
 const { getGlobalInspectors } = require("./../util/private-utils");
 const CONTROLLER_MAPPING = require("./../util/controller-mapping");
@@ -65,7 +65,7 @@ function getControllerWrapper (ctrlerName, callback) {
 		return ctrlerWrapper;
 	}
 	let ctrlerPath = CONTROLLER_PATH.replace(QUESTION_REP_MARK, ctrlerName);
-	if (fs.existsSync(ctrlerPath + JS_FILE_EXT)) {
+	if (file.canAccess(ctrlerPath + JS_FILE_EXT)) {
 		return CONTROLLER_MAPPING.put(ctrlerName, require(ctrlerPath));
 	}
 

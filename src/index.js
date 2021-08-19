@@ -52,9 +52,10 @@ that.start = () => {
 	that.util = require("./util/public-utils");
 
 	const fs = require("fs");
-	const siteappPath = pathResolve("/src/config/siteapp");
-	if (fs.existsSync(siteappPath + ".js")) {
-		that.config.site = require(siteappPath);
+	const file = require("./components/public/file");
+	const siteAppPath = pathResolve("/src/config/siteapp");
+	if (file.canAccess(siteAppPath + ".js")) {
+		that.config.site = require(siteAppPath);
 	}
 
 	let files = fs.readdirSync(`${__dirname}/components/public`);

@@ -1,8 +1,7 @@
 /**
  * 只供 mircore 内部使用的辅助功能
  */
-const fs = require("fs");
-
+const file = require("./../components/public/file");
 const { getConfig } = require("../util/app-config");
 
 const clients = getConfig("limited-clients") || {};
@@ -13,13 +12,13 @@ const INSPECOTRS = [];
 exports.getGlobalInspectors = () => {
 
 	if (Array.isEmpty(INSPECOTRS)) {
-		if (fs.existsSync(GLOBAL_INSPECTOR_FOLDER)) {
+		if (file.canAccess(GLOBAL_INSPECTOR_FOLDER)) {
 			let globalInspectors = fs.readdirSync(GLOBAL_INSPECTOR_FOLDER);
 			for (let i = 0, len = globalInspectors.length; i < len; i++) {
 				INSPECOTRS.push(require(GLOBAL_INSPECTOR_FOLDER + globalInspectors[i]));
 			}
 		}
-		if (fs.existsSync(SYSTEM_INSPECTOR_FOLDER)) {
+		if (file.canAccess(SYSTEM_INSPECTOR_FOLDER)) {
 			let systemInspecotrs = fs.readdirSync(SYSTEM_INSPECTOR_FOLDER);
 			for (let i = 0, len = systemInspecotrs.length; i < len; i++) {
 				INSPECOTRS.push(require(SYSTEM_INSPECTOR_FOLDER + systemInspecotrs[i]));

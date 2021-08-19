@@ -78,6 +78,14 @@ module.exports = {
 	isFile: (obj) => {
 		return obj instanceof File;
 	},
+	canAccess: (path, method = fs.constants.R_OK) => {
+		try {
+			fs.accessSync(path, method);
+			return true;
+		} catch {
+			return false;
+		}
+	},
 	create: (input) => {
 
 		let filename, buffer;
