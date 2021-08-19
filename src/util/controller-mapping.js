@@ -1,3 +1,6 @@
+/**
+ * controller 的集合，所有 controller 都在这里进行统一管理
+ */
 const MAPPING = {};
 const { Mark } = Coralian.constants;
 const ERROR_NAME = "/error";

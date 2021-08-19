@@ -1,3 +1,9 @@
+/**
+ * 文件处理功能
+ * 读取文件，
+ * 如果是二进制文件，可以对文件进行二进制输出
+ */
+
 const fs = require("fs");
 const md5 = require("md5");
 const mime = require('mime');
