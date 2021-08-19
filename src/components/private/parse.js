@@ -16,14 +16,13 @@ function parseFormData (str, parse) {
 	let first = str.slice(0, str.indexOf("\r\n")); // 获得第一行（报头样式）
 	let arr = str.split(first); // 根据报头样式分割数据
 
-	for (let i = 1, len = arr.length - 1; i < len; i++) {
-		let item = arr[i];
+	for (let item of arr) {
 
 		let name = item.match(/name="(.+?)"/)[1];
 		if (!name) continue;
 
 		if (String.contains(item, CONTENT_TYPE)) {
-			if (!/filename="(.+?)"/.test(item)) continue;
+			if (!/filename="(.+?)"/.test(item)) continue; // 没有文件上传的情况则不做任何处理
 
 			let rems = [];
 
@@ -37,9 +36,11 @@ function parseFormData (str, parse) {
 			}
 
 			let data = item.slice(rems[3] + 2, item.length - 2);
-			let type = item.slice(rems[3] + 3, rems[4]);
 			let filename = item.match(/filename="(.+?)"/)[1];
-			files[name] = file.create({ filename, data, type });
+			let _file =  file.create({ filename, data });
+			if (_file !== null) {
+				files[name] = _file;
+			}
 		} else {
 			let data = item.split("\r\n");
 			query[name] = data[data.length - 2];
