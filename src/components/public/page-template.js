@@ -110,13 +110,13 @@ function replaceEqual(str, obj, equalStart, equalEnd, equalElse) {
 	}
 
 	// 当 statement 的类型不是 function 的时候，当作这个 statement 不存在处理
-	if (Function.TYPE_NAME === typeof tmpObj) {
+	if (typeIs(tmpObj, 'function')) {
 		try {
 			result = tmpObj();
 		} catch (e) {
+			// 当指定 statement 所对应的那个函数在执行过程中抛出错误的时候，当作这个 statement 不存在处理
 			Coralian.logger.err(e.message);
 			Coralian.logger.err(e.stack);
-			// 当指定 statement 所对应的那个函数在执行过程中抛出错误的时候，当作这个 statement 不存在处理
 		}
 	}
 
