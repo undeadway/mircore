@@ -21,6 +21,7 @@ server.start();
 * [道亦会](http://daoyiclub.com)
 
 ## TODO
+* 断点续传
 * 更高级的 http 处理；
 
 ## 教程
@@ -50,6 +51,7 @@ server.start();
 * [道亦会](http://daoyiclub.com)
 
 ## TODO
+* resume from break point
 * more http supports;
 
 ## License
