@@ -14,7 +14,6 @@
     "coralian": "0.0.26",
     "file-api": "^0.10.4",
     "fileinfo": "^1.0.4",
-    "imageinfo": "^1.0.4",
     "md5": "^2.3.0",
     "merge-descriptors": "^1.0.1",
     "mime": "^2.5.2",
