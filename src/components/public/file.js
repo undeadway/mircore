@@ -6,49 +6,29 @@
 
 const fs = require("fs");
 const md5 = require("md5");
-const mime = require('mime');
-const extname = require('path').extname;
+const fileinfo = require("fileinfo");
+(() => {
+	const fileAPis = require("file-api");
+	Object.assign(global, fileAPis);
+})();
 
-/*
- * 该函数来源于：https://github.com/hellosean1025/study/blob/master/function.js
- */
-function isTextFile(filepath, length = 1000) {
-
-	let fd = fs.openSync(filepath, "r");
-	for( let i = 0; i < length; i++ ) {
-		let buf = new Buffer( 1 );
-		let bytes = fs.readSync( fd, buf, 0, 1, i );
-		let char = buf.toString().charCodeAt();
-		if( bytes === 0) {
-			return true;
-		}else if(bytes === 1 && char === 0){
-			return false;
-		}
-	}
-	return true;
-}
 
 function File (filename /* 带有后缀 */, buffer) {
 
-	const type = (() => {
-		let _type, str = buffer.toString();
-
-		if (isTextFile(filename, buffer.length)) { // 文本格式
-			_type = extname(filename).slice(1);
-		} else {
-			_type = str.slice(1, str.indexOf("\r\n"));
-		}
-
-		return _type;
-	})();
-
+	let { mime, extension } = fileinfo.fromBuffer(buffer);
 	const hash = md5(buffer);
-	const _mime = mime.getType(type);
 	filename = filename.split("/").pop();
+
+	if (!String.endsWith(filename, extension)
+		&& (extension === 'jpg'
+			|| ( String.endsWith(filename, '.jpeg') && String.endsWith(filename, '.jpg')) 
+	)) {
+		filename += `.${extension}`;
+	}
 
 	this.save = (path, name) => {
 		path = path || process.cwd() + `/temp`;
-		name = name || `${hash}.${type}`;
+		name = name || `${hash}.${extension}`;
 		fs.writeFileSync(`${path}/${name}`, buffer, "binary");
 	}
 
@@ -66,11 +46,11 @@ function File (filename /* 带有后缀 */, buffer) {
 
 	this.getBase64Data = () => {
 		let data = buffer.toString("base64");
-		return `${_mime};base64,${data}`;
+		return `${mime};base64,${data}`;
 	}
 
 	this.getMime = () => {
-		return _mime;
+		return mime;
 	};
 }
 
@@ -86,7 +66,7 @@ module.exports = {
 			return false;
 		}
 	},
-	create: (input) => {
+	create: async (input) => {
 
 		let filename, buffer;
 
@@ -105,6 +85,7 @@ module.exports = {
 			buffer = Buffer.from(input.data, "binary");
 		}
 
-		return new File(filename, buffer);
+		let file = new File(filename, buffer);
+		return file;
 	}
 };

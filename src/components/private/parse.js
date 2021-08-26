@@ -18,7 +18,11 @@ function parseFormData (str, parse) {
 
 	for (let item of arr) {
 
-		let name = item.match(/name="(.+?)"/)[1];
+		if (String.isEmpty(item)) continue;
+
+		let tmp = item.match(/name="(.+?)"/);
+		if (tmp === null) continue;
+		let name = tmp[1];
 		if (!name) continue;
 
 		if (String.contains(item, CONTENT_TYPE)) {

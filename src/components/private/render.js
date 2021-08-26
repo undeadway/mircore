@@ -165,10 +165,13 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 			let fileData = _file.getBinaryData(),
 				fileName = _file.getFileName(),
 				mime = _file.getMime();
-	
+
+			// 如果在没有 mime 的情况下，则提供 Content-Disposition 直接下载文件
+			let contentDisposition = mime ? '' : `attachment;filename=${fileName}`;
+
 			res.writeHead(HttpStatusCode.OK, {
 				"Content-Type": mime,
-				'Content-Disposition': `attachment;filename=${fileName}`,
+				'Content-Disposition': contentDisposition,
 				"Set-Cookie": cookies.print()
 			});
 			res.write(fileData, STR_BINARY);
