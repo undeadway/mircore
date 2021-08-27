@@ -11,12 +11,15 @@ mircore 的依赖如下
 
 | 包名 | 版本号 | 说明 |
 | --- | --- | --- |
-|cache | ^2.3.1 | |
-|cookie | 0.4.0 | |
-|coralian | 0.0.25 | |
-|imageinfo | ^1.0.4 | |
-|merge-descriptors | ^1.0.1 | |
-|nodemailer | ^6.6.3 | |
+| cache | ^2.3.1 | |
+| cookie | 0.4.0 | |
+| coralian | 0.0.26 | |
+| file-api | ^0.10.4 | HTML5 的文件 API |
+| fileinfo | ^1.0.4 | |
+| md5 | ^2.3.0 | |
+| merge-descriptors | ^1.0.1 | |
+| mime | "^2.5.2 | |
+| nodemailer | ^6.6.3 | |
 
 ## 2. 项目
 
@@ -109,7 +112,7 @@ mircore 支持在 url 中带参数，形式如下： `/controller/action/paramet
 在 `app.json` 中的 `routes` 配置中添加一条配置：
 ```
 routes: {
-    "/index | /homepage"
+| /index | /homepage"
 }
 ```
 这样，模块和 浏览器url 之间的对应关系就建立好了。然后在 `homepage` 文件夹中新建一个叫 `controller.js` 的文件。  
@@ -241,15 +244,15 @@ mircore 把 url 分成了四段。一个完整的 url 应该类似下面的结�
 这样做的好处是可以将类似的代码组织在一起，而浏览器访问的时候，通过配置，可以少一层 router：
 ```
 routes: {
-    "/local | /client/local"
-    "/cloud | /client/cloud"
+| /local | /client/local"
+| /cloud | /client/cloud"
 }
 ```
 当然，写成下面这样也完全没有问题。
 ```
 routes: {
-    "/client/local | /client/local"
-    "/client/cloud | /client/cloud"
+| /client/local | /client/local"
+| /client/cloud | /client/cloud"
 }
 ```
 
