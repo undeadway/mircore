@@ -11,6 +11,7 @@ const fileinfo = require("fileinfo");
 	const fileAPis = require("file-api");
 	Object.assign(global, fileAPis);
 })();
+const STR_BINARY = "binary";
 
 
 function File (filename /* 带有后缀 */, buffer) {
@@ -29,7 +30,7 @@ function File (filename /* 带有后缀 */, buffer) {
 	this.save = (path, name) => {
 		path = path || process.cwd() + `/temp`;
 		name = name || `${hash}.${extension}`;
-		fs.writeFileSync(`${path}/${name}`, buffer, "binary");
+		fs.writeFileSync(`${path}/${name}`, buffer, STR_BINARY);
 	}
 
 	this.getHash = () => {
@@ -66,7 +67,7 @@ module.exports = {
 			return false;
 		}
 	},
-	create: async (input) => {
+	create: (input) => {
 
 		let filename, buffer;
 
@@ -75,14 +76,14 @@ module.exports = {
 				fs.accessSync(input, fs.constants.R_OK);
 
 				filename = input;
-				buffer = fs.readFileSync(input, "binary");
+				buffer = fs.readFileSync(input, STR_BINARY);
 			} catch {
 				// 当对象文件不存在或无法处理时，返回 null，而不抛出错误
 				return null;
 			}
 		} else {
 			filename = input.filename;
-			buffer = Buffer.from(input.data, "binary");
+			buffer = Buffer.from(input.data, STR_BINARY);
 		}
 
 		let file = new File(filename, buffer);
