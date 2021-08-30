@@ -13,7 +13,7 @@ const { Mark } = Coralian.constants;
 const { errorCast } = Error;
 const QUESTION_REP_MARK = "{?}", JS_FILE_EXT =  ".js";
 const CONTROLLER_PATH = pathResolve(`/src/modules${QUESTION_REP_MARK}/controller`);
-const STR_ROUTE_INDEX = '/index';
+const STR_ROUTE_INDEX = "/index";
 
 function getController(req, route) {
 
@@ -155,7 +155,7 @@ function getFilterInvocation({ instance, inspectors }, req, res) {
 		 * 调用这个方法来更替 controller 以及执行后续操作
 		 */
 		resetController: function (rename) {
-			if ('string' !== typeof rename) {
+			if ("string" !== typeof rename) {
 				errorCast(rename, String);
 			}
 			index = count + 1;

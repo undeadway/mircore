@@ -20,8 +20,8 @@ function File (filename /* 带有后缀 */, buffer) {
 	filename = filename.split("/").pop();
 
 	if (!String.endsWith(filename, extension)
-		&& (extension === 'jpg'
-			|| ( String.endsWith(filename, '.jpeg') && String.endsWith(filename, '.jpg')) 
+		&& (extension === "jpg"
+			|| ( String.endsWith(filename, ".jpeg") && String.endsWith(filename, ".jpg")) 
 	)) {
 		filename += `.${extension}`;
 	}

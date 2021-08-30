@@ -44,7 +44,7 @@ that.requireConfigs = (... input) => {
 that.start = () => {
 
 	that.md5 = require("md5");
-	that.mixin = require('merge-descriptors');
+	that.mixin = require("merge-descriptors");
 
 	that.controller = require("./core/controller");
 	that.actions = require("./core/actions");

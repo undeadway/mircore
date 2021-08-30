@@ -7,7 +7,7 @@
  * 
  * 通过 controller 可以完成对页面进行渲染、重定向等所有 request 和 response 的操作
  */
-const mergeDescriptors = require('merge-descriptors');
+const mergeDescriptors = require("merge-descriptors");
 
 const sessions = require("./../components/public/sessions");
 const render = require("./../components/private/render");
@@ -15,7 +15,7 @@ const { splitMark } = require("../util/app-config");
 
 const { HttpStatusCode, HttpRequestMethod, Mark } = Coralian.constants;
 const { unsupportedOperation, unsupportedType } = Error;
-const STR_INDEX = 'index', STR_ACTION = "Action";
+const STR_INDEX = "index", STR_ACTION = "Action";
 
 function controller() {
 

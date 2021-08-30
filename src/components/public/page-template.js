@@ -110,7 +110,7 @@ function replaceEqual(str, obj, equalStart, equalEnd, equalElse) {
 	}
 
 	// 当 statement 的类型不是 function 的时候，当作这个 statement 不存在处理
-	if (typeIs(tmpObj, 'function')) {
+	if (typeIs(tmpObj, "function")) {
 		try {
 			result = tmpObj();
 		} catch (e) {
@@ -169,10 +169,10 @@ function parseInclude(path) {
 
 function getUsing(using, paras) {
 
-	let arr = using.split('" ');
+	let arr = using.split("\" ");
 
 	for (let i = 1, len = arr.length; i < len; i++) {
-		let line = arr[i].split('="');
+		let line = arr[i].split("=\"");
 		paras[line[0]] = line[1].replace(Mark.DQUOTE, String.BLANK);
 	}
 

@@ -23,13 +23,13 @@ function indexAction() {
 
 		let ctrler = action.controller;
 		let getAttr = ctrler.getAttr;
-		let errorcode = getAttr('code');
+		let errorcode = getAttr("code");
 		let error = getError(errorcode);
 
 		ctrler.setAttrs(error);
-		ctrler.setAttr('isDevelopMode', getDegelopMode);
+		ctrler.setAttr("isDevelopMode", getDegelopMode);
 		let not404 = errorcode !== HttpStatusCode.NOT_FOUND;
-		ctrler.setAttr('not404', () => {
+		ctrler.setAttr("not404", () => {
 			return not404;
 		})
 

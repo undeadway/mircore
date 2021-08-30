@@ -47,8 +47,8 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 					url = absoluteUrl;
 
 					// 这里的缓存处理只是为了不每次都进行页面模板解析而进行的处理
-					if (caches.cacheUsed('page')) {
-						let pageCache = caches.get('page');
+					if (caches.cacheUsed("page")) {
+						let pageCache = caches.get("page");
 						/*
 						* 判断使用 cache 的标准
 						* 1. cache 必须打开（被定义）
@@ -125,7 +125,7 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 	 * 在这里暂时只做关闭 res 处理，之后再补充其他功能
 	 */
 	function end() {
-		Coralian.logger.log(typeName + ' request end');
+		Coralian.logger.log(typeName + " request end");
 		res.end();
 	}
 
@@ -167,11 +167,11 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 				mime = _file.getMime();
 
 			// 如果在没有 mime 的情况下，则提供 Content-Disposition 直接下载文件
-			let contentDisposition = mime ? '' : `attachment;filename=${fileName}`;
+			let contentDisposition = mime ? String.BLANK : `attachment;filename=${fileName}`;
 
 			res.writeHead(HttpStatusCode.OK, {
 				"Content-Type": mime,
-				'Content-Disposition': contentDisposition,
+				"Content-Disposition": contentDisposition,
 				"Set-Cookie": cookies.print()
 			});
 			res.write(fileData, STR_BINARY);

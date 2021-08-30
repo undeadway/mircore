@@ -1,7 +1,7 @@
 /**
  * 开放给外部的辅助功能
  */
-const process = require('child_process');
+const process = require("child_process");
 const nodemailer = require("nodemailer");
 
 const { getConfig } = require("../util/app-config");
@@ -47,14 +47,14 @@ exports.mail = () => {
 	}
 };
 
-Object.defineProperty(constants, 'AjaxRenderType', {
+Object.defineProperty(constants, "AjaxRenderType", {
 	value: {
-		JSON: 'JSON'
+		JSON: "JSON"
 	},
 	writeable: false
 });
 
-Object.defineProperty(exports, 'constants', {
+Object.defineProperty(exports, "constants", {
 	value: constants,
 	writeable: false
 });
