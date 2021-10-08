@@ -4,7 +4,7 @@
 
 const url = require("url"), qs = require("querystring");
 const file = require("../public/file");
-const CONTENT_TYPE = "Content-Type";
+const { STR_BINARY, STR_CONTENT_DISPOSITION, STR_CONTENT_TYPE} = require("./../constants").Strings;
 
 const { DELETE, PUT, POST, HEAD, OPTIONS, GET, CONNECT, TRACE, PATCH } = Coralian.constants.HttpRequestMethod;
 const unsupportedOperation = Error.unsupportedOperation;
@@ -25,7 +25,7 @@ function parseFormData (str, parse) {
 		let name = tmp[1];
 		if (!name) continue;
 
-		if (String.contains(item, CONTENT_TYPE)) {
+		if (String.contains(item, STR_CONTENT_TYPE)) {
 			if (!/filename="(.+?)"/.test(item)) continue; // 没有文件上传的情况则不做任何处理
 
 			let rems = [];
@@ -64,7 +64,7 @@ module.exports = () => {
 	return {
 		init: (_req, _res) => {
 			req = _req, res = _res;
-			req.setEncoding("binary"); // TODO 这里改成 binary 不知道会不会对其他类型的提交造成影响
+			req.setEncoding(STR_BINARY); // TODO 这里改成 binary 不知道会不会对其他类型的提交造成影响
 			req.url = req.url.replace(/\/{2,}/g, "/");
 			parse = req.parse = url.parse(req.url, true);
 			method = req.method = req.method.toUpperCase();
@@ -80,7 +80,7 @@ module.exports = () => {
 				case DELETE: // PUT 、DELETE 都采用和 POST 一样的实现
 				case PUT:
 				case POST:
-					if (String.contains(str, "Content-Disposition")) { // TODO 这里的处理可能还要再分其他情况
+					if (String.contains(str, STR_CONTENT_DISPOSITION)) { // TODO 这里的处理可能还要再分其他情况
 						parseFormData(str, parse);
 					} else {
 						Object.addAll(qs.parse(str), parse.query);

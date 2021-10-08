@@ -5,7 +5,6 @@ const process = require("child_process");
 const nodemailer = require("nodemailer");
 
 const { getConfig } = require("../util/app-config");
-const constants = {};
 
 exports.runShell = (shellCmd) => {
 	Coralian.logger.log(`run ${shellCmd} start.`);
@@ -46,15 +45,3 @@ exports.mail = () => {
 		});
 	}
 };
-
-Object.defineProperty(constants, "AjaxRenderType", {
-	value: {
-		JSON: "JSON"
-	},
-	writeable: false
-});
-
-Object.defineProperty(exports, "constants", {
-	value: constants,
-	writeable: false
-});

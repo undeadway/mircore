@@ -10,7 +10,7 @@ const file = require("../public/file");
 const { MimeType,  HttpStatusCode, HttpRequestMethod } = Coralian.constants;
 const JSONstringify = JSON.stringify;
 const ROUTE_ERROR = "/error";
-const STR_BINARY = "binary";
+const { STR_BINARY } = require("./../constants").Strings;
 
 function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 

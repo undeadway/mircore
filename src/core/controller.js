@@ -15,7 +15,8 @@ const { splitMark } = require("../util/app-config");
 
 const { HttpStatusCode, HttpRequestMethod, Mark } = Coralian.constants;
 const { unsupportedOperation, unsupportedType } = Error;
-const STR_INDEX = "index", STR_ACTION = "Action";
+
+const { INDEX, ACTION } = require("./../components/constants").Strings;
 
 function controller() {
 
@@ -63,7 +64,7 @@ function controller() {
 				}
 
 				if (path === Mark.SLASH) {
-					path += STR_INDEX;
+					path += INDEX;
 				}
 
 				let url = path.split(Mark.SLASH); // 到这里， path 就不含任何 和 路径无关的东西了
@@ -83,19 +84,19 @@ function controller() {
 				} else if (url.length === 1 // [route]
 					|| path === Mark.SLASH + realRoute.join(Mark.SLASH)) { // [route...] 所请求的不包含 action、paras，只有 route
 					reqRoute = lastUrl;
-					actionName = STR_INDEX;
+					actionName = INDEX;
 				} else { // [...., paras]
 					let lastSecond = Array.last(url, 2); // 取得倒数第二个
 					if (url.length > 2 && actions[`${reqMethod}_${lastSecond}`]) {  // [route..., action, paras]
 						actionName = lastSecond;
 					} else { // [route..., paras]
-						actionName = STR_INDEX;
+						actionName = INDEX;
 					}
 					reqRoute = lastName;
 					paras = lastUrl.split(splitMark);
 				}
 			} else {
-				actionName = STR_INDEX;
+				actionName = INDEX;
 				let err = parse.error;
 				switch (typeOf(err)) {
 					case Object.TYPE_NAME:
@@ -234,7 +235,7 @@ function controller() {
 			switch (arguments.length) {
 				case 1: // [action]
 					action = name;
-					name = Function.getName(action).replace(STR_ACTION, String.BLANK);
+					name = Function.getName(action).replace(ACTION, String.BLANK);
 					break;
 				case 2:
 					if (typeIs(name, Function.TYPE_NAME)) {
@@ -246,7 +247,7 @@ function controller() {
 						}
 
 						action = name;
-						name = STR_INDEX;
+						name = INDEX;
 					}
 					break;
 				case 3:
@@ -261,7 +262,7 @@ function controller() {
 					break;
 			}
 			method = method.toLowerCase();
-			name = name || STR_INDEX;
+			name = name || INDEX;
 			addAction(actions, `${method}_${name}`, action, inspectors);
 		},
 		getAction: function (name) {
@@ -281,7 +282,7 @@ function controller() {
 			this.render(code, String.BLANK, location);
 		},
 		isIndex: function () {
-			return pathName === STR_INDEX || String.isEmpty(pathName);
+			return pathName === INDEX || String.isEmpty(pathName);
 		},
 		method: function (name) {
 			return (!name) ? method : (method.toUpperCase() === name.toUpperCase());
@@ -329,7 +330,7 @@ function addAction(actions, name, instance, inspectors = []) {
 	let actionName = Function.getName(instance);
 
 	actions[name] = {
-		isAction: String.contains(actionName, STR_ACTION),
+		isAction: String.contains(actionName, ACTION),
 		instance: instance,
 		inspectors: inspectors,
 		getActionName: function () {
