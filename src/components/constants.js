@@ -1,22 +1,23 @@
-const STR_CONTENT_TYPE = "Content-Type",
-	STR_BINARY = "binary",
-	STR_CONTENT_DISPOSITION = "Content-Disposition",
-	STR_CTRLER = "Controller",
-	STR_INDEX = "index",
-	STR_ACTION = "Action";
+const Strings = {
+	CONTENT_TYPE: "Content-Type",
+	BINARY: "binary",
+	CONTENT_DISPOSITION: "Content-Disposition",
+	CONTROLLER: "Controller",
+	INDEX: "index",
+	ACTION: "Action"
+}
+
+const AjaxRenderType = {
+	JSON: "JSON"
+}
+
+function get(obj, key) {
+	return obj[key];
+}
 
 const constants = {
-	AjaxRenderType: {
-		JSON: "JSON"
-	},
-	Strings: {
-		CONTENT_TYPE: STR_CONTENT_TYPE,
-		BINARY: STR_BINARY,
-		CONTENT_DISPOSITION: STR_CONTENT_DISPOSITION,
-		CONTROLLER: STR_CTRLER,
-		ACTION: STR_ACTION,
-		INDEX: STR_INDEX
-	}
+	AjaxRenderType: new Proxy(AjaxRenderType, { get }),
+	Strings: new Proxy(Strings, { get })
 };
 
 module.exports = exports = new Proxy(constants, {
