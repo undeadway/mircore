@@ -25,7 +25,7 @@ function controller() {
 	// 这些都是已经初始化好的值
 	let attrs = {}, actions = {}, paras = null; //, isLogged = false;
 
-	return {
+	const _ctlr_ = {
 		/* 
 		 * 在 filter 中设置 controller 的初始值
 		 * 并返回 true / false 交由 filter 来判断是否继续执行 execute
@@ -272,14 +272,14 @@ function controller() {
 			return actionName;
 		},
 		// 重定向，触发 301 / 302（默认） 请求
-		redirect: function (code, location) {
+		redirect: function (code, target) {
 
-			if (arguments.length === 1) {
-				location = code;
+			if (target === undefined) {
+				target = code;
 				code = 302;
 			}
 
-			this.render(code, String.BLANK, location);
+			_ctlr_.render(code, String.BLANK, target);
 		},
 		isIndex: function () {
 			return pathName === INDEX || String.isEmpty(pathName);
@@ -319,6 +319,8 @@ function controller() {
 			return modName;
 		}
 	};
+
+	return _ctlr_;
 }
 
 function addAction(actions, name, instance, inspectors = []) {
