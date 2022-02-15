@@ -91,7 +91,7 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 	/*
 	 * 页面直接打印的内容（现阶段基本用于 ajax）
 	 */
-	function plain(data, hsc = 200, mime = MimeType.TEXT) {
+	function plain(data = String.BLANK, hsc = 200, mime = MimeType.TEXT) {
 		// 从理论上来说，不管任何形式的 plain 的 mime 都是 text/plain
 		// 但 js、css 等有自己单独的 mime，所以 mime 类型可选择，不给就赋默认值的 text/plain
 		res.writeHead(hsc, {
