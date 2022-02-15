@@ -8,8 +8,8 @@ const fs = require("fs");
 const md5 = require("md5");
 const fileinfo = require("fileinfo");
 (() => {
-	const fileAPis = require("file-api");
-	Object.assign(global, fileAPis);
+	const fileApis = require("file-api");
+	Object.assign(global, fileApis);
 })();
 const STR_BINARY = "binary";
 

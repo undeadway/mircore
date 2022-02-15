@@ -2,7 +2,7 @@
  * 把渲染处理独立出来
  * 作为一个单独的模块
  */
-const fs = require("fs");
+// const fs = require("fs");
 const contollerMapping = require("./../../util/controller-mapping");
 const pageTemplate = require("../public/page-template");
 const caches = require("../public/cache");
@@ -41,8 +41,9 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 				}
 				res.writeHead(code, header);
 
-				try {
-					fs.accessSync(absoluteUrl, fs.constants.R_OK);
+				// try {
+				if (file.canAccess(absoluteUrl)) {
+					// fs.accessSync(absoluteUrl, fs.constants.R_OK);
 
 					url = absoluteUrl;
 
@@ -70,7 +71,7 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 					} else {
 						page = pageTemplate(url, attrs);
 					}
-				} catch {
+				} else {
 					page = url; // 如果不存在对应的文件，则把该请求的内容直接显示在页面上
 				}
 				res.write(page);
