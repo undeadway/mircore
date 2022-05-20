@@ -12,6 +12,7 @@ const mergeDescriptors = require("merge-descriptors");
 const sessions = require("./../components/public/sessions");
 const render = require("./../components/private/render");
 const { splitMark } = require("../util/app-config");
+const { typeIs } = require("coralian/src/base/common");
 
 const { HttpStatusCode, HttpRequestMethod, Mark } = Coralian.constants;
 const { unsupportedOperation, unsupportedType } = Error;
@@ -227,43 +228,72 @@ function controller() {
 		clearCookies: () => {
 			cookies.res.clear();
 		},
-		// Action 处理
 		// 添加 action 用的函数
 		// 添加一个对应请求方法的参数，可以 RESTFul 化处理
-		addAction: function (name, action, method = HttpRequestMethod.GET, inspectors = []) {
+		addAction: function ({ name, action, method, inspectors }) {
 
-			switch (arguments.length) {
-				case 1: // [action]
-					action = name;
-					name = Function.getName(action).replace(ACTION, String.BLANK);
-					break;
-				case 2:
-					if (typeIs(name, Function.TYPE_NAME)) {
-						
-						if (typeIs(action, String.TYPE_NAME)) { // [action, method]
-							method = action;
-						} else if (typeIs(action, Array.TYPE_NAME)) { // [action, inspectors]
-							inspectors = action;
-						}
-
-						action = name;
-						name = INDEX;
-					}
-					break;
-				case 3:
-					if (typeIs(method, Array.TYPE_NAME)) { // [name, action, inspectors]
-						inspectors = method;
-						method = HttpRequestMethod.GET;
-					}
-					break;
-				case 4: // 所有参数都有
-					break;
-				default:
-					break;
-			}
-			method = method.toLowerCase();
 			name = name || INDEX;
-			addAction(actions, `${method}_${name}`, action, inspectors);
+			method = method || HttpRequestMethod.GET;
+			inspectors = inspectors || [];
+
+			if (typeIs(method, Array.TYPE_NAME)) {
+				for (let m of method) {
+					m = m.toLowerCase();
+					addAction(actions, `${m}_${name}`, action, inspectors);
+				}
+			} else {
+				method = method.toLowerCase();
+				addAction(actions, `${method}_${name}`, action, inspectors);
+			}
+
+			// let multipleMethod = false
+
+			// switch (arguments.length) {
+			// 	case 1: // [action]
+			// 		action = name;
+			// 		name = Function.getName(action).replace(ACTION, String.BLANK);
+			// 		break;
+			// 	case 2:
+			// 		if (typeIs(name, Function.TYPE_NAME)) {
+						
+			// 			if (typeIs(action, String.TYPE_NAME)) { // [action, method]
+			// 				method = action;
+			// 			} else if (typeIs(action, Array.TYPE_NAME)) { // [action, inspectors]
+			// 				inspectors = action;
+			// 			}
+
+			// 			action = name;
+			// 			name = INDEX;
+			// 		}
+			// 		break;
+			// 	case 3:
+			// 		if (typeIs(method, Array.TYPE_NAME)) { // [name, action, methods]
+			// 			if (!typeIs(method[0], String.TYPE_NAME)) { // [name, action, inspectors]
+			// 				inspectors = method;
+			// 				method = HttpRequestMethod.GET;
+			// 			} else {
+			// 				// 允许多重 method
+			// 				multipleMethod = true;
+			// 			}
+			// 		}
+			// 		break;
+			// 	case 4: // 所有参数都有
+			// 		break;
+			// 	default:
+			// 		break;
+			// }
+
+			// if (!multipleMethod) {
+			// 	method = method.toLowerCase();
+			// 	addAction(actions, `${method}_${name}`, action, inspectors);
+			// } else {
+			// 	for (let m of method) {
+			// 		m = m.toLowerCase();
+			// 		addAction(actions, `${m}_${name}`, action, inspectors);
+			// 	}
+			// }
+
+
 		},
 		getAction: function (name) {
 			return actions[name];
