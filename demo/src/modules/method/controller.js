@@ -116,11 +116,11 @@ function methodController() {
 
 	const ctrler = controller();
 
-	ctrler.addAction(indexAction);
-	ctrler.addAction("testreq", getAction, HttpRequestMethod.GET);
-	ctrler.addAction("testreq", postAction, HttpRequestMethod.POST);
-	ctrler.addAction("testreq", putAction, HttpRequestMethod.PUT);
-	ctrler.addAction("testreq", deleteAction, HttpRequestMethod.DELETE);
+	ctrler.addAction({ action: indexAction });
+	ctrler.addAction({ name: "testreq", action: getAction, method: HttpRequestMethod.GET });
+	ctrler.addAction({ name: "testreq", action: postAction, method: HttpRequestMethod.POST });
+	ctrler.addAction({ name: "testreq", action: putAction, method: HttpRequestMethod.PUT });
+	ctrler.addAction({ name: "testreq", action: deleteAction, method: HttpRequestMethod.DELETE });
 
 	return ctrler;
 }

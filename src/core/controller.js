@@ -239,11 +239,11 @@ function controller() {
 			if (typeIs(method, Array.TYPE_NAME)) {
 				for (let m of method) {
 					m = m.toLowerCase();
-					addAction(actions, `${m}_${name}`, action, inspectors);
+					_addAction(actions, `${m}_${name}`, action, inspectors);
 				}
 			} else {
 				method = method.toLowerCase();
-				addAction(actions, `${method}_${name}`, action, inspectors);
+				_addAction(actions, `${method}_${name}`, action, inspectors);
 			}
 
 			// let multipleMethod = false
@@ -353,7 +353,7 @@ function controller() {
 	return _ctlr_;
 }
 
-function addAction(actions, name, instance, inspectors = []) {
+function _addAction(actions, name, instance, inspectors = []) {
 
 	if (typeIs(inspectors, Object.TYPE_NAME)) {
 		inspectors = [inspectors];

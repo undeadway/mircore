@@ -19,7 +19,7 @@ function indexController() {
 
 	const ctrler = controller();
 
-	ctrler.addAction(indexAction, HttpRequestMethod.GET);
+	ctrler.addAction({ action: indexAction, method: HttpRequestMethod.GET });
 
 	return ctrler;
 }

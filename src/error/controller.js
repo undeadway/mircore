@@ -11,7 +11,7 @@ const ERROR_HTML_FILE = __dirname + "/error.html";
 function errorController() {
 
 	let ctrler = controller();
-	ctrler.addAction(indexAction);
+	ctrler.addAction({ action: indexAction });
 
 	return ctrler;
 }

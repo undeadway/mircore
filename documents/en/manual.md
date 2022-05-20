@@ -278,10 +278,10 @@ function indexController() {
 
 	const ctrler = controller();
 
-	ctrler.addAction(() => {
+	ctrler.addAction({ action: () => {
         ctrler.setAttr("tpl_val", "Hello world!");
 		ctrler.render(page);
-	});
+	} });
 
 	return ctrler;
 }
@@ -334,49 +334,15 @@ ajaxAction 重载了一个 renderAjax 的方法，默认的渲染方式时 JSON 
 如果需要实现其他形式的渲染，需要调用 controller 中其他的渲染方式来实现。
 
 #### 2.4.2.3. 将 action 添加到 controller
-##### 2.4.2.3.1. 用匿名函数作为 action
-就如值前示例的：
-```
-ctrler.addAction(() => {
+
+```controller.addAction({
+	name, action, method, inspectors
 });
 ```
-通过这种方式加载的 action，所对应的 url 就是 index 。
 
-##### 2.4.2.3.2. 通过命名函数作为 action
-```
-function xxxAction() {
-	const action = baseAction() {
-	}
-	return action;
-}
-```
-如果有以上代码，则可以直接添加 `xxxAction` 作为 action 。
-```
-ctrler.addAction(xxxAction);
-```
-通过这种方式加载的 action ，所对应的 url 就是 xxx 。
-
-##### 2.4.2.3.3. 通过指定 action 名来添加 action
-```
-ctrler.addAction("abc", xxxAction);
-```
-上面的代码虽然同样是添加了 xxxAction，但因为多了一个参数”aaa“，所以这时候 action 的名称已经被指定为”aaa“。  
-在浏览器中就无法通过 `xxx` 来访问，只能通过 `abc` 来访问了。
-
-#### 2.4.2.4. 请求方法
-mircore 支持 RESTFul 形式的请求，在添加 action 时，可以指定请求方法，如：
-```
-ctrler.addAction("abc", xxxAction, "POST");
-```
-如果不指定，默认为 `GET` 方法。
-
-#### 2.4.2.5. index
-当 action 为 index 的时候，url 中可以省略 index 。
-示例：
-```
-http://127.0.0.1/controller/
-```
-
-### 2.4.3 paramters
-
-### 2.4.4. queries
+| 参数名 | 数据类型 | 详细说明 |
+| --- | --- | --- |
+| name | String | action 的名称 |
+| action | Function | action 的具体函数 |
+| method | String / Array<String> | 请求方法（get、post）等，可以用 数组来表示多重方法 |
+| inspectors | Array<Object> | inspetor 的数组，其中 inspetor 的结构为： { inspect: () => {} } |

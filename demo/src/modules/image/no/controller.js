@@ -5,10 +5,10 @@ function nonoController() {
 
 	const ctrler = controller();
 
-	ctrler.addAction(() => {
+	ctrler.addAction({ action: () => {
 
 		ctrler.renderFile(file_name);
-	});
+	} });
 
 	return ctrler;
 }

@@ -4,9 +4,9 @@ function nonoController() {
 
 	const ctrler = controller();
 
-	ctrler.addAction(() => {
+	ctrler.addAction({ action: () => {
 		ctrler.render({url: "No No No!"});
-	});
+	} });
 
 	return ctrler;
 }

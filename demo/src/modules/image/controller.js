@@ -6,14 +6,14 @@ function nonoController() {
 
 	const ctrler = controller();
 
-	ctrler.addAction("svg", () => {
+	ctrler.addAction({ name: "svg", action: () => {
 
 		ctrler.renderFile(file_name_svg);
-	});
-	ctrler.addAction("png", () => {
+	} });
+	ctrler.addAction({ name: "png", action: () => {
 
 		ctrler.renderFile(file_name_png);
-	});
+	} });
 
 
 	return ctrler;
