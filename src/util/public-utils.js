@@ -19,29 +19,30 @@ exports.runShell = (shellCmd) => {
 	});
 }
 
-exports.mail = () => {
+const mailConfig = getConfig("mail");
+const hasMainConfig = !!mailConfig;
 
-	let mailConfig = getConfig("mail");
-	let hasMainConfig = !!mailConfig;
-	let transporter = (hasMainConfig) ? nodemailer.createTransport(mailConfig) : null;
 
-	return (trgt, subject, html, callback) => {
+exports.mail = ({targets, subject, html, success, failed}) => {
 
-		if (!hasMainConfig) return;
-
-		transporter.sendMail({
-			from: mailConfig.auth.user,
-			to: trgt.join(),
-			subject: subject,
-			html: html
-		}, function (err, res) {
-			if (err) {
-				Coralian.logger.err("Mail sent failed.");
-				callback(err);
-			} else {
-				Coralian.logger.err("Mail sent succeeed.");
-				callback(res);
-			}
-		});
+	if (!hasMainConfig) {
+		throw new Error("没有配置邮箱");
 	}
+
+	const transporter = (hasMainConfig) ? nodemailer.createTransport(mailConfig) : null;
+
+	transporter.sendMail({
+		from: mailConfig.auth.user,
+		to: trgt.join(),
+		subject: subject,
+		html: html
+	}, function (err, res) {
+		if (err) {
+			Coralian.logger.err("邮件发送失败");
+			success(err);
+		} else {
+			Coralian.logger.log("邮件发送成功");
+			failed(res);
+		}
+	});
 };
