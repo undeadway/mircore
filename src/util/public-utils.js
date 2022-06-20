@@ -23,7 +23,7 @@ const mailConfig = getConfig("mail");
 const hasMainConfig = !!mailConfig;
 
 
-exports.mail = ({targets, subject, html, success, failed}) => {
+exports.mail = ({targets, subject, html, success, fail}) => {
 
 	if (!hasMainConfig) {
 		throw new Error("没有配置邮箱");
@@ -33,16 +33,17 @@ exports.mail = ({targets, subject, html, success, failed}) => {
 
 	transporter.sendMail({
 		from: mailConfig.auth.user,
-		to: trgt.join(),
+		to: targets.join(),
 		subject: subject,
 		html: html
 	}, function (err, res) {
 		if (err) {
 			Coralian.logger.err("邮件发送失败");
-			success(err);
+			Coralian.logger.err(err);
+			fail(err);
 		} else {
 			Coralian.logger.log("邮件发送成功");
-			failed(res);
+			success(res);
 		}
 	});
 };

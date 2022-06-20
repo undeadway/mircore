@@ -4,6 +4,15 @@
 	"develop-mode": true,
 	"app-name": "mircore-demo",
 	"config" : {
+		"mail": {
+			"host": "smtp.163.com",
+			"port": 465,
+			"secure": true,
+			"auth": {
+				"user": "",
+				"pass": ""
+			}
+		}
 	},
 	"cache": {
 		"global": {
@@ -21,6 +30,7 @@
 		"/image": "/image",
 		"/no-image": "/image/no",
 		"/file": "/file",
+		"/mail": "/mail",
 		"/*": "/test"
 	}
 }
