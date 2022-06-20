@@ -4,7 +4,7 @@
 const process = require("child_process");
 const nodemailer = require("nodemailer");
 
-const { getConfig } = require("../util/app-config");
+const { getConfig } = require("./app-config");
 
 exports.runShell = (shellCmd) => {
 	Coralian.logger.log(`run ${shellCmd} start.`);
