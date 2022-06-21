@@ -4,7 +4,7 @@
 
 const url = require("url"), qs = require("querystring");
 const file = require("../public/file");
-const { STR_BINARY, STR_CONTENT_DISPOSITION, STR_CONTENT_TYPE} = require("./../constants").Strings;
+const { STR_BINARY, CONTENT_DISPOSITION, STR_CONTENT_TYPE} = require("./../constants").Strings;
 
 const { DELETE, PUT, POST, HEAD, OPTIONS, GET, CONNECT, TRACE, PATCH } = Coralian.constants.HttpRequestMethod;
 const unsupportedOperation = Error.unsupportedOperation;
@@ -80,14 +80,30 @@ module.exports = () => {
 				case DELETE: // PUT 、DELETE 都采用和 POST 一样的实现
 				case PUT:
 				case POST:
-					if (String.contains(str, STR_CONTENT_DISPOSITION)) { // TODO 这里的处理可能还要再分其他情况
+					if (String.contains(str, CONTENT_DISPOSITION)) { // TODO 这里的处理可能还要再分其他情况
 						parseFormData(str, parse);
 					} else {
 						Object.addAll(qs.parse(str), parse.query);
 					}
+					request(req, res);
+					break;
 				// 因为都要调用 request 方法，所以这里 switch 贯穿掉
 				case HEAD:
 				case OPTIONS: // 这里主要考虑到有跨域请求
+					res.writeHead(204, {
+						//允许所有来源访问
+						'Access-Control-Allow-Origin': '*',
+						//用于判断request来自ajax还是传统请求
+						"Access-Control-Allow-Headers": " Origin, X-Requested-With, Content-Type, Accept",
+						//允许访问的方式
+						'Access-Control-Allow-Methods': 'PUT,POST,GET,DELETE,OPTIONS',
+						//修改程序信息与版本
+						'X-Powered-By': ' 3.2.1',
+						//内容类型：如果是post请求必须指定这个属性
+						'Content-Type': 'application/json;charset=utf-8'
+					});
+					res.end();
+					break;
 				case GET:
 					Object.addAll(qs.parse(str), parse.query);
 					request(req, res);
