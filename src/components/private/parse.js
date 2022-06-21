@@ -83,7 +83,11 @@ module.exports = () => {
 					if (String.contains(str, CONTENT_DISPOSITION)) { // TODO 这里的处理可能还要再分其他情况
 						parseFormData(str, parse);
 					} else {
-						Object.addAll(qs.parse(str), parse.query);
+						try {
+							Object.addAll(JSON.parse(str), parse.query); // 先判断是否是 json 结构
+						} catch (e) {
+							Object.addAll(qs.parse(str), parse.query);
+						}
 					}
 					request(req, res);
 					break;
