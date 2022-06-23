@@ -5,15 +5,19 @@
  * 也就是说， server 这里要完成的是 nodejs 没有实现，但是整个应用程序却需要的功能
  * 更接近于服务器的设置
  */
-const Cookies = require("../components/public/cookies"),
-	filter = require("./filter"),
-	parse = require("./../components/private/parse");
+// mircore 的组件
+const Cookies = require("../components/public/cookies");
+const parse = require("./../components/private/parse"),
+	Client = require("../components/private/client");
+// 辅助模块
 const { port, appName, developMode, clusterMode } = require("../util/app-config");
-const { clientDisAccessable } = require("./../util/private-utils");;
-
+const { clientDisAccessable } = require("./../util/private-utils");
+// 各种常量
 const { HttpStatusCode, Mark } = Coralian.constants;
 const { formatString } = Coralian.Formatter;
-
+// filter
+const filter = require("./filter");
+// 服务器配置
 const TIMEOUT = 20000,
 	ERROR_ROUTE_FORMAT = "/error/%s";
 let isStarted = false;
@@ -40,7 +44,7 @@ function router(req, res) {
 
 	setClientInfo(req);
 
-	if (clientDisAccessable(req.client.USERAGENT)) { // 客户端被拒绝，返回403
+	if (clientDisAccessable(req.client.get("USERAGENT"))) { // 客户端被拒绝，返回403
 		res.writeHead(403);
 		res.end();
 		return;
@@ -116,13 +120,13 @@ function request(req, res) {
  */
 function setClientInfo(req) {
 
-	let client = req.client = {};
+	Client.newInstance(req);
 
-	initUserAgendAndOS(req.headers, client);
-	initClientIp(req, client);
+	initUserAgendAndOS(req);
+	initClientIp(req);
 }
 
-function initUserAgendAndOS(headers, client) {
+function initUserAgendAndOS({headers, client}) {
 
 	let input = getUserAgent(headers);
 	let userAgent, os;
@@ -165,19 +169,19 @@ function initUserAgendAndOS(headers, client) {
 		userAgent = "Unknown";
 	}
 
-	client.USERAGENT = userAgent;
-	client.OS = os;
+	client.put("USERAGENT", userAgent);
+	client.put("OS", os);
 
-	Coralian.logger.log("A Request. OS : " + os);
-	Coralian.logger.log("           User Agnet : " + userAgent);
+	Coralian.logger.log("A Request OS : " + os);
+	Coralian.logger.log("  User Agnet : " + userAgent);
 }
 
-function initClientIp(req, client) {
+function initClientIp(req) {
 	let ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress || req.socket.remoteAddress ||
 		req.connection.socket.remoteAddress;
-	client.IP = ip;
+	req.client.put("IP", ip);
 
-	Coralian.logger.log("           IP : " + ip);
+	Coralian.logger.log("          IP : " + ip);
 };
 
 /*

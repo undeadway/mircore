@@ -22,7 +22,7 @@ const { INDEX, ACTION } = require("./../components/constants").Strings;
 function controller() {
 
 	// 这些都要经过 juddeExe 才处理后才会赋值
-	let parse, files, method, query, realRoute, reqRoute, typeName, modName, actionName, cookies, client, reqPath;
+	let files, method, query, realRoute, reqRoute, typeName, modName, actionName, cookies, client, reqPath;
 	// 这些都是已经初始化好的值
 	let attrs = {}, actions = {}, paras = null; //, isLogged = false;
 
@@ -30,12 +30,19 @@ function controller() {
 		/* 
 		 * 在 filter 中设置 controller 的初始值
 		 * 并返回 true / false 交由 filter 来判断是否继续执行 execute
+		 * request: 服务器的请求
+		 * response: 服务器的返回值
+		 * name：controller 的名字
 		 */
-		judgeExecute: function (request, response, name) {
+		judgeExecute: function (request, response, header) {
 
 			// 初始化设置
-			parse = request.parse, method = request.method;
-			query = parse.query, cookies = parse.cookies, typeName = name.type, client = request.client, files = parse.files;
+			let parse = request.parse;
+			// 全局变量
+			method = request.method, client = request.client;
+			query = parse.query, cookies = parse.cookies, typeName = header.type, files = parse.files;
+			// 局部变量
+			let { pathname, path, error } = parse;
 
 			/**
 			 * realRoute = name.path 是对应文件物理路径 : [blog,read]
@@ -43,21 +50,21 @@ function controller() {
 			 * modName 是模块名 = 物理路径的第一层 blog
 			 * reqPath 是浏览器请求中的完整 url /blog/create?bid=123456
 			 */
-			reqPath = decodeURIComponent(parse.pathname);
-			realRoute = name.route;
+			reqPath = decodeURIComponent(pathname);
+			realRoute = header.route;
 			modName = realRoute[0];
 
 			Coralian.logger.log(`request route : ${modName}`);
 			if (modName === Error.TYPE_NAME) {
-				if ((parse.error && typeIs(parse.error, Number.TYPE_NAME))) {
-					Coralian.logger.log(`Error code : ${parse.error}`);
+				if ((error && typeIs(error, Number.TYPE_NAME))) {
+					Coralian.logger.log(`Error code : ${error}`);
 				} else {
-					Coralian.logger.err(parse.error);
+					Coralian.logger.err(error);
 				}
 			}
 
-			if (!parse.error) { // 如果传入的 parse 对象中未包含 error 对象，则正常执行
-				let path = parse.path.split(Mark.QUESTION);
+			if (!error) { // 如果传入的 parse 对象中未包含 error 对象，则正常执行
+				path = path.split(Mark.QUESTION);
 				paras = path[1];
 				path = path[0];
 				if (!Object.isEmpty(paras)) {
@@ -98,7 +105,7 @@ function controller() {
 				}
 			} else {
 				actionName = INDEX;
-				let err = parse.error;
+				let err = error;
 				switch (typeOf(err)) {
 					case Object.TYPE_NAME:
 						attrs = err;
@@ -334,7 +341,7 @@ function controller() {
 		// 	return isLogged;
 		// },
 		getClientInfo: function (name) {
-			return client[name.toUpperCase()];
+			return client.get(name);
 		},
 		getReqRoute: function () {
 			return reqRoute;

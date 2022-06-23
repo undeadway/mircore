@@ -20,7 +20,7 @@ function putContoller(ctrlerName, ctrler) {
 	let ctrlerWrapper = {
 		instance: instance,
 		inspectors: ctrler.inspectors || [],
-		name: {
+		header: {
 			path: ctrlerName,
 			route: outRoute, // 文件系统的物理路径
 			type: Function.getName(instance)
