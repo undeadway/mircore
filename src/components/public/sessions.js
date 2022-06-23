@@ -5,7 +5,6 @@
  * 每 24 对过期的 session 进行清理
  */
 const NUM_TIME_OUT = 1000 * 60 * 30;
-const NUM_ONE_DAY = 1000 * 60 * 60 * 24;
 const sessions = {};
 
 function session(sid) {
@@ -126,6 +125,8 @@ function clear(session, sid) {
 	setTimeout(function () {
 		setInterval(function () {
 
+			Coralian.logger.log(new Date().toString() + " ：清理垃圾");
+
 			for (let sid in sessions) {
 				let session = sessions[sid];
 				if (!session.isValid()) {
@@ -141,6 +142,6 @@ function clear(session, sid) {
 			// TODO
 			// global.gc();
 
-		}, NUM_ONE_DAY);
+		}, 1000 * 60 * 60 * 24);
 	}, nextZero - now.getTime());
 })();
