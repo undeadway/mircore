@@ -12,7 +12,7 @@ const JSONstringify = JSON.stringify;
 const ROUTE_ERROR = "/error";
 const { STR_BINARY } = require("./../constants").Strings;
 
-function render (req, res, {reqRoute, typeName, cookies, attrs}) {
+function render (req, res, reqRoute, typeName, cookies, attrs) {
 
 	/*
 	 * render 只负责实现 HTML 的显示

@@ -125,8 +125,7 @@ function controller() {
 			}
 
 			// 将 render 绑定到 controller
-			const _render = render(request, response, {reqRoute, typeName, cookies: cookies.res, attrs});
-			// Object.addAll(render, this);
+			const _render = render(request, response, reqRoute, typeName, cookies.res, attrs);
 			mergeDescriptors(this, _render);
 
 			return true;
