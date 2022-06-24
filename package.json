@@ -16,8 +16,7 @@
     "fileinfo": "^1.0.4",
     "md5": "^2.3.0",
     "merge-descriptors": "^1.0.1",
-    "mime": "^2.5.2",
-    "nodemailer": "^6.6.3"
+    "mime": "^2.5.2"
   },
   "bugs": {
     "url": "https://gitee.com/undeadway/mircore/issues"

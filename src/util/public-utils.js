@@ -2,9 +2,6 @@
  * 开放给外部的辅助功能
  */
 const process = require("child_process");
-const nodemailer = require("nodemailer");
-
-const { getConfig } = require("./app-config");
 
 exports.runShell = (shellCmd) => {
 	Coralian.logger.log(`run ${shellCmd} start.`);
@@ -18,32 +15,3 @@ exports.runShell = (shellCmd) => {
 		Coralian.logger.log(`run ${shellCmd} end.`);
 	});
 }
-
-const mailConfig = getConfig("mail");
-const hasMainConfig = !!mailConfig;
-
-
-exports.mail = ({targets, subject, html, success, fail}) => {
-
-	if (!hasMainConfig) {
-		throw new Error("没有配置邮箱");
-	}
-
-	const transporter = (hasMainConfig) ? nodemailer.createTransport(mailConfig) : null;
-
-	transporter.sendMail({
-		from: mailConfig.auth.user,
-		to: targets.join(),
-		subject: subject,
-		html: html
-	}, function (err, res) {
-		if (err) {
-			Coralian.logger.err("邮件发送失败");
-			Coralian.logger.err(err);
-			fail(err);
-		} else {
-			Coralian.logger.log("邮件发送成功");
-			success(res);
-		}
-	});
-};
