@@ -142,7 +142,7 @@ function render (req, res, reqRoute, typeName, cookies, attrs) {
 			req.parse.error = error;
 		}
 		req.method = HttpRequestMethod.GET; // controller 中执行错误页面的时候，改成 get 模式
-		if (ctrler.judgeExecute(req, res, errorCtrler.name)) {
+		if (ctrler.judgeExecute(req, res, errorCtrler.header)) {
 			ctrler.execute();
 		}
 	}
