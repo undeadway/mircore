@@ -12,7 +12,7 @@ const JSONstringify = JSON.stringify;
 const ROUTE_ERROR = "/error";
 const { STR_BINARY } = require("./../constants").Strings;
 
-function render (req, res, reqRoute, typeName, cookies, attrs) {
+function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
 
 	/*
 	 * render 只负责实现 HTML 的显示
@@ -124,7 +124,7 @@ function render (req, res, reqRoute, typeName, cookies, attrs) {
 	 * 在这里暂时只做关闭 res 处理，之后再补充其他功能
 	 */
 	function end() {
-		Coralian.logger.log(typeName + " request end");
+		Coralian.logger.log(`${typeName}.${actionName} request end`);
 		res.end();
 	}
 
