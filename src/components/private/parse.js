@@ -98,7 +98,7 @@ module.exports = () => {
 						//允许所有来源访问
 						'Access-Control-Allow-Origin': '*',
 						//用于判断request来自ajax还是传统请求
-						"Access-Control-Allow-Headers": " Origin, X-Requested-With, Content-Type, Accept",
+						"Access-Control-Allow-Headers": "*",
 						//允许访问的方式
 						'Access-Control-Allow-Methods': 'PUT,POST,GET,DELETE,OPTIONS',
 						//修改程序信息与版本
