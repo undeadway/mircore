@@ -112,6 +112,19 @@ function deleteAction() {
 	return action;
 }
 
+function postpostFormAction() {
+	const action = ajaxAction();
+
+	action.query = () => {
+		const ctrler = action.controller;
+		console.log(ctrler.getQuery("content"));
+
+		action.renderAjax({});
+	};
+
+	return action;
+}
+
 function methodController() {
 
 	const ctrler = controller();
@@ -121,6 +134,9 @@ function methodController() {
 	ctrler.addAction({ name: "testreq", action: postAction, method: HttpRequestMethod.POST });
 	ctrler.addAction({ name: "testreq", action: putAction, method: HttpRequestMethod.PUT });
 	ctrler.addAction({ name: "testreq", action: deleteAction, method: HttpRequestMethod.DELETE });
+
+	
+	ctrler.addAction({ name: "postForm", action: postpostFormAction, method: HttpRequestMethod.POST });
 
 	return ctrler;
 }
