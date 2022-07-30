@@ -52,7 +52,7 @@ function router(req, res) {
 		__parse.init(req, res);
 		req.on("data", function (chunk) {
 				// TODO 现在这里只处理 post 上来的字符串，二进制格式要怎么弄还要再研究
-				__parse.push(chunk);
+				__parse.append(chunk);
 			}).on("end", () => {
 				__parse.end(request);
 			})

@@ -57,7 +57,7 @@ function parseFormData (str, parse) {
 
 module.exports = () => {
 
-	let chunks = [], size = 0;
+	let chunks = [];
 	let parse = null, method;
 	let req = null, res = null;
 
@@ -69,9 +69,8 @@ module.exports = () => {
 			parse = req.parse = url.parse(req.url, true);
 			method = req.method = req.method.toUpperCase();
 		},
-		push: (chunk) => {
+		append: (chunk) => {
 			chunks.push(chunk);
-			size += chunk.length;
 		},
 		end: (request) => {
 			let str = chunks.join(String.BLANK);
