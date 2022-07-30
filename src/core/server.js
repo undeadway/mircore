@@ -7,7 +7,7 @@
  */
 // mircore 的组件
 const Cookies = require("../components/public/cookies");
-const parse = require("./../components/private/parse"),
+const parseRequest = require("./../components/private/parse_request"),
 	Client = require("../components/private/client");
 // 辅助模块
 const { port, appName, developMode, clusterMode } = require("../util/app-config");
@@ -40,7 +40,7 @@ function listen(name) {
  */
 function router(req, res) {
 
-	let __parse = parse();
+	let __parse = parseRequest();
 
 	setClientInfo(req);
 
@@ -73,7 +73,7 @@ function router(req, res) {
 				// 504 Gateway Timeout
 				Coralian.logger.err(`response 返信错误: ${HttpStatusCode.REQUEST_TIMEOUT}`);
 				req.url = formatString(ERROR_ROUTE_FORMAT, HttpStatusCode.GATEWAY_TIMEOUT);
-				parse = url.parse(req.url, true);
+				req.parse = url.parse(req.url, true);
 				request(req, res);
 			});
 	}
