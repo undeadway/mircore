@@ -7,7 +7,7 @@
  */
 // mircore 的组件
 const Cookies = require("../components/public/cookies");
-const parseRequest = require("./../components/private/parse_request"),
+const parseRequest = require("../components/private/parse-request"),
 	Client = require("../components/private/client");
 // 辅助模块
 const { port, appName, developMode, clusterMode } = require("../util/app-config");
