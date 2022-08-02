@@ -152,9 +152,9 @@ function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
 		/*
 		 * 提供文件下载用
 		 */
-		renderFile: (input) => {
+		renderFile: (input, isTxt) => {
 
-			let _file = _File.isFile(input) ? input: _File.create(input);
+			let _file = _File.isFile(input) ? input: _File.create(input, isTxt);
 
 			if (_file === null) {
 				renderOnError(404);

@@ -9,9 +9,13 @@ const md5 = require("md5");
 const fileinfo = require("fileinfo");
 const STR_BINARY = "binary";
 
-function File (filename /* 带有后缀 */, buffer) {
+function File (filename /* 带有后缀 */, buffer, isStr, isTxt) {
 
-	let { mime, extension } = fileinfo.fromBuffer(buffer);
+	let tmpObj = isStr ? 
+		fileinfo.fromString(isTxt ? filename : buffer)
+		: fileinfo.fromBuffer(buffer);
+
+	let { mime, extension } = tmpObj;
 	const hash = md5(buffer);
 	filename = filename.split("/").pop();
 
@@ -59,35 +63,45 @@ function canAccess (path, method = fs.constants.R_OK) {
 	}
 }
 
-function create (input) {
-	let filename, buffer;
-
-	if (typeIs(input, "string")) {
-
-		// 当对象文件不存在或无法处理时，返回 null，而不抛出错误
-		if (!canAccess(input)) return null;
-
-		filename = input;
-		buffer = fs.readFileSync(input, "binary");
-	} else {
-		filename = input.filename;
-		buffer = Buffer.from(input.data, STR_BINARY);
-	}
-
-	try {
-		let file = new File(filename, buffer);
-		return file;
-	} catch (e) {
-		console.log(e);
-		// 当对象文件不存在或无法处理时，返回 null，而不抛出错误
-		return null;
-	}
-}
-
 module.exports = {
 	isFile: (obj) => {
 		return obj instanceof File;
 	},
 	canAccess,
-	create
+	create: (input, isTxt = false) => {
+		let filename, buffer;
+		let isStr = false;
+	
+		if (typeIs(input, "string")) {
+	
+			// 当对象文件不存在或无法处理时，返回 null，而不抛出错误
+			if (!canAccess(input)) return null;
+	
+			filename = input;
+			buffer = fs.readFileSync(input, "binary");
+		} else {
+			filename = input.filename;
+			buffer = input.data;
+		}
+	
+		
+		if (isTxt) {
+			// 暂时还无法处理纯文本
+			isStr = true;
+		} else if (fileinfo.isSVGString(buffer.toString())) {
+			buffer = buffer.toString();
+			isStr = true;
+		} else if (!isTxt) {
+			buffer = Buffer.from(buffer, STR_BINARY);
+		}
+	
+		try {
+			let file = new File(filename, buffer, isStr, isTxt);
+			return file;
+		} catch (e) {
+			console.log(e);
+			// 当对象文件不存在或无法处理时，返回 null，而不抛出错误
+			return null;
+		}
+	}
 };
