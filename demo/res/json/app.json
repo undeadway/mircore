@@ -27,8 +27,8 @@
 		"/err": "/eooo",
 		"/method": "/method",
 		"/nono": "/nono",
-		"/image": "/image",
-		"/no-image": "/image/no",
+		"/render": "/render",
+		"/not-exist": "/render/no",
 		"/file": "/file",
 		"/mail": "/mail",
 		"/*": "/test"
