@@ -1,7 +1,7 @@
 const { controller, file } = mircore;
-const path = require("path");
 const file_name_svg = "./res/file/mylogo.svg";
 const file_name_png =  "./res/file/mylogo.png";
+const file_name_text =  "./res/file/mytext.txt";
 
 function nonoController() {
 
@@ -14,6 +14,10 @@ function nonoController() {
 	ctrler.addAction({ name: "png", action: () => {
 
 		ctrler.renderFile(file_name_png);
+	} });
+	ctrler.addAction({ name: "txt", action: () => {
+
+		ctrler.renderFile(file_name_text, true);
 	} });
 
 
