@@ -1,6 +1,7 @@
 const { controller, file } = mircore;
-const file_name_svg = "/home/waygc/workspace/mircore/demo/res/file/mylogo.svg";
-const file_name_png = "/home/waygc/workspace/mircore/demo/res/file/mylogo.png";
+const path = require("path");
+const file_name_svg = "./res/file/mylogo.svg";
+const file_name_png =  "./res/file/mylogo.png";
 
 function nonoController() {
 

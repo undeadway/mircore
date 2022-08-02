@@ -11,6 +11,8 @@ const unsupportedOperation = Error.unsupportedOperation;
 
 function parseFormData (str, parse) {
 
+	console.log(str);
+
 	let query = {}, files = {}; // 全局设置
 
 	let first = str.slice(0, str.indexOf("\r\n")); // 获得第一行（报头样式）

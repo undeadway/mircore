@@ -11,8 +11,7 @@
   "dependencies": {
     "cache": "^2.3.1",
     "cookie": "0.4.0",
-    "coralian": "0.0.26",
-    "file-api": "^0.10.4",
+    "coralian": "git+https://gitee.com/undeadway/coralian#dev",
     "fileinfo": "^1.0.4",
     "md5": "^2.3.0",
     "merge-descriptors": "^1.0.1",

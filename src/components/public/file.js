@@ -7,12 +7,7 @@
 const fs = require("fs");
 const md5 = require("md5");
 const fileinfo = require("fileinfo");
-(() => {
-	const fileApis = require("file-api");
-	Object.assign(global, fileApis);
-})();
 const STR_BINARY = "binary";
-
 
 function File (filename /* 带有后缀 */, buffer) {
 
@@ -55,38 +50,44 @@ function File (filename /* 带有后缀 */, buffer) {
 	};
 }
 
+function canAccess (path, method = fs.constants.R_OK) {
+	try {
+		file = fs.accessSync(path, method);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+function create (input) {
+	let filename, buffer;
+
+	if (typeIs(input, "string")) {
+
+		// 当对象文件不存在或无法处理时，返回 null，而不抛出错误
+		if (!canAccess(input)) return null;
+
+		filename = input;
+		buffer = fs.readFileSync(input, "binary");
+	} else {
+		filename = input.filename;
+		buffer = Buffer.from(input.data, STR_BINARY);
+	}
+
+	try {
+		let file = new File(filename, buffer);
+		return file;
+	} catch (e) {
+		console.log(e);
+		// 当对象文件不存在或无法处理时，返回 null，而不抛出错误
+		return null;
+	}
+}
+
 module.exports = {
 	isFile: (obj) => {
 		return obj instanceof File;
 	},
-	canAccess: (path, method = fs.constants.R_OK) => {
-		try {
-			fs.accessSync(path, method);
-			return true;
-		} catch {
-			return false;
-		}
-	},
-	create: (input) => {
-
-		let filename, buffer;
-
-		if (typeIs(input, "string")) {
-			try {
-				fs.accessSync(input, fs.constants.R_OK);
-
-				filename = input;
-				buffer = fs.readFileSync(input, STR_BINARY);
-			} catch {
-				// 当对象文件不存在或无法处理时，返回 null，而不抛出错误
-				return null;
-			}
-		} else {
-			filename = input.filename;
-			buffer = Buffer.from(input.data, STR_BINARY);
-		}
-
-		let file = new File(filename, buffer);
-		return file;
-	}
+	canAccess,
+	create
 };

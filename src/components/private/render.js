@@ -6,7 +6,7 @@
 const contollerMapping = require("./../../util/controller-mapping");
 const pageTemplate = require("../public/page-template");
 const caches = require("../public/cache");
-const file = require("../public/file");
+const _File = require("../public/file");
 const { MimeType,  HttpStatusCode, HttpRequestMethod } = Coralian.constants;
 const JSONstringify = JSON.stringify;
 const ROUTE_ERROR = "/error";
@@ -42,7 +42,7 @@ function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
 				res.writeHead(code, header);
 
 				// try {
-				if (file.canAccess(absoluteUrl)) {
+				if (_File.canAccess(absoluteUrl)) {
 					// fs.accessSync(absoluteUrl, fs.constants.R_OK);
 
 					url = absoluteUrl;
@@ -154,7 +154,7 @@ function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
 		 */
 		renderFile: (input) => {
 
-			let _file = file.isFile(input) ? input: file.create(input);
+			let _file = _File.isFile(input) ? input: _File.create(input);
 
 			if (_file === null) {
 				renderOnError(404);
