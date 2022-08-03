@@ -6,7 +6,7 @@ const url = require("url"), qs = require("querystring");
 const file = require("../public/file");
 const { BINARY, CONTENT_DISPOSITION, CONTENT_TYPE } = require("../constants").Strings;
 
-const { DELETE, PUT, POST, HEAD, OPTIONS, GET, CONNECT, TRACE, PATCH } = Coralian.constants.HttpRequestMethod;
+const { DELETE, PUT, POST, HEAD, OPTIONS, GET, CONNECT, TRACE, PATCH } = JsConst.HttpRequestMethod;
 const unsupportedOperation = Error.unsupportedOperation;
 
 function parseFormData (str, parse) {

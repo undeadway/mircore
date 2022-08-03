@@ -7,7 +7,7 @@
 const fs = require("fs");
 const md5 = require("md5");
 const fileinfo = require("fileinfo");
-const STR_BINARY = "binary";
+const { String } = require("./../constants");
 
 function File (filename /* 带有后缀 */, buffer, isStr, isTxt) {
 
@@ -29,7 +29,7 @@ function File (filename /* 带有后缀 */, buffer, isStr, isTxt) {
 	this.save = (path, name) => {
 		path = path || process.cwd() + `/temp`;
 		name = name || `${hash}.${extension}`;
-		fs.writeFileSync(`${path}/${name}`, buffer, STR_BINARY);
+		fs.writeFileSync(`${path}/${name}`, buffer, String.BINARY);
 	}
 
 	this.getHash = () => {
@@ -45,8 +45,8 @@ function File (filename /* 带有后缀 */, buffer, isStr, isTxt) {
 	};
 
 	this.getBase64Data = () => {
-		let data = buffer.toString("base64");
-		return `${mime};base64,${data}`;
+		let data = buffer.toString(String.BASE64);
+		return `${mime};${String.BASE64},${data}`;
 	}
 
 	this.getMime = () => {
@@ -68,7 +68,7 @@ module.exports = {
 		return obj instanceof File;
 	},
 	canAccess,
-	create: (input, {isTxt = false, readType = "binary"}) => {
+	create: (input, {isTxt = false, readType = String.BINARY}) => {
 		let filename, buffer;
 		let isStr = false;
 	
@@ -92,7 +92,7 @@ module.exports = {
 			buffer = buffer.toString();
 			isStr = true;
 		} else if (!isTxt) {
-			buffer = Buffer.from(buffer, STR_BINARY);
+			buffer = Buffer.from(buffer, String.BINARY);
 		}
 	
 		try {

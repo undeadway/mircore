@@ -9,7 +9,7 @@ const file = require("./../components/public/file");
 const { routes } = require("../util/app-config");
 const { getGlobalInspectors } = require("./../util/private-utils");
 const CONTROLLER_MAPPING = require("./../util/controller-mapping");
-const { Mark } = Coralian.constants;
+const { Char } = JsConst;
 const { errorCast } = Error;
 const QUESTION_REP_MARK = "{?}", JS_FILE_EXT =  ".js";
 const CONTROLLER_PATH = pathResolve(`/src/modules${QUESTION_REP_MARK}/controller`);
@@ -19,11 +19,11 @@ function getController(req, route) {
 
 	let ctrlerWrapper, name = route;
 
-	if (name === Mark.SLASH) {
+	if (name === Char.SLASH) {
 		name = STR_ROUTE_INDEX;
 	}
 
-	name = name.split(Mark.SLASH);
+	name = name.split(Char.SLASH);
 	name.shift();
 	let count = name.length - 1;
 
@@ -33,7 +33,7 @@ function getController(req, route) {
 
 	for (; count >= 0; count--) {
 
-		let ctrlerName = routes.get(Mark.SLASH + name.join(Mark.SLASH));
+		let ctrlerName = routes.get(Char.SLASH + name.join(Char.SLASH));
 
 		if (ctrlerName === undefined) { // 非已注册的路径则判断非法路径，不做请求处理，进入下一轮循环
 			name.pop();
@@ -51,7 +51,7 @@ function getController(req, route) {
 		return CONTROLLER_MAPPING.put(STR_ROUTE_INDEX,
 			require(CONTROLLER_PATH.replace(QUESTION_REP_MARK, STR_ROUTE_INDEX)));
 	} else if (routes.hasFuzzyMatching()) {
-		let ctrlerName = routes.get(`${Mark.SLASH}${Mark.ASTERISK}`);
+		let ctrlerName = routes.get(`${Char.SLASH}${Char.ASTERISK}`);
 		ctrlerWrapper = getControllerWrapper(ctrlerName);
 		return ctrlerWrapper;
 	}
@@ -88,7 +88,7 @@ function invokeController(req, res, route) {
 		invokeGlobalInspectors(instance, ctrler.header, req, res,
 			getFilterInvocation({ instance, inspectors: ctrler.inspectors }, req, res));
 	} catch (e) {
-		e.code = Coralian.constants.HttpStatusCode.INTERNAL_SERVER_ERROR;
+		e.code = JsConst.HttpStatusCode.INTERNAL_SERVER_ERROR;
 		Coralian.logger.err(e);
 		req.parse.error = e;
 		let errorControllerWapper = CONTROLLER_MAPPING.error();;

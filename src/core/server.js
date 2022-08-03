@@ -13,7 +13,7 @@ const parseRequest = require("../components/private/parse-request"),
 const { port, appName, developMode, clusterMode } = require("../util/app-config");
 const { clientDisAccessable } = require("./../util/private-utils");
 // 各种常量
-const { HttpStatusCode, Mark } = Coralian.constants;
+const { HttpStatusCode, Char } = JsConst;
 const { formatString } = Coralian.Formatter;
 // filter
 const filter = require("./filter");
@@ -224,7 +224,7 @@ module.exports = exports = () => {
 
 		if (cluster.isMaster) {
 			process.title = `${appName} master`;
-			Coralian.logger.log(process.title, `${Mark.SHARP}${process.pid}`, "started");
+			Coralian.logger.log(process.title, `${Char.SHARP}${process.pid}`, "started");
 
 			// 根据 CPU 个数来启动相应数量的 worker
 			for (let i = 0, numCPUs = require("os").cpus().length; i < numCPUs; i++) {
@@ -246,7 +246,7 @@ module.exports = exports = () => {
 			});
 
 			cluster.on("death", function (worker) {
-				Coralian.logger.log(appName, "worker",`${Mark.SHARP}${worker.pid}`, "died");
+				Coralian.logger.log(appName, "worker",`${Char.SHARP}${worker.pid}`, "died");
 				cluster.fork();
 			}).on("error", function () {
 				Coralian.logger.log(arguments);
@@ -259,7 +259,7 @@ module.exports = exports = () => {
 				process.exit(0);
 			});
 
-			listen(process.title, `${Mark.SHARP}${process.pid}`);
+			listen(process.title, `${Char.SHARP}${process.pid}`);
 		}
 	} else {
 		listen(appName); // 开发模式或者非集群模式下，简化所有配置，直接启动服务器

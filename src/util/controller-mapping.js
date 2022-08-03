@@ -2,13 +2,13 @@
  * controller 的集合，所有 controller 都在这里进行统一管理
  */
 const MAPPING = {};
-const { Mark } = Coralian.constants;
+const { Char } = JsConst;
 const ERROR_NAME = "/error";
 
 function putContoller(ctrlerName, ctrler) {
 	let instance = ctrler;
 
-	let route = ctrlerName.split(Mark.SLASH);
+	let route = ctrlerName.split(Char.SLASH);
 	let outRoute = [];
 
 	for (let i = 0, len = route.length; i < len; i++) {

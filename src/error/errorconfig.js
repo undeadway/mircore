@@ -3,7 +3,7 @@
  */
 
 const HTTP_STATUS_CODES = require("http").STATUS_CODES;
-const HttpStatusCode = Coralian.constants.HttpStatusCode;
+const { HttpStatusCode } = JsConst;
 
 const ERR_OBJ = {
 	[HttpStatusCode.BAD_REQUEST]: "由于包含语法错误，当前请求无法被服务器理解。", // 400

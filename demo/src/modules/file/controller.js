@@ -1,5 +1,5 @@
-const { controller, file } = mircore;
-const { HttpRequestMethod } = Coralian.constants;
+const { controller } = mircore;
+const { HttpRequestMethod } = JsConst;
 const PAGE = "/res/html/image.html"
 
 function nonoController() {

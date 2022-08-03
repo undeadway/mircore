@@ -4,7 +4,9 @@ const Strings = {
 	CONTENT_DISPOSITION: "Content-Disposition",
 	CONTROLLER: "Controller",
 	INDEX: "index",
-	ACTION: "Action"
+	ACTION: "Action",
+	UTF8: "utf-8",
+	BASE64: "base64"
 }
 
 const AjaxRenderType = {

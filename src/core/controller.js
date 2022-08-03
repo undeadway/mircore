@@ -14,7 +14,7 @@ const render = require("./../components/private/render");
 const { splitMark } = require("../util/app-config");
 const { typeIs } = require("coralian/src/base/common");
 
-const { HttpStatusCode, HttpRequestMethod, Mark } = Coralian.constants;
+const { HttpStatusCode, HttpRequestMethod, Char } = JsConst;
 const { unsupportedOperation, unsupportedType } = Error;
 
 const { INDEX, ACTION } = require("./../components/constants").Strings;
@@ -64,21 +64,21 @@ function controller() {
 			}
 
 			if (!error) { // 如果传入的 parse 对象中未包含 error 对象，则正常执行
-				path = path.split(Mark.QUESTION);
+				path = path.split(Char.QUESTION);
 				paras = path[1];
 				path = path[0];
 				if (!Object.isEmpty(paras)) {
 					paras = paras.split(splitMark);
 				}
 
-				if (path === Mark.SLASH) {
+				if (path === Char.SLASH) {
 					path += INDEX;
 				}
 
-				let url = path.split(Mark.SLASH); // 到这里， path 就不含任何 和 路径无关的东西了
+				let url = path.split(Char.SLASH); // 到这里， path 就不含任何 和 路径无关的东西了
 				url.shift(); // 去掉一个的空值
 
-				if (String.endsWith(path, Mark.SLASH)) {
+				if (String.endsWith(path, Char.SLASH)) {
 					url.pop(); // 去掉最后一个空值
 				}
 
@@ -90,7 +90,7 @@ function controller() {
 					reqRoute = lastName;
 					actionName = lastUrl;
 				} else if (url.length === 1 // [route]
-					|| path === Mark.SLASH + realRoute.join(Mark.SLASH)) { // [route...] 所请求的不包含 action、paras，只有 route
+					|| path === Char.SLASH + realRoute.join(Char.SLASH)) { // [route...] 所请求的不包含 action、paras，只有 route
 					reqRoute = lastUrl;
 					actionName = INDEX;
 				} else { // [...., paras]
