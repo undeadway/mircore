@@ -7,7 +7,7 @@
 const fs = require("fs");
 const md5 = require("md5");
 const fileinfo = require("fileinfo");
-const { String } = require("./../constants");
+const { stringify } = require("querystring");
 
 function File (filename /* 带有后缀 */, buffer, isStr, isTxt) {
 
@@ -68,7 +68,7 @@ module.exports = {
 		return obj instanceof File;
 	},
 	canAccess,
-	create: (input, {isTxt = false, readType = String.BINARY}) => {
+	create: (input, obj = {isTxt: false, readType: "binary"}) => {
 		let filename, buffer;
 		let isStr = false;
 	
@@ -78,25 +78,25 @@ module.exports = {
 			if (!canAccess(input)) return null;
 	
 			filename = input;
-			buffer = fs.readFileSync(input, readType);
+			buffer = fs.readFileSync(input, obj.readType);
 		} else {
 			filename = input.filename;
 			buffer = input.data;
 		}
 	
 		
-		if (isTxt) {
+		if (obj.isTxt) {
 			// 暂时还无法处理纯文本
 			isStr = true;
 		} else if (fileinfo.isSVGString(buffer.toString())) {
 			buffer = buffer.toString();
 			isStr = true;
-		} else if (!isTxt) {
+		} else if (!obj.isTxt) {
 			buffer = Buffer.from(buffer, String.BINARY);
 		}
 	
 		try {
-			let file = new File(filename, buffer, isStr, isTxt);
+			let file = new File(filename, buffer, isStr, obj.isTxt);
 			return file;
 		} catch (e) {
 			console.log(e);

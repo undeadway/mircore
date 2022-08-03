@@ -8,6 +8,7 @@ const config = JSON.parse(require("fs").readFileSync(pathResolve("/res/json/app.
 const { cache, routes } = config;
 const routesName = Object.keys(routes);
 const STR_GLOBAL = "global";
+const { Char } = JsConst;
 
 Object.defineProperty(exports, "port", {
 	value: (config.port || 9000),
@@ -49,7 +50,7 @@ Object.defineProperty(exports, "routes", {
 			return route;
 		},
 		hasFuzzyMatching:  () => {
-			return !!routes[`${Mark.SLASH}${Mark.ASTERISK}`];
+			return !!routes[`${Char.SLASH}${Char.ASTERISK}`];
 		}
 	},
 	writable: false

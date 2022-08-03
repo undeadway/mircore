@@ -18,7 +18,7 @@ const { errorStatement, noSuchProperty } = Error;
 const { replaceElement, replaceLoop } = Coralian.ReplaceHolder;
 const { Char } = JsConst;
 
-const { String } = require("./../constants");
+const { UTF8 } = JsConst.Encoding;
 
 const HTML_FILE_MAP = {};
 const SHAPE_INCLUDE = "<#include file=\"",
@@ -222,7 +222,7 @@ function getHTMLFile(path) {
 	if (pageCache) {
 		if (html === undefined) {
 			try {
-				html = HTML_FILE_MAP[path] = readFileSync(path, String.UTF8).split(SHAPE_INCLUDE);
+				html = HTML_FILE_MAP[path] = readFileSync(path, UTF8).split(SHAPE_INCLUDE);
 			} catch (e) {
 				Coralian.logger.err("errpath:" + path);
 				throw e;
@@ -230,7 +230,7 @@ function getHTMLFile(path) {
 		}
 	} else {
 		try {
-			html = readFileSync(path, String.UTF8).split(SHAPE_INCLUDE);
+			html = readFileSync(path, UTF8).split(SHAPE_INCLUDE);
 		} catch (e) {
 			Coralian.logger.err("errpath:" + path);
 			throw e;
