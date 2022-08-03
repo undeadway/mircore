@@ -68,7 +68,7 @@ module.exports = {
 		return obj instanceof File;
 	},
 	canAccess,
-	create: (input, isTxt = false) => {
+	create: (input, {isTxt = false, readType = "binary"}) => {
 		let filename, buffer;
 		let isStr = false;
 	
@@ -78,7 +78,7 @@ module.exports = {
 			if (!canAccess(input)) return null;
 	
 			filename = input;
-			buffer = fs.readFileSync(input, "binary");
+			buffer = fs.readFileSync(input, readType);
 		} else {
 			filename = input.filename;
 			buffer = input.data;

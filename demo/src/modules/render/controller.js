@@ -17,7 +17,7 @@ function nonoController() {
 	} });
 	ctrler.addAction({ name: "txt", action: () => {
 
-		ctrler.renderFile(file_name_text, true);
+		ctrler.renderFile(file_name_text, { isTxt: true, readType: "utf-8"});
 	} });
 
 
