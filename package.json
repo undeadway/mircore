@@ -15,7 +15,8 @@
     "fileinfo": "^1.0.4",
     "md5": "^2.3.0",
     "merge-descriptors": "^1.0.1",
-    "mime": "^2.5.2"
+    "mime": "^2.5.2",
+    "jsconst": "git+https://gitee.com/undeadway/jsconst#dev"
   },
   "bugs": {
     "url": "https://gitee.com/undeadway/mircore/issues"
