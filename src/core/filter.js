@@ -9,7 +9,7 @@ const file = require("./../components/public/file");
 const { routes } = require("../util/app-config");
 const { getGlobalInspectors } = require("./../util/private-utils");
 const CONTROLLER_MAPPING = require("./../util/controller-mapping");
-const { Char } = JsConst;
+const { Char, HttpStatusCode } = JsConst;
 const { errorCast } = Error;
 const QUESTION_REP_MARK = "{?}", JS_FILE_EXT =  ".js";
 const CONTROLLER_PATH = pathResolve(`/src/modules${QUESTION_REP_MARK}/controller`);
@@ -88,7 +88,7 @@ function invokeController(req, res, route) {
 		invokeGlobalInspectors(instance, ctrler.header, req, res,
 			getFilterInvocation({ instance, inspectors: ctrler.inspectors }, req, res));
 	} catch (e) {
-		e.code = JsConst.HttpStatusCode.INTERNAL_SERVER_ERROR;
+		e.code = HttpStatusCode.INTERNAL_SERVER_ERROR;
 		Coralian.logger.err(e);
 		req.parse.error = e;
 		let errorControllerWapper = CONTROLLER_MAPPING.error();;

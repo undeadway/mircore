@@ -5,7 +5,7 @@
  * 本类只定义 getRequestRoute 这个最原始的方法，其他方法都要靠子类来实现
  * execute 是个抽象方法，需要其他子类实现
  */
-const { Strings, AjaxRenderType } = require("./../components/constants");
+const { Names, AjaxRenderType } = require("./../components/constants");
 
 function baseAction() {
 
@@ -15,7 +15,7 @@ function baseAction() {
 			this.execute(); // 这个方法需要子类覆盖重写
 		},
 		getRequestRoute: function () {
-			return this.controller.getTypeName().replace(Strings.CONTROLLER, String.BLANK);
+			return this.controller.getTypeName().replace(Names.CONTROLLER, String.BLANK);
 		}
 	};
 }

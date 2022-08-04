@@ -2,11 +2,14 @@ const Strings = {
 	CONTENT_TYPE: "Content-Type",
 	BINARY: "binary",
 	CONTENT_DISPOSITION: "Content-Disposition",
+	INDEX: "index"
+}
+
+const Names = {
 	CONTROLLER: "Controller",
-	INDEX: "index",
 	ACTION: "Action",
-	UTF8: "utf-8",
-	BASE64: "base64"
+	FILTER: "Filter",
+	INSPECTOR: "Inspector"
 }
 
 const AjaxRenderType = {
@@ -19,11 +22,8 @@ function get(obj, key) {
 
 const constants = {
 	AjaxRenderType: new Proxy(AjaxRenderType, { get }),
-	Strings: new Proxy(Strings, { get })
+	Strings: new Proxy(Strings, { get }),
+	Names: new Proxy(Names, { get }),
 };
 
-module.exports = exports = new Proxy(constants, {
-	get: (obj, key) => {
-		return obj[key];
-	}
-});
+module.exports = exports = new Proxy(constants, { get });

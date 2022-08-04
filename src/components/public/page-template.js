@@ -66,7 +66,7 @@ function replaceSpaceLine(str) {
 	}
 
 	let output = [];
-	let lines = str.split("\n");
+	let lines = str.split(Char.Space.LF);
 
 	lines.forEach(function (line) {
 		if (!String.isEmpty(String.trim(line))) {
@@ -111,7 +111,7 @@ function replaceEqual(str, obj, equalStart, equalEnd, equalElse) {
 	}
 
 	// 当 statement 的类型不是 function 的时候，当作这个 statement 不存在处理
-	if (typeIs(tmpObj, "function")) {
+	if (typeIs(tmpObj, Function.TYPE_NAME)) {
 		try {
 			result = tmpObj();
 		} catch (e) {

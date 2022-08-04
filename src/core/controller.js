@@ -17,7 +17,7 @@ const { typeIs } = require("coralian/src/base/common");
 const { HttpStatusCode, HttpRequestMethod, Char } = JsConst;
 const { unsupportedOperation, unsupportedType } = Error;
 
-const { INDEX, ACTION } = require("./../components/constants").Strings;
+const {  Strings: { INDEX }, Names: { ACTION } } = require("./../components/constants");
 
 function controller() {
 
@@ -251,55 +251,6 @@ function controller() {
 				method = method.toLowerCase();
 				_addAction(actions, `${method}_${name}`, action, inspectors);
 			}
-
-			// let multipleMethod = false
-
-			// switch (arguments.length) {
-			// 	case 1: // [action]
-			// 		action = name;
-			// 		name = Function.getName(action).replace(ACTION, String.BLANK);
-			// 		break;
-			// 	case 2:
-			// 		if (typeIs(name, Function.TYPE_NAME)) {
-						
-			// 			if (typeIs(action, String.TYPE_NAME)) { // [action, method]
-			// 				method = action;
-			// 			} else if (typeIs(action, Array.TYPE_NAME)) { // [action, inspectors]
-			// 				inspectors = action;
-			// 			}
-
-			// 			action = name;
-			// 			name = INDEX;
-			// 		}
-			// 		break;
-			// 	case 3:
-			// 		if (typeIs(method, Array.TYPE_NAME)) { // [name, action, methods]
-			// 			if (!typeIs(method[0], String.TYPE_NAME)) { // [name, action, inspectors]
-			// 				inspectors = method;
-			// 				method = HttpRequestMethod.GET;
-			// 			} else {
-			// 				// 允许多重 method
-			// 				multipleMethod = true;
-			// 			}
-			// 		}
-			// 		break;
-			// 	case 4: // 所有参数都有
-			// 		break;
-			// 	default:
-			// 		break;
-			// }
-
-			// if (!multipleMethod) {
-			// 	method = method.toLowerCase();
-			// 	addAction(actions, `${method}_${name}`, action, inspectors);
-			// } else {
-			// 	for (let m of method) {
-			// 		m = m.toLowerCase();
-			// 		addAction(actions, `${m}_${name}`, action, inspectors);
-			// 	}
-			// }
-
-
 		},
 		getAction: function (name) {
 			return actions[name];

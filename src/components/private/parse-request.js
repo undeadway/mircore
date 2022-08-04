@@ -9,6 +9,9 @@ const { BINARY, CONTENT_DISPOSITION, CONTENT_TYPE } = require("../constants").St
 const { DELETE, PUT, POST, HEAD, OPTIONS, GET, CONNECT, TRACE, PATCH } = JsConst.HttpRequestMethod;
 const unsupportedOperation = Error.unsupportedOperation;
 
+const FILE_NAME_REGX = /Content-Type: (.+?)\r\n/;
+const CONTENT_TYPE_REGX = /Content-Type: (.+?)\r\n/;
+
 function parseFormData (str, parse) {
 
 	console.log(str);
@@ -28,7 +31,7 @@ function parseFormData (str, parse) {
 		if (!name) continue;
 
 		if (String.contains(item, CONTENT_TYPE)) {
-			if (!/filename="(.+?)"/.test(item)) continue; // 没有文件上传的情况则不做任何处理
+			if (!CONTENT_TYPE_REGX.test(item)) continue; // 没有文件上传的情况则不做任何处理
 
 			let rems = [];
 
@@ -42,8 +45,9 @@ function parseFormData (str, parse) {
 			}
 
 			let data = item.slice(rems[3] + 2, item.length - 2);
-			let filename = item.match(/filename="(.+?)"/)[1];
-			let _file =  file.create({ filename, data });
+			let filename = item.match(FILE_NAME_REGX)[1];
+			let contentType = item.match(CONTENT_TYPE_REGX)[1];
+			let _file =  file.create({ filename, contentType, data });
 			if (_file !== null) {
 				files[name] = _file;
 			}

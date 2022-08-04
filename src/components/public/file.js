@@ -7,7 +7,7 @@
 const fs = require("fs");
 const md5 = require("md5");
 const fileinfo = require("fileinfo");
-const { stringify } = require("querystring");
+const { Encoding } = JsConst;
 
 function File (filename /* 带有后缀 */, buffer, isStr, isTxt) {
 
@@ -45,8 +45,8 @@ function File (filename /* 带有后缀 */, buffer, isStr, isTxt) {
 	};
 
 	this.getBase64Data = () => {
-		let data = buffer.toString(String.BASE64);
-		return `${mime};${String.BASE64},${data}`;
+		let data = buffer.toString(Encoding.BASE64);
+		return `${mime};${Encoding.BASE64},${data}`;
 	}
 
 	this.getMime = () => {
@@ -68,11 +68,14 @@ module.exports = {
 		return obj instanceof File;
 	},
 	canAccess,
+	createFromBuffer: ({ filename, contentType, data }) => {
+
+	},
 	create: (input, obj = {isTxt: false, readType: "binary"}) => {
 		let filename, buffer;
 		let isStr = false;
 	
-		if (typeIs(input, "string")) {
+		if (typeIs(input, String.TYPE_NAME)) {
 	
 			// 当对象文件不存在或无法处理时，返回 null，而不抛出错误
 			if (!canAccess(input)) return null;
