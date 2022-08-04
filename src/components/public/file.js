@@ -3,7 +3,7 @@
  * 读取文件，
  * 如果是二进制文件，可以对文件进行二进制输出
  */
-
+// TODO 当前 file 类只能处理图片
 const fs = require("fs");
 const md5 = require("md5");
 const fileinfo = require("fileinfo");
