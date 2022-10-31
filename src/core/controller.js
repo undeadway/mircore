@@ -19,21 +19,23 @@ const { unsupportedOperation, unsupportedType } = Error;
 
 const {  Strings: { INDEX }, Names: { ACTION } } = require("./../components/constants");
 
-function controller(request) {
+function controller() {
 
 	// 全局变量
-	const client = request.client,
-			cookies = request.parse.cookies,
-			method = request.method.toLowerCase(),
-			query = request.parse.query,
-			files = request.parse.files;
-
+	let client, cookies , method, query, files;
 	// 这些都要经过 juddeExe 才处理后才会赋值
 	let realRoute, reqRoute, modName, actionName, reqPath, typeName;
 	// 这些都是已经初始化好的值
 	let attrs = {}, actions = {}, paras = null; //, isLogged = false;
 
 	const _ctlr_ = {
+		init : (request) => {
+			client = request.client,
+			cookies = request.parse.cookies,
+			method = request.method.toLowerCase(),
+			query = request.parse.query,
+			files = request.parse.files;
+		},
 		/* 
 		 * 在 filter 中设置 controller 的初始值
 		 * 并返回 true / false 交由 filter 来判断是否继续执行 execute
