@@ -16,9 +16,7 @@ const { readFileSync } = require("fs");
 const pageCache = require("../../util/app-config").getCacheConfig("page");
 const { errorStatement, noSuchProperty } = Error;
 const { replaceElement, replaceLoop } = Coralian.ReplaceHolder;
-const { Char } = JsConst;
-
-const { UTF8 } = JsConst.Encoding;
+const { Char, Encoding: { UTF8 } } = JsConst;
 
 const HTML_FILE_MAP = {};
 const SHAPE_INCLUDE = "<#include file=\"",
