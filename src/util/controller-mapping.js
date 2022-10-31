@@ -5,7 +5,8 @@ const MAPPING = {};
 const { Char } = JsConst;
 const ERROR_NAME = "/error";
 
-function putContoller(ctrlerName, ctrler) {
+function putContoller(ctrlerName, ctrler, req) {
+	ctrler.init(req);
 	let instance = ctrler;
 
 	let route = ctrlerName.split(Char.SLASH);
@@ -34,8 +35,7 @@ function putContoller(ctrlerName, ctrler) {
 function getController(ctrlerName, req) {
 	let ctrler = MAPPING[ctrlerName];
 	if (ctrlerName === ERROR_NAME && !ctrler) {
-		ctrler = putContoller(ctrlerName, require("../error/controller"));
-		ctrler.init(req);
+		ctrler = putContoller(ctrlerName, require("../error/controller"), req);
 	}
 	return ctrler;
 }
