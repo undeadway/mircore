@@ -76,7 +76,7 @@ function invokeController(req, res, route) {
 
 	try {
 		let ctrler = getController(req, res, route);
-		let instance = ctrler.instance();
+		let instance = ctrler.instance(req);
 
 		/*
 		 * 在 controller 中判断是否正常执行
@@ -92,7 +92,7 @@ function invokeController(req, res, route) {
 		Coralian.logger.err(e);
 		req.parse.error = e;
 		let errorControllerWapper = CONTROLLER_MAPPING.error(req);
-		let exe = errorControllerWapper.instance();
+		let exe = errorControllerWapper.instance(req);
 		if (exe.judgeExecute(req, res, errorControllerWapper.header)) {
 			exe.execute();
 		}

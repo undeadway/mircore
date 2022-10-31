@@ -19,19 +19,21 @@ const { unsupportedOperation, unsupportedType } = Error;
 
 const {  Strings: { INDEX }, Names: { ACTION } } = require("./../components/constants");
 
-function controller() {
+function controller(request) {
+
+	// 全局变量
+	const client = request.client,
+			cookies = request.parse.cookies,
+			method = request.method.toLowerCase(),
+			query = request.parse.query,
+			files = request.parse.files;
 
 	// 这些都要经过 juddeExe 才处理后才会赋值
-	let files, method, query, realRoute, reqRoute, typeName, modName, actionName, cookies, client, reqPath;
+	let realRoute, reqRoute, modName, actionName, reqPath, typeName;
 	// 这些都是已经初始化好的值
 	let attrs = {}, actions = {}, paras = null; //, isLogged = false;
 
 	const _ctlr_ = {
-		// 初始化设置
-		init: (request) => {
-			client = request.client;
-			cookies = request.parse.cookies
-		},
 		/* 
 		 * 在 filter 中设置 controller 的初始值
 		 * 并返回 true / false 交由 filter 来判断是否继续执行 execute
@@ -41,14 +43,9 @@ function controller() {
 		 */
 		judgeExecute: function (request, response, header) {
 
-			let parse = request.parse;
-
-			// 全局变量
-			method = request.method;
-			query = parse.query, typeName = header.type, files = parse.files;
-			// 局部变量
-
-			let { pathname, path, error } = parse;
+			// 初始化设置
+			typeName = header.type;
+			let { pathname, path, error } = request.parse;
 			/**
 			 * realRoute = name.path 是对应文件物理路径 : [blog,read]
 			 * reqRoute 是浏览器中输入的 url，如果有多层，在取最后一层 : read
@@ -87,7 +84,7 @@ function controller() {
 					url.pop(); // 去掉最后一个空值
 				}
 
-				let reqMethod = method.toLowerCase();
+				let reqMethod = method;
 				let lastUrl = Array.last(url); // 获取 url 中最后一节
 				let lastName = Array.last(realRoute);
 
@@ -139,7 +136,7 @@ function controller() {
 		 * 暂时只是对action的处理（包括inspector和之后的执行 action ）
 		 */
 		execute: function () {
-			invokeAction(actions, method.toLowerCase(), actionName, this);
+			invokeAction(actions, method, actionName, this);
 		},
 		// 各种参数处理
 		// 获得数组形式的 para

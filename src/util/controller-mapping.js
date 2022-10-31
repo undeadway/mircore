@@ -6,7 +6,6 @@ const { Char } = JsConst;
 const ERROR_NAME = "/error";
 
 function putContoller(ctrlerName, ctrler, req) {
-	ctrler.init(req);
 	let instance = ctrler;
 
 	let route = ctrlerName.split(Char.SLASH);

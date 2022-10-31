@@ -131,7 +131,7 @@ function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
 	function renderOnError (error, code = HttpStatusCode.INTERNAL_SERVER_ERROR) {
 
 		let errorCtrler = contollerMapping.get(ROUTE_ERROR);
-		let ctrler = errorCtrler.instance();
+		let ctrler = errorCtrler.instance(req);
 
 		if (typeIs(error, Number.TYPE_NAME)) {
 			let newErr = new Error();
