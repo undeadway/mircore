@@ -27,6 +27,11 @@ function controller() {
 	let attrs = {}, actions = {}, paras = null; //, isLogged = false;
 
 	const _ctlr_ = {
+		// 初始化设置
+		init: (request) => {
+			client = request.client;
+			cookies = request.parse.cookies
+		},
 		/* 
 		 * 在 filter 中设置 controller 的初始值
 		 * 并返回 true / false 交由 filter 来判断是否继续执行 execute
@@ -36,14 +41,14 @@ function controller() {
 		 */
 		judgeExecute: function (request, response, header) {
 
-			// 初始化设置
 			let parse = request.parse;
-			// 全局变量
-			method = request.method, client = request.client;
-			query = parse.query, cookies = parse.cookies, typeName = header.type, files = parse.files;
-			// 局部变量
-			let { pathname, path, error } = parse;
 
+			// 全局变量
+			method = request.method;
+			query = parse.query, typeName = header.type, files = parse.files;
+			// 局部变量
+
+			let { pathname, path, error } = parse;
 			/**
 			 * realRoute = name.path 是对应文件物理路径 : [blog,read]
 			 * reqRoute 是浏览器中输入的 url，如果有多层，在取最后一层 : read

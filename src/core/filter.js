@@ -15,7 +15,7 @@ const QUESTION_REP_MARK = "{?}", JS_FILE_EXT =  ".js";
 const CONTROLLER_PATH = pathResolve(`/src/modules${QUESTION_REP_MARK}/controller`);
 const STR_ROUTE_INDEX = "/index";
 
-function getController(req, route) {
+function getController(req, res, route) {
 
 	let ctrlerWrapper, name = route;
 
@@ -38,7 +38,7 @@ function getController(req, route) {
 		if (ctrlerName === undefined) { // 非已注册的路径则判断非法路径，不做请求处理，进入下一轮循环
 			name.pop();
 		} else {
-			ctrlerWrapper = getControllerWrapper(ctrlerName);
+			ctrlerWrapper = getControllerWrapper(ctrlerName, req);
 			if (ctrlerWrapper !== null) {
 				return ctrlerWrapper;
 			}
@@ -52,15 +52,15 @@ function getController(req, route) {
 			require(CONTROLLER_PATH.replace(QUESTION_REP_MARK, STR_ROUTE_INDEX)));
 	} else if (routes.hasFuzzyMatching()) {
 		let ctrlerName = routes.get(`${Char.SLASH}${Char.ASTERISK}`);
-		ctrlerWrapper = getControllerWrapper(ctrlerName);
+		ctrlerWrapper = getControllerWrapper(ctrlerName, req);
 		return ctrlerWrapper;
 	}
 	req.parse.error = 404;
-	return CONTROLLER_MAPPING.error();
+	return CONTROLLER_MAPPING.error(req);
 }
 
-function getControllerWrapper (ctrlerName) {
-	let ctrlerWrapper = CONTROLLER_MAPPING.get(ctrlerName);
+function getControllerWrapper (ctrlerName, req) {
+	let ctrlerWrapper = CONTROLLER_MAPPING.get(ctrlerName, req);
 	if (ctrlerWrapper) {
 		return ctrlerWrapper;
 	}
@@ -75,7 +75,7 @@ function getControllerWrapper (ctrlerName) {
 function invokeController(req, res, route) {
 
 	try {
-		let ctrler = getController(req, route);
+		let ctrler = getController(req, res, route);
 		let instance = ctrler.instance();
 
 		/*
@@ -91,7 +91,7 @@ function invokeController(req, res, route) {
 		e.code = HttpStatusCode.INTERNAL_SERVER_ERROR;
 		Coralian.logger.err(e);
 		req.parse.error = e;
-		let errorControllerWapper = CONTROLLER_MAPPING.error();;
+		let errorControllerWapper = CONTROLLER_MAPPING.error(req);
 		let exe = errorControllerWapper.instance();
 		if (exe.judgeExecute(req, res, errorControllerWapper.header)) {
 			exe.execute();

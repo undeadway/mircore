@@ -31,19 +31,20 @@ function putContoller(ctrlerName, ctrler) {
 	return ctrlerWrapper;
 }
 
-function getContoller(ctrlerName) {
+function getController(ctrlerName, req) {
 	let ctrler = MAPPING[ctrlerName];
 	if (ctrlerName === ERROR_NAME && !ctrler) {
-		ctrler = putContoller(ctrlerName, require("../error/controller"))
+		ctrler = putContoller(ctrlerName, require("../error/controller"));
+		ctrler.init(req);
 	}
 	return ctrler;
 }
 
 exports = module.exports = {
 	put: putContoller,
-	get: getContoller,
-	error: () => {
-		return getContoller(ERROR_NAME);
+	get: getController,
+	error: (req) => {
+		return getController(ERROR_NAME, req);
 	},
 	"delete": (name) => {
 		let ctrler = MAPPING[name];
