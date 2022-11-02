@@ -22,7 +22,7 @@ const {  Strings: { INDEX }, Names: { ACTION } } = require("./../components/cons
 function controller() {
 
 	// 全局变量
-	let client, cookies , method, query, files;
+	let client, cookies , method, query, files, headers;
 	// 这些都要经过 juddeExe 才处理后才会赋值
 	let realRoute, reqRoute, modName, actionName, reqPath, typeName;
 	// 这些都是已经初始化好的值
@@ -34,7 +34,8 @@ function controller() {
 			cookies = request.parse.cookies,
 			method = request.method.toLowerCase(),
 			query = request.parse.query,
-			files = request.parse.files;
+			files = request.parse.files,
+			headers = request.headers;
 		},
 		/* 
 		 * 在 filter 中设置 controller 的初始值
@@ -160,6 +161,9 @@ function controller() {
 		},
 		isEmptyPara: function () {
 			return Object.isEmpty(paras);
+		},
+		getHeader : (key) => {
+			return headers[key];
 		},
 		getQuery: function (key) {
 			if (key) {
