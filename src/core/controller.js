@@ -22,7 +22,7 @@ const {  Strings: { INDEX }, Names: { ACTION } } = require("./../components/cons
 function controller() {
 
 	// 全局变量
-	let client, cookies , method, query, files, headers;
+	let client, cookies , method, query, files, headers, url;
 	// 这些都要经过 juddeExe 才处理后才会赋值
 	let realRoute, reqRoute, modName, actionName, reqPath, typeName;
 	// 这些都是已经初始化好的值
@@ -35,6 +35,7 @@ function controller() {
 			method = request.method.toLowerCase(),
 			query = request.parse.query,
 			files = request.parse.files,
+			url = request.url,
 			headers = request.headers;
 		},
 		/* 
@@ -312,6 +313,9 @@ function controller() {
 		},
 		getModName: function () {
 			return modName;
+		},
+		getUrl: () => {
+			return url;
 		}
 	};
 
