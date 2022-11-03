@@ -314,7 +314,7 @@ function controller() {
 		getModName: function () {
 			return modName;
 		},
-		getUrl: () => {
+		getRequestUrl: () => {
 			return url;
 		}
 	};
