@@ -77,7 +77,7 @@ function invokeController(req, res, route) {
 	try {
 		let ctrler = getController(req, res, route);
 		let instance = ctrler.instance();
-		instance.init(req);
+		instance.init(req, res, ctrler.header);
 
 		/*
 		 * 在 controller 中判断是否正常执行
@@ -86,22 +86,21 @@ function invokeController(req, res, route) {
 		 * 非正常执行时，直接在 Controller 中 调用错误处理，所以在 filter 中不用做额外处理
 		 */
 		// 全局 inspector 的执行
-		invokeGlobalInspectors(instance, ctrler.header, req, res,
-			getFilterInvocation({ instance, inspectors: ctrler.inspectors }, req, res));
+		invokeGlobalInspectors(instance, getFilterInvocation({ instance, inspectors: ctrler.inspectors }));
 	} catch (e) {
 		e.code = HttpStatusCode.INTERNAL_SERVER_ERROR;
 		Coralian.logger.err(e);
 		req.parse.error = e;
 		let errorControllerWapper = CONTROLLER_MAPPING.error(req);
 		let exe = errorControllerWapper.instance();
-		exe.init(req);
-		if (exe.judgeExecute(req, res, errorControllerWapper.header)) {
+		exe.init(req, res, errorControllerWapper.header);
+		if (exe.judgeExecute()) {
 			exe.execute();
 		}
 	}
 }
 
-function invokeGlobalInspectors(instance, header, req, res, fi) {
+function invokeGlobalInspectors(instance, fi) {
 
 	let inspectors = getGlobalInspectors();
 	let count = inspectors.length,
@@ -120,7 +119,7 @@ function invokeGlobalInspectors(instance, header, req, res, fi) {
 			if (index < count) {
 				inspectors[index++].inspect(this);
 			} else if (index++ === count) {
-				if (instance.judgeExecute(req, res, header)) {
+				if (instance.judgeExecute()) {
 					fi.execute(); // 当 global  inspector 被执行完时，执行 filter inspector
 				}
 				end();

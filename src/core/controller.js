@@ -29,15 +29,6 @@ function controller() {
 	let attrs = {}, actions = {}, paras = null; //, isLogged = false;
 
 	const _ctlr_ = {
-		init : (request) => {
-			client = request.client,
-			cookies = request.parse.cookies,
-			method = request.method.toLowerCase(),
-			query = request.parse.query,
-			files = request.parse.files,
-			url = request.url,
-			headers = request.headers;
-		},
 		/* 
 		 * 在 filter 中设置 controller 的初始值
 		 * 并返回 true / false 交由 filter 来判断是否继续执行 execute
@@ -45,11 +36,22 @@ function controller() {
 		 * response: 服务器的返回值
 		 * name：controller 的名字
 		 */
-		judgeExecute: function (request, response, header) {
+		init: function (request, response, header) {
+
+			client = request.client,
+			cookies = request.parse.cookies,
+			method = request.method.toLowerCase(),
+			query = request.parse.query,
+			files = request.parse.files,
+			url = request.url,
+			headers = request.headers,
+			typeName = header.type;
 
 			// 初始化设置
-			typeName = header.type;
 			let { pathname, path, error } = request.parse;
+
+			// 因为每个请求都有对应的 controller 和 action
+			// 所以先完成所有 action 和请求参数的预处理
 			/**
 			 * realRoute = name.path 是对应文件物理路径 : [blog,read]
 			 * reqRoute 是浏览器中输入的 url，如果有多层，在取最后一层 : read
@@ -133,7 +135,11 @@ function controller() {
 			// 将 render 绑定到 controller
 			const _render = render(request, response, reqRoute, typeName, actionName, cookies.res, attrs);
 			mergeDescriptors(this, _render);
-
+		},
+		// TODO
+		// 这个方法或许可以下放到各个子类，
+		//controller 基类默认全部通过
+		judgeExecute: () => {
 			return true;
 		},
 		/*

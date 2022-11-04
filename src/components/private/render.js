@@ -132,7 +132,7 @@ function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
 
 		let errorCtrler = contollerMapping.get(ROUTE_ERROR);
 		let ctrler = errorCtrler.instance();
-		ctrler.init(req);
+		ctrler.init(req, res, errorCtrler.header);
 
 		if (typeIs(error, Number.TYPE_NAME)) {
 			let newErr = new Error();
@@ -143,7 +143,7 @@ function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
 			req.parse.error = error;
 		}
 		req.method = HttpRequestMethod.GET; // controller 中执行错误页面的时候，改成 get 模式
-		if (ctrler.judgeExecute(req, res, errorCtrler.header)) {
+		if (ctrler.judgeExecute()) {
 			ctrler.execute();
 		}
 	}
