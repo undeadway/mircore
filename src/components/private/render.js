@@ -4,7 +4,7 @@
  */
 // const fs = require("fs");
 const contollerMapping = require("./../../util/controller-mapping");
-const secrecy = require("./../../util/secrecy");
+const secrecy = require("../public/secrecy");
 const pageTemplate = require("../public/page-template");
 const caches = require("../public/cache");
 const _File = require("../public/file");

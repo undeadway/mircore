@@ -15,7 +15,7 @@ const parseRequest = require("../components/private/parse-request"),
 // 辅助模块
 const { port, appName, developMode, clusterMode } = require("../util/app-config");
 const { clientDisAccessable } = require("./../util/private-utils");
-const secrecy = require("./../util/secrecy"); 
+const secrecy = require("../components/public/secrecy"); 
 // 各种常量
 const { HttpStatusCode, Char } = JsConst;
 const { formatString } = Coralian.Formatter;
