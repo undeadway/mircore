@@ -15,6 +15,7 @@ const parseRequest = require("../components/private/parse-request"),
 // 辅助模块
 const { port, appName, developMode, clusterMode } = require("../util/app-config");
 const { clientDisAccessable } = require("./../util/private-utils");
+const secrecy = require("./../util/secrecy"); 
 // 各种常量
 const { HttpStatusCode, Char } = JsConst;
 const { formatString } = Coralian.Formatter;
@@ -24,6 +25,7 @@ const filter = require("./filter");
 const TIMEOUT = 20000,
 	ERROR_ROUTE_FORMAT = "/error/%s";
 let isStarted = false;
+
 
 /*
  * 初始化完毕，执行 listen 函数启动 http 服务器
@@ -107,7 +109,7 @@ function router(req, res) {
  */
 function request(req, res) {
 
-	let parse = req.parse,
+	let parse = secrecy.decrypt(req.parse),
 		cookies = Cookies.createRequestCookies();
 	cookies.addFromRequest(req.headers.cookie);
 

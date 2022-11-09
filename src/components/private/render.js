@@ -4,12 +4,13 @@
  */
 // const fs = require("fs");
 const contollerMapping = require("./../../util/controller-mapping");
+const secrecy = require("./../../util/secrecy");
 const pageTemplate = require("../public/page-template");
 const caches = require("../public/cache");
 const _File = require("../public/file");
 const { MimeType,  HttpStatusCode, HttpRequestMethod } = JsConst;
 const JSONstringify = JSON.stringify;
-const ROUTE_ERROR = "/error";
+const ROUTE_ERROR_STR = "/error";
 const { STR_BINARY } = require("./../constants").Strings;
 
 function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
@@ -74,7 +75,7 @@ function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
 				} else {
 					page = url; // 如果不存在对应的文件，则把该请求的内容直接显示在页面上
 				}
-				res.write(page);
+				write(page);
 				break;
 			case Function.TYPE_NAME: // 单数类型是是函数，则认为是回调函数，并执行该回调函数
 				url(res);
@@ -86,6 +87,11 @@ function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
 				unsupportedType(url);
 		}
 		end();
+	}
+
+	function write (data) {
+		data = secrecy.encrypt(data);
+		res.write(data);
 	}
 
 	/*
@@ -116,7 +122,7 @@ function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
 				 */
 				break;
 		}
-		res.write(data);
+		write(data);
 		end();
 	}
 
@@ -130,7 +136,7 @@ function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
 
 	function renderOnError (error, code = HttpStatusCode.INTERNAL_SERVER_ERROR) {
 
-		let errorCtrler = contollerMapping.get(ROUTE_ERROR);
+		let errorCtrler = contollerMapping.get(ROUTE_ERROR_STR);
 		let ctrler = errorCtrler.instance();
 		ctrler.init(req, res, errorCtrler.header);
 
@@ -174,7 +180,7 @@ function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
 				"Content-Disposition": contentDisposition,
 				"Set-Cookie": cookies.print()
 			});
-			res.write(fileData, STR_BINARY);
+			write(fileData, STR_BINARY);
 
 			end();
 		},
