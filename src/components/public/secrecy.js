@@ -4,6 +4,7 @@ let hasConfig = !!secrecyConfig;
 const secrecy = (() => {
     try {
         const secrecy = require(pathResolve(secrecyConfig));
+        return secrecy;
     } catch {
         hasConfig = false;
         return null;
