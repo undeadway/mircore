@@ -12,7 +12,8 @@
 				"user": "",
 				"pass": ""
 			}
-		}
+		},
+		"secrecy": "/src/util/secrecy"
 	},
 	"cache": {
 		"global": {
