@@ -60,7 +60,7 @@ that.start = () => {
 
 	let files = fs.readdirSync(`${__dirname}/components/public`);
 	files.map(file => {
-		modName = file.slice(0, file.length - 3);
+		let modName = file.slice(0, file.length - 3);
 		if (String.contains(modName, "-")) {
 			modName = String.lowerCamelCase(modName);
 		}
