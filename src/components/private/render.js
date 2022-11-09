@@ -2,7 +2,6 @@
  * 把渲染处理独立出来
  * 作为一个单独的模块
  */
-// const fs = require("fs");
 const contollerMapping = require("./../../util/controller-mapping");
 const secrecy = require("../public/secrecy");
 const pageTemplate = require("../public/page-template");
@@ -14,6 +13,14 @@ const ROUTE_ERROR_STR = "/error";
 const { STR_BINARY } = require("./../constants").Strings;
 
 function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
+
+	/*
+	 * 在这里暂时只做关闭 res 处理，之后再补充其他功能
+	 */
+	function end() {
+		Coralian.logger.log(`${typeName}.${actionName} request end`);
+		res.end();
+	}
 
 	/*
 	 * render 只负责实现 HTML 的显示
@@ -75,7 +82,7 @@ function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
 				} else {
 					page = url; // 如果不存在对应的文件，则把该请求的内容直接显示在页面上
 				}
-				write(page);
+				res.write(page);
 				break;
 			case Function.TYPE_NAME: // 单数类型是是函数，则认为是回调函数，并执行该回调函数
 				url(res);
@@ -87,11 +94,6 @@ function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
 				unsupportedType(url);
 		}
 		end();
-	}
-
-	function write (data) {
-		data = secrecy.encrypt(data);
-		res.write(data);
 	}
 
 	/*
@@ -122,16 +124,10 @@ function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
 				 */
 				break;
 		}
-		write(data);
-		end();
-	}
 
-	/*
-	 * 在这里暂时只做关闭 res 处理，之后再补充其他功能
-	 */
-	function end() {
-		Coralian.logger.log(`${typeName}.${actionName} request end`);
-		res.end();
+		data = secrecy.encrypt(data);
+		res.write(data);
+		end();
 	}
 
 	function renderOnError (error, code = HttpStatusCode.INTERNAL_SERVER_ERROR) {
@@ -180,8 +176,7 @@ function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
 				"Content-Disposition": contentDisposition,
 				"Set-Cookie": cookies.print()
 			});
-			write(fileData, STR_BINARY);
-
+			res.write(fileData, STR_BINARY); // 这里是传输的二进制文件，所以直接输出
 			end();
 		},
 		/*
