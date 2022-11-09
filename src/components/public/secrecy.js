@@ -20,7 +20,7 @@ this.encrypt = (input) => {
 
 this.decrypt = (input) => {
     if (hasConfig && secrecy.defined && secrecy.defined()) {
-        return secrecy.encrypt(input);
+        return secrecy.decrypt(input);
     } else {
         return input;
     }
