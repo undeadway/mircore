@@ -1,4 +1,4 @@
-const secrecyConfig = require("../../util/app-config").getConfig("getConfig");
+const secrecyConfig = require("../../util/app-config").getConfig("secrecy");
 let hasConfig = !!secrecyConfig;
 
 const secrecy = (() => {
