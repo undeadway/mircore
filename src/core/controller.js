@@ -12,7 +12,7 @@ const mergeDescriptors = require("merge-descriptors");
 const sessions = require("./../components/public/sessions");
 const render = require("./../components/private/render");
 const { splitMark } = require("../util/app-config");
-const { typeIs } = require("coralian/src/base/common");
+const { typeIs } = require("coralian/src/common/base");
 
 const { HttpStatusCode, HttpRequestMethod, Char } = JsConst;
 const { unsupportedOperation, unsupportedType } = Error;
