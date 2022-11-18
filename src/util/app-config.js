@@ -15,7 +15,7 @@ Object.defineProperty(exports, "port", {
 	writable: false
 });
 Object.defineProperty(exports, "mode", {
-	value: !!config["mode"],
+	value: config["mode"],
 	writable: false
 });
 Object.defineProperty(exports, "clusterMode", {
