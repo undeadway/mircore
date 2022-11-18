@@ -1,4 +1,5 @@
 const secrecyConfig = require("../../util/app-config").getConfig("secrecy");
+const { mode: { encrypt } } = require("../../util/app-config");
 let hasConfig = !!secrecyConfig;
 
 const secrecy = (() => {
@@ -12,7 +13,8 @@ const secrecy = (() => {
 })();
 
 this.encrypt = (input) => {
-    if (hasConfig && secrecy.defined && secrecy.defined()) {
+
+    if (encrypt && hasConfig && secrecy.defined && secrecy.defined()) {
         return secrecy.encrypt(input);
     } else {
         return input;
@@ -20,7 +22,8 @@ this.encrypt = (input) => {
 }
 
 this.decrypt = (input) => {
-    if (hasConfig && secrecy.defined && secrecy.defined()) {
+
+    if (encrypt && hasConfig && secrecy.defined && secrecy.defined()) {
         return secrecy.decrypt(input);
     } else {
         return input;
