@@ -7,7 +7,7 @@
 const fs = require("fs");
 const md5 = require("md5");
 const fileinfo = require("fileinfo");
-const { Encoding } = JsConst;
+const { Encoding, Char } = JsConst;
 
 function File (filename /* 带有后缀 */, buffer, isStr, isTxt) {
 
@@ -17,7 +17,7 @@ function File (filename /* 带有后缀 */, buffer, isStr, isTxt) {
 
 	let { mime, extension } = tmpObj;
 	const hash = md5(buffer);
-	filename = filename.split("/").pop();
+	filename = filename.split(Char.SLASH).pop();
 
 	if (!String.endsWith(filename, extension)
 		&& (extension === "jpg"
@@ -71,7 +71,7 @@ module.exports = {
 	createFromBuffer: ({ filename, contentType, data }) => {
 
 	},
-	create: (input, obj = {isTxt: false, readType: "binary"}) => {
+	create: (input, obj = {isTxt: false, readType: String.BINARY}) => {
 		let filename, buffer;
 		let isStr = false;
 	
