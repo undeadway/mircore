@@ -1,5 +1,7 @@
 require("coralian"); // 预载入 coralian
 
+const { Char } = JsSonst;
+
 function pathResolve(name, isFolder) {
 
 	if (String.startsWith(name, __dirname)) {
@@ -61,7 +63,7 @@ that.start = () => {
 	let files = fs.readdirSync(`${__dirname}/components/public`);
 	files.map(file => {
 		let modName = file.slice(0, file.length - 3);
-		if (String.contains(modName, "-")) {
+		if (String.contains(modName, Char.HYPHEN)) {
 			modName = String.lowerCamelCase(modName);
 		}
 		that[modName] = require(`./components/public/${file}`);
