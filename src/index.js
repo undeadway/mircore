@@ -1,6 +1,6 @@
 require("coralian"); // 预载入 coralian
 
-const { Char } = JsSonst;
+const { Char } = JsConst;
 
 function pathResolve(name, isFolder) {
 
