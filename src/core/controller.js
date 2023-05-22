@@ -41,7 +41,7 @@ function controller() {
 			client = request.client,
 			cookies = request.parse.cookies,
 			method = request.method.toLowerCase(),
-			query = request.parse.query,
+			query = JSON.parse(request.parse.query),
 			files = request.parse.files,
 			url = request.url,
 			headers = request.headers,
