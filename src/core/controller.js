@@ -183,7 +183,10 @@ function controller() {
 			const output = {};
 
 			for (const key of keys) {
-				output[key] = query[key];
+				const obj = query[key];
+				if (obj) {
+					output[key] = query[key];
+				}
 			}
 
 			return output;
