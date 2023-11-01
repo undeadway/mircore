@@ -179,8 +179,14 @@ function controller() {
 				return query;
 			}
 		},
-		getQueries: function() {
-			return query;
+		getQueries: function(... keys) {
+			const output = {};
+
+			for (const key of keys) {
+				output[key] = query[key];
+			}
+
+			return output;
 		},
 		isEmptyQuery: function () {
 			return Object.isEmpty(query);
