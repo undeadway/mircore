@@ -179,17 +179,8 @@ function controller() {
 				return query;
 			}
 		},
-		getQueries: function(... keys) {
-			const output = {};
-
-			for (const key of keys) {
-				const obj = query[key];
-				if (obj) {
-					output[key] = query[key];
-				}
-			}
-
-			return output;
+		getQueries: function() {
+			return query;
 		},
 		isEmptyQuery: function () {
 			return Object.isEmpty(query);
