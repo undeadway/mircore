@@ -10,7 +10,9 @@ function indexAction() {
 		const param1 = ctrler.getPara(0);
 		filename += param1;
 		try {
-			ctrler.render("binary", filename);
+			let data = fs.readFileSync(filename);
+			data = Buffer.from(data, "binary");
+			ctrler.render("binary", data);
 			ctrler.end((connection, reasonCode, description) => {
 				console.log(connection, reasonCode, description);
 			});

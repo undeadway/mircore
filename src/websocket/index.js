@@ -39,12 +39,10 @@ function createWebSocketServer(httpServer) {
 			},
 			method: "ws"
 		}, request), res = {
-			write (type, filename) {
+			write (type, data) {
 				if (type === 'utf8') {
-					connection.sendUTF(filename);
+					connection.sendUTF(data);
 				} else if (type === 'binary') {
-					let data = fs.readFileSync(filename);
-					data = Buffer.from(data, "binary");
 					connection.sendBytes(data);
 				}
 			},
