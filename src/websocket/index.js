@@ -34,8 +34,8 @@ function createWebSocketServer(httpServer) {
 			const req = Object.assign({
 				parse: {
 					query: message,
-					path: "/websocket",
-					pathname: "/websocket",
+					path: request.resource || "/websocket",
+					pathname: request.resource || "/websocket",
 					cookies: {req: Cookies.createRequestCookies(), res: Cookies.createResponseCookies()}
 				},
 				method: "ws"

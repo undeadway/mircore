@@ -34,7 +34,7 @@
 		"/not-exist": "/render/no",
 		"/file": "/file",
 		"/mail": "/mail",
-		"/websocket": "/websocket",
+		"/download": "/websocket",
 		"/*": "/test"
 	}
 }
