@@ -7,8 +7,12 @@ function indexAction() {
 
 	action.execute = () => {
 		const ctrler = action.controller;
-		ctrler.renderBinary({url: ctrler.getReqPath()});
-        ctrler.end();
+		const param1 = ctrler.getPara(0);
+		const data = Math.random() * 0xFFFFFF;
+		ctrler.render("utf8", data + param1);
+		ctrler.end((connection, reasonCode, description) => {
+			console.log(connection, reasonCode, description);
+		});
 	};
 
 	return action;

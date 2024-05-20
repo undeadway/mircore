@@ -18,8 +18,12 @@ module.exports = () => {
 		superCtrler.addAction({name, action, method: "ws", inspectors});
 	}
 	
-	controller.renderBinary = (data) => {
-		res.write(data);
+	controller.render = (type, data) => {
+		res.write(type, data);
+	}
+
+	controller.end = (callback) => {
+		res.end(callback);
 	}
 
 	return controller;

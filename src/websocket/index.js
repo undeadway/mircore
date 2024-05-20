@@ -28,31 +28,37 @@ function createWebSocketServer(httpServer) {
 
 		const connection = request.accept('echo-protocol', request.origin);
 		console.log((new Date()) + ' Connection accepted.');
+		let _callback = null;
+
+		const req = Object.assign({
+			parse: {
+				path: request.resource || "/websocket",
+				pathname: request.resource || "/websocket",
+				cookies: {req: Cookies.createRequestCookies(), res: Cookies.createResponseCookies()}
+			},
+			method: "ws"
+		}, request), res = {
+			write (type, data) {
+				if (type === 'utf8') {
+					connection.sendUTF(data);
+				} else if (type === 'binary') {
+					connection.sendBytes(data);
+				}
+			},
+			end (callback) {
+				_callback = callback;
+			}
+		};
 
 		connection.on('message', function(message) {
-
-			const req = Object.assign({
-				parse: {
-					query: message,
-					path: request.resource || "/websocket",
-					pathname: request.resource || "/websocket",
-					cookies: {req: Cookies.createRequestCookies(), res: Cookies.createResponseCookies()}
-				},
-				method: "ws"
-			}, request), res = {
-				write (type, data) {
-					if (type === 'utf8') {
-						connection.sendUTF(data);
-					} else if (type === 'binary') {
-						connection.sendBytes(data);
-					}
-				},
-				end (callback) {
-					connection.on('close', callback);
-				}
-			};
-
+			req.parse.query = message;
 			filter(req, res);
+		});
+
+		connection.on('close', function(reasonCode, description) {
+			console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+			_callback(connection, reasonCode, description);
+
 		});
 	});
 }
