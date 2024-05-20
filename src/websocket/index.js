@@ -1,6 +1,7 @@
 const WebSocketServer = require('websocket').server;
 const filter = require("./../core/filter");
 const Cookies = require("../components/public/cookies");
+const fs = require("fs");
 
 function originIsAllowed(origin) {
     // put logic here to detect whether the specified origin is allowed.
@@ -38,10 +39,12 @@ function createWebSocketServer(httpServer) {
 			},
 			method: "ws"
 		}, request), res = {
-			write (type, data) {
+			write (type, filename) {
 				if (type === 'utf8') {
-					connection.sendUTF(data);
+					connection.sendUTF(filename);
 				} else if (type === 'binary') {
+					let data = fs.readFileSync(filename);
+					data = Buffer.from(data, "binary");
 					connection.sendBytes(data);
 				}
 			},
@@ -58,7 +61,10 @@ function createWebSocketServer(httpServer) {
 		connection.on('close', function(reasonCode, description) {
 			console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
 			_callback(connection, reasonCode, description);
+		});
 
+		connection.on('error', function(error) {
+			console.log("Connection Error: " + error.toString());
 		});
 	});
 }

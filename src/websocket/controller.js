@@ -1,7 +1,6 @@
 const superCtrler = require("./../core/controller")();
 const mergeDescriptors = require("merge-descriptors");
 
-
 module.exports = () => {
 
 	const controller = {};
