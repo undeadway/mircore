@@ -1,5 +1,6 @@
 const secrecyConfig = require("../../util/app-config").getConfig("secrecy");
-const { mode: { encrypt } } = require("../../util/app-config");
+const { mode } = require("../../util/app-config");
+const encrypt = (mode && mode.encrypt) ? mode.encrypt : false;
 let hasConfig = !!secrecyConfig;
 
 const secrecy = (() => {
