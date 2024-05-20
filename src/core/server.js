@@ -7,6 +7,7 @@
  */
 // 系统组件
 const url = require("url");
+const websocket = require("./../websocket/index");
 
 // mircore 的组件
 const Cookies = require("../components/public/cookies");
@@ -36,6 +37,8 @@ function listen(name) {
 	const httpServer = require("http").createServer(router);
 	httpServer.listen(port);
 	Coralian.logger.log(`${name} Server started`);
+
+	websocket.create(httpServer);
 }
 
 /*
@@ -124,7 +127,7 @@ function request(req, res) {
  */
 function setClientInfo(req) {
 
-	ClientMap.newInstance(req);
+	// ClientMap.newInstance(req);
 
 	initUserAgendAndOS(req);
 	initClientIp(req);

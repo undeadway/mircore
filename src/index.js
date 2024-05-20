@@ -49,6 +49,7 @@ that.start = () => {
 	that.mixin = require("merge-descriptors");
 
 	that.controller = require("./core/controller");
+	that.controller.websocket = require("./websocket/controller");
 	that.actions = require("./core/actions");
 	that.config = require("./util/app-config");
 	that.util = require("./util/public-utils");

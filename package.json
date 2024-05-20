@@ -13,10 +13,11 @@
     "cookie": "0.4.0",
     "coralian": "git+https://gitee.com/undeadway/coralian#dev",
     "fileinfo": "^1.0.4",
+    "jsconst": "git+https://gitee.com/undeadway/jsconst#dev",
     "md5": "^2.3.0",
     "merge-descriptors": "^1.0.1",
     "mime": "^2.5.2",
-    "jsconst": "git+https://gitee.com/undeadway/jsconst#dev"
+    "websocket": "^1.0.35"
   },
   "bugs": {
     "url": "https://gitee.com/undeadway/mircore/issues"
