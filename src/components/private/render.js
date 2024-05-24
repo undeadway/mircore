@@ -2,17 +2,25 @@
  * 把渲染处理独立出来
  * 作为一个单独的模块
  */
-const fs = require("fs");
 const contollerMapping = require("./../../util/controller-mapping");
+const secrecy = require("../public/secrecy");
 const pageTemplate = require("../public/page-template");
 const caches = require("../public/cache");
-const file = require("../public/file");
-const { MimeType,  HttpStatusCode, HttpRequestMethod } = Coralian.constants;
+const _File = require("../public/file");
+const { MimeType,  HttpStatusCode, HttpRequestMethod } = JsConst;
 const JSONstringify = JSON.stringify;
-const ROUTE_ERROR = "/error";
-const STR_BINARY = "binary";
+const ROUTE_ERROR_STR = "/error";
+const { STR_BINARY } = require("./../constants").Strings;
 
-function render (req, res, {reqRoute, typeName, cookies, attrs}) {
+function render (req, res, reqRoute, typeName, actionName, cookies, attrs) {
+
+	/*
+	 * 在这里暂时只做关闭 res 处理，之后再补充其他功能
+	 */
+	function end() {
+		Coralian.logger.log(`${typeName}.${actionName} request end`);
+		res.end();
+	}
 
 	/*
 	 * render 只负责实现 HTML 的显示
@@ -41,8 +49,9 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 				}
 				res.writeHead(code, header);
 
-				try {
-					fs.accessSync(absoluteUrl, fs.constants.R_OK);
+				// try {
+				if (_File.canAccess(absoluteUrl)) {
+					// fs.accessSync(absoluteUrl, fs.constants.R_OK);
 
 					url = absoluteUrl;
 
@@ -70,7 +79,7 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 					} else {
 						page = pageTemplate(url, attrs);
 					}
-				} catch {
+				} else {
 					page = url; // 如果不存在对应的文件，则把该请求的内容直接显示在页面上
 				}
 				res.write(page);
@@ -90,11 +99,9 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 	/*
 	 * 页面直接打印的内容（现阶段基本用于 ajax）
 	 */
-	function plain(data, hsc, mime) {
-		hsc = hsc || httpStatusCode;
+	function plain(data = String.BLANK, hsc = 200, mime = MimeType.TEXT) {
 		// 从理论上来说，不管任何形式的 plain 的 mime 都是 text/plain
 		// 但 js、css 等有自己单独的 mime，所以 mime 类型可选择，不给就赋默认值的 text/plain
-		mime = mime || MimeType.TEXT;
 		res.writeHead(hsc, {
 			"Content-Type": mime,
 			"Set-Cookie": cookies.print()
@@ -117,22 +124,17 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 				 */
 				break;
 		}
+
+		data = secrecy.encrypt(data);
 		res.write(data);
 		end();
 	}
 
-	/*
-	 * 在这里暂时只做关闭 res 处理，之后再补充其他功能
-	 */
-	function end() {
-		Coralian.logger.log(typeName + " request end");
-		res.end();
-	}
-
 	function renderOnError (error, code = HttpStatusCode.INTERNAL_SERVER_ERROR) {
 
-		let errorCtrler = contollerMapping.get(ROUTE_ERROR);
+		let errorCtrler = contollerMapping.get(ROUTE_ERROR_STR);
 		let ctrler = errorCtrler.instance();
+		ctrler.init(req, res, errorCtrler.header);
 
 		if (typeIs(error, Number.TYPE_NAME)) {
 			let newErr = new Error();
@@ -143,7 +145,7 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 			req.parse.error = error;
 		}
 		req.method = HttpRequestMethod.GET; // controller 中执行错误页面的时候，改成 get 模式
-		if (ctrler.judgeExecute(req, res, errorCtrler.name)) {
+		if (ctrler.judgeExecute()) {
 			ctrler.execute();
 		}
 	}
@@ -153,9 +155,9 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 		/*
 		 * 提供文件下载用
 		 */
-		renderFile: (input) => {
+		renderFile: (input, extObj) => {
 
-			let _file = file.isFile(input) ? input: file.create(input);
+			let _file = _File.isFile(input) ? input: _File.create(input, extObj);
 
 			if (_file === null) {
 				renderOnError(404);
@@ -174,8 +176,7 @@ function render (req, res, {reqRoute, typeName, cookies, attrs}) {
 				"Content-Disposition": contentDisposition,
 				"Set-Cookie": cookies.print()
 			});
-			res.write(fileData, STR_BINARY);
-
+			res.write(fileData, STR_BINARY); // 这里是传输的二进制文件，所以直接输出
 			end();
 		},
 		/*

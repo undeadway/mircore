@@ -1,9 +1,21 @@
 {
 	"port": 9000,
 	"split-mark": ":",
-	"develop-mode": true,
+	"mode": {
+		"develop": true
+	},
 	"app-name": "mircore-demo",
 	"config" : {
+		"mail": {
+			"host": "smtp.163.com",
+			"port": 465,
+			"secure": true,
+			"auth": {
+				"user": "",
+				"pass": ""
+			}
+		},
+		"secrecy": "/src/util/secrecy"
 	},
 	"cache": {
 		"global": {
@@ -18,9 +30,11 @@
 		"/err": "/eooo",
 		"/method": "/method",
 		"/nono": "/nono",
-		"/image": "/image",
-		"/no-image": "/image/no",
+		"/render": "/render",
+		"/not-exist": "/render/no",
 		"/file": "/file",
+		"/mail": "/mail",
+		"/download": "/websocket",
 		"/*": "/test"
 	}
 }

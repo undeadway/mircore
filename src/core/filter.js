@@ -9,21 +9,21 @@ const file = require("./../components/public/file");
 const { routes } = require("../util/app-config");
 const { getGlobalInspectors } = require("./../util/private-utils");
 const CONTROLLER_MAPPING = require("./../util/controller-mapping");
-const { Mark } = Coralian.constants;
+const { Char, HttpStatusCode } = JsConst;
 const { errorCast } = Error;
 const QUESTION_REP_MARK = "{?}", JS_FILE_EXT =  ".js";
 const CONTROLLER_PATH = pathResolve(`/src/modules${QUESTION_REP_MARK}/controller`);
 const STR_ROUTE_INDEX = "/index";
 
-function getController(req, route) {
+function getController(req, res, route) {
 
 	let ctrlerWrapper, name = route;
 
-	if (name === Mark.SLASH) {
+	if (name === Char.SLASH) {
 		name = STR_ROUTE_INDEX;
 	}
 
-	name = name.split(Mark.SLASH);
+	name = name.split(Char.SLASH);
 	name.shift();
 	let count = name.length - 1;
 
@@ -33,12 +33,12 @@ function getController(req, route) {
 
 	for (; count >= 0; count--) {
 
-		let ctrlerName = routes.get(Mark.SLASH + name.join(Mark.SLASH));
+		let ctrlerName = routes.get(Char.SLASH + name.join(Char.SLASH));
 
 		if (ctrlerName === undefined) { // 非已注册的路径则判断非法路径，不做请求处理，进入下一轮循环
 			name.pop();
 		} else {
-			ctrlerWrapper = getControllerWrapper(ctrlerName);
+			ctrlerWrapper = getControllerWrapper(ctrlerName, req);
 			if (ctrlerWrapper !== null) {
 				return ctrlerWrapper;
 			}
@@ -51,16 +51,16 @@ function getController(req, route) {
 		return CONTROLLER_MAPPING.put(STR_ROUTE_INDEX,
 			require(CONTROLLER_PATH.replace(QUESTION_REP_MARK, STR_ROUTE_INDEX)));
 	} else if (routes.hasFuzzyMatching()) {
-		let ctrlerName = routes.get(`${Mark.SLASH}${Mark.ASTERISK}`);
-		ctrlerWrapper = getControllerWrapper(ctrlerName);
+		let ctrlerName = routes.get(`${Char.SLASH}${Char.ASTERISK}`);
+		ctrlerWrapper = getControllerWrapper(ctrlerName, req);
 		return ctrlerWrapper;
 	}
 	req.parse.error = 404;
-	return CONTROLLER_MAPPING.error();
+	return CONTROLLER_MAPPING.error(req);
 }
 
-function getControllerWrapper (ctrlerName, callback) {
-	let ctrlerWrapper = CONTROLLER_MAPPING.get(ctrlerName);
+function getControllerWrapper (ctrlerName, req) {
+	let ctrlerWrapper = CONTROLLER_MAPPING.get(ctrlerName, req);
 	if (ctrlerWrapper) {
 		return ctrlerWrapper;
 	}
@@ -75,8 +75,9 @@ function getControllerWrapper (ctrlerName, callback) {
 function invokeController(req, res, route) {
 
 	try {
-		let ctrler = getController(req, route);
+		let ctrler = getController(req, res, route);
 		let instance = ctrler.instance();
+		instance.init(req, res, ctrler.header);
 
 		/*
 		 * 在 controller 中判断是否正常执行
@@ -85,21 +86,21 @@ function invokeController(req, res, route) {
 		 * 非正常执行时，直接在 Controller 中 调用错误处理，所以在 filter 中不用做额外处理
 		 */
 		// 全局 inspector 的执行
-		invokeGlobalInspectors({ instance, name: ctrler.name }, req, res,
-			getFilterInvocation({ instance, inspectors: ctrler.inspectors }, req, res));
+		invokeGlobalInspectors(instance, getFilterInvocation({ instance, inspectors: ctrler.inspectors }));
 	} catch (e) {
-		e.code = Coralian.constants.HttpStatusCode.INTERNAL_SERVER_ERROR;
+		e.code = HttpStatusCode.INTERNAL_SERVER_ERROR;
 		Coralian.logger.err(e);
 		req.parse.error = e;
-		let errorControllerWapper = CONTROLLER_MAPPING.error();;
+		let errorControllerWapper = CONTROLLER_MAPPING.error(req);
 		let exe = errorControllerWapper.instance();
-		if (exe.judgeExecute(req, res, errorControllerWapper.name)) {
+		exe.init(req, res, errorControllerWapper.header);
+		if (exe.judgeExecute()) {
 			exe.execute();
 		}
 	}
 }
 
-function invokeGlobalInspectors({ instance, name }, req, res, fi) {
+function invokeGlobalInspectors(instance, fi) {
 
 	let inspectors = getGlobalInspectors();
 	let count = inspectors.length,
@@ -118,7 +119,7 @@ function invokeGlobalInspectors({ instance, name }, req, res, fi) {
 			if (index < count) {
 				inspectors[index++].inspect(this);
 			} else if (index++ === count) {
-				if (instance.judgeExecute(req, res, name)) {
+				if (instance.judgeExecute()) {
 					fi.execute(); // 当 global  inspector 被执行完时，执行 filter inspector
 				}
 				end();

@@ -16,10 +16,9 @@ const { readFileSync } = require("fs");
 const pageCache = require("../../util/app-config").getCacheConfig("page");
 const { errorStatement, noSuchProperty } = Error;
 const { replaceElement, replaceLoop } = Coralian.ReplaceHolder;
-const { Mark } = Coralian.constants;
+const { Char, Encoding: { UTF8 } } = JsConst;
 
 const HTML_FILE_MAP = {};
-const STR_UTF8 = "utf-8";
 const SHAPE_INCLUDE = "<#include file=\"",
 	INCLUDE_END = " />",
 	COMMENT_START = "<?!--",
@@ -65,7 +64,7 @@ function replaceSpaceLine(str) {
 	}
 
 	let output = [];
-	let lines = str.split("\n");
+	let lines = str.split(Char.Space.LF);
 
 	lines.forEach(function (line) {
 		if (!String.isEmpty(String.trim(line))) {
@@ -97,8 +96,8 @@ function replaceEqual(str, obj, equalStart, equalEnd, equalElse) {
 	let result = false, tmpObj;
 
 	// 多层级对应处理
-	if (String.contains(statement, Mark.POINT)) {
-		let tmpStmt = statement.split(Mark.POINT);
+	if (String.contains(statement, Char.POINT)) {
+		let tmpStmt = statement.split(Char.POINT);
 		tmpObj = obj;
 
 		for (let i = 0, len = tmpStmt.length; i < len; i++) {
@@ -110,7 +109,7 @@ function replaceEqual(str, obj, equalStart, equalEnd, equalElse) {
 	}
 
 	// 当 statement 的类型不是 function 的时候，当作这个 statement 不存在处理
-	if (typeIs(tmpObj, "function")) {
+	if (typeIs(tmpObj, Function.TYPE_NAME)) {
 		try {
 			result = tmpObj();
 		} catch (e) {
@@ -173,12 +172,12 @@ function getUsing(using, paras) {
 
 	for (let i = 1, len = arr.length; i < len; i++) {
 		let line = arr[i].split("=\"");
-		paras[line[0]] = line[1].replace(Mark.DQUOTE, String.BLANK);
+		paras[line[0]] = line[1].replace(Char.DQUOTE, String.BLANK);
 	}
 
 	// 获得文件
 	let file = arr[0];
-	if (file.endsWith(Mark.DQUOTE)) {
+	if (file.endsWith(Char.DQUOTE)) {
 		file = file.slice(0, file.length - 1);
 	}
 
@@ -199,9 +198,9 @@ function replaceAt(str, obj) {
 
 	let statement = str.slice(tagStart + 2, tagEnd);
 	let result = String.BLANK;
-	if (String.contains(statement, Mark.COLON)) {
-		statement = statement.split(Mark.COLON);
-		result = obj[statement[0]].apply(null, statement[1].split(Mark.COMMA));
+	if (String.contains(statement, Char.COLON)) {
+		statement = statement.split(Char.COLON);
+		result = obj[statement[0]].apply(null, statement[1].split(Char.COMMA));
 	} else {
 		let method = obj[statement];
 		if (method) {
@@ -221,7 +220,7 @@ function getHTMLFile(path) {
 	if (pageCache) {
 		if (html === undefined) {
 			try {
-				html = HTML_FILE_MAP[path] = readFileSync(path, STR_UTF8).split(SHAPE_INCLUDE);
+				html = HTML_FILE_MAP[path] = readFileSync(path, UTF8).split(SHAPE_INCLUDE);
 			} catch (e) {
 				Coralian.logger.err("errpath:" + path);
 				throw e;
@@ -229,7 +228,7 @@ function getHTMLFile(path) {
 		}
 	} else {
 		try {
-			html = readFileSync(path, STR_UTF8).split(SHAPE_INCLUDE);
+			html = readFileSync(path, UTF8).split(SHAPE_INCLUDE);
 		} catch (e) {
 			Coralian.logger.err("errpath:" + path);
 			throw e;
@@ -243,10 +242,10 @@ function parseUsing(str, obj) {
 
 	let start = str.indexOf(USING_TAG_START);
 	if (start < 0) return str;
-	let end = str.slice(start).indexOf(Mark.RIGHT_ANGLE) + start;
+	let end = str.slice(start).indexOf(Char.Angle.RIGHT) + start;
 	if (end < 0) return str;
 	let usingName = str.slice(start + USING_TAG_START_LEN, end);
-	let endTag = USING_TAG_END + usingName + Mark.RIGHT_ANGLE;
+	let endTag = USING_TAG_END + usingName + Char.Angle.RIGHT;
 	let usingEnd = str.indexOf(endTag);
 	let usingHtml = str.slice(end + 1, usingEnd);
 

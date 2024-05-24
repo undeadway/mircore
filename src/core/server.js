@@ -5,18 +5,28 @@
  * 也就是说， server 这里要完成的是 nodejs 没有实现，但是整个应用程序却需要的功能
  * 更接近于服务器的设置
  */
-const Cookies = require("../components/public/cookies"),
-	filter = require("./filter"),
-	parse = require("./../components/private/parse");
-const { port, appName, developMode, clusterMode } = require("../util/app-config");
-const { clientDisAccessable } = require("./../util/private-utils");;
+// 系统组件
+const url = require("url");
+const websocket = require("./../websocket/index");
 
-const { HttpStatusCode, Mark } = Coralian.constants;
+// mircore 的组件
+const Cookies = require("../components/public/cookies");
+const parseRequest = require("../components/private/parse-request"),
+	ClientMap = require("../components/private/client-map");
+// 辅助模块
+const { port, appName, mode: { develop }, clusterMode } = require("../util/app-config");
+const { clientDisAccessable } = require("./../util/private-utils");
+const secrecy = require("../components/public/secrecy"); 
+// 各种常量
+const { HttpStatusCode, Char } = JsConst;
 const { formatString } = Coralian.Formatter;
-
+// filter
+const filter = require("./filter");
+// 服务器配置
 const TIMEOUT = 20000,
 	ERROR_ROUTE_FORMAT = "/error/%s";
 let isStarted = false;
+
 
 /*
  * 初始化完毕，执行 listen 函数启动 http 服务器
@@ -27,6 +37,8 @@ function listen(name) {
 	const httpServer = require("http").createServer(router);
 	httpServer.listen(port);
 	Coralian.logger.log(`${name} Server started`);
+
+	websocket.create(httpServer);
 }
 
 /*
@@ -36,24 +48,23 @@ function listen(name) {
  */
 function router(req, res) {
 
-	let __parse = parse();
+	let __parse = parseRequest();
 
 	setClientInfo(req);
 
-	if (clientDisAccessable(req.client.USERAGENT)) { // 客户端被拒绝，返回403
+	if (clientDisAccessable(req.client.get("USERAGENT"))) { // 客户端被拒绝，返回403
 		res.writeHead(403);
 		res.end();
 		return;
 	} else {
 		__parse.init(req, res);
 		req.on("data", function (chunk) {
-				// TODO 现在这里只处理 post 上来的字符串，二进制格式要怎么弄还要再研究
-				__parse.push(chunk);
+				__parse.append(chunk);
 			}).on("end", () => {
 				__parse.end(request);
 			})
 			.setTimeout(TIMEOUT, function () {
-				if (developMode) return; // 开发模式的情况下，无视各种超时
+				if (develop) return; // 开发模式的情况下，无视各种超时
 				// req 请求超时，网络不稳定
 				// 408 Request Timeout
 				Coralian.logger.err(`request 请求错误: ${HttpStatusCode.REQUEST_TIMEOUT}`);
@@ -64,12 +75,12 @@ function router(req, res) {
 			.on(Error.TYPE_NAME, onError);
 		res.on(Error.TYPE_NAME, onError)
 			.setTimeout(TIMEOUT, function () {
-				if (developMode) return; // 开发模式的情况下，无视各种超时
+				if (develop) return; // 开发模式的情况下，无视各种超时
 				// res 响应超时，服务器无应答
 				// 504 Gateway Timeout
 				Coralian.logger.err(`response 返信错误: ${HttpStatusCode.REQUEST_TIMEOUT}`);
 				req.url = formatString(ERROR_ROUTE_FORMAT, HttpStatusCode.GATEWAY_TIMEOUT);
-				parse = url.parse(req.url, true);
+				req.parse = url.parse(req.url, true);
 				request(req, res);
 			});
 	}
@@ -101,7 +112,7 @@ function router(req, res) {
  */
 function request(req, res) {
 
-	let parse = req.parse,
+	let parse = secrecy.decrypt(req.parse),
 		cookies = Cookies.createRequestCookies();
 	cookies.addFromRequest(req.headers.cookie);
 
@@ -116,13 +127,13 @@ function request(req, res) {
  */
 function setClientInfo(req) {
 
-	let client = req.client = {};
+	// ClientMap.newInstance(req);
 
-	initUserAgendAndOS(req.headers, client);
-	initClientIp(req, client);
+	initUserAgendAndOS(req);
+	initClientIp(req);
 }
 
-function initUserAgendAndOS(headers, client) {
+function initUserAgendAndOS({headers, client}) {
 
 	let input = getUserAgent(headers);
 	let userAgent, os;
@@ -165,19 +176,19 @@ function initUserAgendAndOS(headers, client) {
 		userAgent = "Unknown";
 	}
 
-	client.USERAGENT = userAgent;
-	client.OS = os;
+	client.put("USERAGENT", userAgent);
+	client.put("OS", os);
 
-	Coralian.logger.log("A Request. OS : " + os);
-	Coralian.logger.log("           User Agnet : " + userAgent);
+	Coralian.logger.log("A Request OS : " + os);
+	Coralian.logger.log("  User Agnet : " + userAgent);
 }
 
-function initClientIp(req, client) {
+function initClientIp(req) {
 	let ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress || req.socket.remoteAddress ||
 		req.connection.socket.remoteAddress;
-	client.IP = ip;
+	req.client.put("IP", ip);
 
-	Coralian.logger.log("           IP : " + ip);
+	Coralian.logger.log("          IP : " + ip);
 };
 
 /*
@@ -211,7 +222,7 @@ module.exports = exports = () => {
 		Coralian.logger.err(err);
 	})
 
-	if (clusterMode && !developMode) {
+	if (clusterMode && !develop) {
 		/*
 		 * 这段代码当时是从网上抄来的，据说对服务器稳定有好处
 		 * 但从实际运行来看，好像没什么变化，暂时保留
@@ -220,7 +231,7 @@ module.exports = exports = () => {
 
 		if (cluster.isMaster) {
 			process.title = `${appName} master`;
-			Coralian.logger.log(process.title, `${Mark.SHARP}${process.pid}`, "started");
+			Coralian.logger.log(process.title, `${Char.SHARP}${process.pid}`, "started");
 
 			// 根据 CPU 个数来启动相应数量的 worker
 			for (let i = 0, numCPUs = require("os").cpus().length; i < numCPUs; i++) {
@@ -242,7 +253,7 @@ module.exports = exports = () => {
 			});
 
 			cluster.on("death", function (worker) {
-				Coralian.logger.log(appName, "worker",`${Mark.SHARP}${worker.pid}`, "died");
+				Coralian.logger.log(appName, "worker",`${Char.SHARP}${worker.pid}`, "died");
 				cluster.fork();
 			}).on("error", function () {
 				Coralian.logger.log(arguments);
@@ -255,7 +266,7 @@ module.exports = exports = () => {
 				process.exit(0);
 			});
 
-			listen(process.title, `${Mark.SHARP}${process.pid}`);
+			listen(process.title, `${Char.SHARP}${process.pid}`);
 		}
 	} else {
 		listen(appName); // 开发模式或者非集群模式下，简化所有配置，直接启动服务器

@@ -12,68 +12,85 @@ const mergeDescriptors = require("merge-descriptors");
 const sessions = require("./../components/public/sessions");
 const render = require("./../components/private/render");
 const { splitMark } = require("../util/app-config");
+const { typeIs } = require("coralian/src/common/base");
 
-const { HttpStatusCode, HttpRequestMethod, Mark } = Coralian.constants;
+const { HttpStatusCode, HttpRequestMethod, Char } = JsConst;
 const { unsupportedOperation, unsupportedType } = Error;
-const STR_INDEX = "index", STR_ACTION = "Action";
+
+const {  Strings: { INDEX }, Names: { ACTION } } = require("./../components/constants");
 
 function controller() {
 
+	// 全局变量
+	let client, cookies , method, query, files, headers, url;
 	// 这些都要经过 juddeExe 才处理后才会赋值
-	let parse, files, method, query, realRoute, reqRoute, typeName, modName, actionName, cookies, client, reqPath;
+	let realRoute, reqRoute, modName, actionName, reqPath, typeName;
 	// 这些都是已经初始化好的值
 	let attrs = {}, actions = {}, paras = null; //, isLogged = false;
 
-	return {
+	const _ctlr_ = {
 		/* 
 		 * 在 filter 中设置 controller 的初始值
 		 * 并返回 true / false 交由 filter 来判断是否继续执行 execute
+		 * request: 服务器的请求
+		 * response: 服务器的返回值
+		 * name：controller 的名字
 		 */
-		judgeExecute: function (request, response, name) {
+		init: function (request, response, header) {
+
+			client = request.client,
+			cookies = request.parse.cookies,
+			method = request.method.toLowerCase(),
+			query = request.parse.query,
+			files = request.parse.files,
+			url = request.url,
+			headers = request.headers,
+			typeName = header.type;
 
 			// 初始化设置
-			parse = request.parse, method = request.method;
-			query = parse.query, cookies = parse.cookies, typeName = name.type, client = request.client, files = parse.files;
+			let { pathname, path, error } = request.parse;
 
+			// 因为每个请求都有对应的 controller 和 action
+			// 所以先完成所有 action 和请求参数的预处理
 			/**
 			 * realRoute = name.path 是对应文件物理路径 : [blog,read]
 			 * reqRoute 是浏览器中输入的 url，如果有多层，在取最后一层 : read
 			 * modName 是模块名 = 物理路径的第一层 blog
 			 * reqPath 是浏览器请求中的完整 url /blog/create?bid=123456
 			 */
-			reqPath = decodeURIComponent(parse.pathname);
-			realRoute = name.route;
+			reqPath = decodeURIComponent(pathname);
+			realRoute = header.route;
 			modName = realRoute[0];
 
 			Coralian.logger.log(`request route : ${modName}`);
 			if (modName === Error.TYPE_NAME) {
-				if ((parse.error && typeIs(parse.error, Number.TYPE_NAME))) {
-					Coralian.logger.log(`Error code : ${parse.error}`);
+				if ((error && typeIs(error, Number.TYPE_NAME))) {
+					Coralian.logger.log(`Error code : ${error}`);
 				} else {
-					Coralian.logger.err(parse.error);
+					Coralian.logger.err(error);
 				}
 			}
 
-			if (!parse.error) { // 如果传入的 parse 对象中未包含 error 对象，则正常执行
-				let path = parse.path.split(Mark.QUESTION);
+			if (!error) { // 如果传入的 parse 对象中未包含 error 对象，则正常执行
+				path = path.split(Char.QUESTION);
 				paras = path[1];
 				path = path[0];
 				if (!Object.isEmpty(paras)) {
 					paras = paras.split(splitMark);
 				}
 
-				if (path === Mark.SLASH) {
-					path += STR_INDEX;
+				if (path === Char.SLASH) {
+					path += INDEX;
 				}
 
-				let url = path.split(Mark.SLASH); // 到这里， path 就不含任何 和 路径无关的东西了
+				let url = path.split(Char.SLASH); // 到这里， path 就不含任何 和 路径无关的东西了
 				url.shift(); // 去掉一个的空值
 
-				if (String.endsWith(path, Mark.SLASH)) {
+				if (String.endsWith(path, Char.SLASH)) {
 					url.pop(); // 去掉最后一个空值
 				}
 
-				let reqMethod = method.toLowerCase();
+				let reqMethod = method;
 				let lastUrl = Array.last(url); // 获取 url 中最后一节
 				let lastName = Array.last(realRoute);
 
@@ -81,22 +98,22 @@ function controller() {
 					reqRoute = lastName;
 					actionName = lastUrl;
 				} else if (url.length === 1 // [route]
-					|| path === Mark.SLASH + realRoute.join(Mark.SLASH)) { // [route...] 所请求的不包含 action、paras，只有 route
+					|| path === Char.SLASH + realRoute.join(Char.SLASH)) { // [route...] 所请求的不包含 action、paras，只有 route
 					reqRoute = lastUrl;
-					actionName = STR_INDEX;
+					actionName = INDEX;
 				} else { // [...., paras]
 					let lastSecond = Array.last(url, 2); // 取得倒数第二个
 					if (url.length > 2 && actions[`${reqMethod}_${lastSecond}`]) {  // [route..., action, paras]
 						actionName = lastSecond;
 					} else { // [route..., paras]
-						actionName = STR_INDEX;
+						actionName = INDEX;
 					}
 					reqRoute = lastName;
 					paras = lastUrl.split(splitMark);
 				}
 			} else {
-				actionName = STR_INDEX;
-				let err = parse.error;
+				actionName = INDEX;
+				let err = error;
 				switch (typeOf(err)) {
 					case Object.TYPE_NAME:
 						attrs = err;
@@ -116,17 +133,20 @@ function controller() {
 			}
 
 			// 将 render 绑定到 controller
-			const _render = render(request, response, {reqRoute, typeName, cookies: cookies.res, attrs});
-			// Object.addAll(render, this);
+			const _render = render(request, response, reqRoute, typeName, actionName, cookies.res, attrs);
 			mergeDescriptors(this, _render);
-
+		},
+		// TODO
+		// 这个方法或许可以下放到各个子类，
+		//controller 基类默认全部通过
+		judgeExecute: () => {
 			return true;
 		},
 		/*
 		 * 暂时只是对action的处理（包括inspector和之后的执行 action ）
 		 */
 		execute: function () {
-			invokeAction(actions, method.toLowerCase(), actionName, this);
+			invokeAction(actions, method, actionName, this);
 		},
 		// 各种参数处理
 		// 获得数组形式的 para
@@ -148,6 +168,9 @@ function controller() {
 		},
 		isEmptyPara: function () {
 			return Object.isEmpty(paras);
+		},
+		getHeader : (key) => {
+			return headers[key];
 		},
 		getQuery: function (key) {
 			if (key) {
@@ -226,43 +249,23 @@ function controller() {
 		clearCookies: () => {
 			cookies.res.clear();
 		},
-		// Action 处理
 		// 添加 action 用的函数
 		// 添加一个对应请求方法的参数，可以 RESTFul 化处理
-		addAction: function (name, action, method = HttpRequestMethod.GET, inspectors = []) {
+		addAction: function ({ name, action, method, inspectors }) {
 
-			switch (arguments.length) {
-				case 1: // [action]
-					action = name;
-					name = Function.getName(action).replace(STR_ACTION, String.BLANK);
-					break;
-				case 2:
-					if (typeIs(name, Function.TYPE_NAME)) {
-						
-						if (typeIs(action, String.TYPE_NAME)) { // [action, method]
-							method = action;
-						} else if (typeIs(action, Array.TYPE_NAME)) { // [action, inspectors]
-							inspectors = action;
-						}
+			name = name || INDEX;
+			method = method || HttpRequestMethod.GET;
+			inspectors = inspectors || [];
 
-						action = name;
-						name = STR_INDEX;
-					}
-					break;
-				case 3:
-					if (typeIs(method, Array.TYPE_NAME)) { // [name, action, inspectors]
-						inspectors = method;
-						method = HttpRequestMethod.GET;
-					}
-					break;
-				case 4: // 所有参数都有
-					break;
-				default:
-					break;
+			if (typeIs(method, Array.TYPE_NAME)) {
+				for (let m of method) {
+					m = m.toLowerCase();
+					_addAction(actions, `${m}_${name}`, action, inspectors);
+				}
+			} else {
+				method = method.toLowerCase();
+				_addAction(actions, `${method}_${name}`, action, inspectors);
 			}
-			method = method.toLowerCase();
-			name = name || STR_INDEX;
-			addAction(actions, `${method}_${name}`, action, inspectors);
 		},
 		getAction: function (name) {
 			return actions[name];
@@ -271,17 +274,17 @@ function controller() {
 			return actionName;
 		},
 		// 重定向，触发 301 / 302（默认） 请求
-		redirect: function (code, location) {
+		redirect: function (code, target) {
 
-			if (arguments.length === 1) {
-				location = code;
+			if (target === undefined) {
+				target = code;
 				code = 302;
 			}
 
-			this.render(code, String.BLANK, location);
+			_ctlr_.render(code, String.BLANK, target);
 		},
 		isIndex: function () {
-			return pathName === STR_INDEX || String.isEmpty(pathName);
+			return pathName === INDEX || String.isEmpty(pathName);
 		},
 		method: function (name) {
 			return (!name) ? method : (method.toUpperCase() === name.toUpperCase());
@@ -303,7 +306,7 @@ function controller() {
 		// 	return isLogged;
 		// },
 		getClientInfo: function (name) {
-			return client[name.toUpperCase()];
+			return client.get(name);
 		},
 		getReqRoute: function () {
 			return reqRoute;
@@ -316,11 +319,16 @@ function controller() {
 		},
 		getModName: function () {
 			return modName;
+		},
+		getRequestUrl: () => {
+			return url;
 		}
 	};
+
+	return _ctlr_;
 }
 
-function addAction(actions, name, instance, inspectors = []) {
+function _addAction(actions, name, instance, inspectors = []) {
 
 	if (typeIs(inspectors, Object.TYPE_NAME)) {
 		inspectors = [inspectors];
@@ -329,7 +337,7 @@ function addAction(actions, name, instance, inspectors = []) {
 	let actionName = Function.getName(instance);
 
 	actions[name] = {
-		isAction: String.contains(actionName, STR_ACTION),
+		isAction: String.contains(actionName, ACTION),
 		instance: instance,
 		inspectors: inspectors,
 		getActionName: function () {

@@ -6,7 +6,7 @@
  * 在 controller 中设置的 cookie 都是准备写到客户端去的
  */
 const { unsupportedType } = Error;
-const { Mark } = Coralian.constants;
+const { Char } = JsConst;
 const asUnicodeEndode = Coralian.util.CharUtil.asUnicodeEncode;
 const cookie = require("cookie");
 
@@ -71,7 +71,7 @@ function cookies() {
 			}
 		}
 
-		let output = result.join(Mark.SEMICOLON);
+		let output = result.join(Char.SEMICOLON);
 		return output;
 	}
 
@@ -87,8 +87,8 @@ function cookies() {
 		add: add,
 		addFromRequest: function (string) {
 			if (string) {
-				Object.forEach(string.split(Mark.SEMICOLON), function (i, obj) {
-					let tmp = obj.split(Mark.EQUALS);
+				Object.forEach(string.split(Char.SEMICOLON), function (i, obj) {
+					let tmp = obj.split(Char.EQUALS);
 					add(tmp[0], tmp[1]);
 				});
 			}
@@ -122,7 +122,7 @@ function cookies() {
  */
 function changeToUnicodeCode(val) {
 
-	let output = "";
+	let output = String.BLANK;
 	for (let i = 0; i < val.length; ++i) {
 		let c = val.charCodeAt(i);
 		if ((c <= 31 && c !== 9) || c > 255 || c === 127) {

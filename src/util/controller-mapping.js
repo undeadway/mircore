@@ -2,13 +2,13 @@
  * controller 的集合，所有 controller 都在这里进行统一管理
  */
 const MAPPING = {};
-const { Mark } = Coralian.constants;
+const { Char } = JsConst;
 const ERROR_NAME = "/error";
 
-function putContoller(ctrlerName, ctrler) {
+function putController(ctrlerName, ctrler, req) {
 	let instance = ctrler;
 
-	let route = ctrlerName.split(Mark.SLASH);
+	let route = ctrlerName.split(Char.SLASH);
 	let outRoute = [];
 
 	for (let i = 0, len = route.length; i < len; i++) {
@@ -20,7 +20,7 @@ function putContoller(ctrlerName, ctrler) {
 	let ctrlerWrapper = {
 		instance: instance,
 		inspectors: ctrler.inspectors || [],
-		name: {
+		header: {
 			path: ctrlerName,
 			route: outRoute, // 文件系统的物理路径
 			type: Function.getName(instance)
@@ -31,19 +31,19 @@ function putContoller(ctrlerName, ctrler) {
 	return ctrlerWrapper;
 }
 
-function getContoller(ctrlerName) {
+function getController(ctrlerName, req) {
 	let ctrler = MAPPING[ctrlerName];
 	if (ctrlerName === ERROR_NAME && !ctrler) {
-		ctrler = putContoller(ctrlerName, require("../error/controller"))
+		ctrler = putController(ctrlerName, require("../error/controller"), req);
 	}
 	return ctrler;
 }
 
 exports = module.exports = {
-	put: putContoller,
-	get: getContoller,
-	error: () => {
-		return getContoller(ERROR_NAME);
+	put: putController,
+	get: getController,
+	error: (req) => {
+		return getController(ERROR_NAME, req);
 	},
 	"delete": (name) => {
 		let ctrler = MAPPING[name];

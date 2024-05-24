@@ -3,22 +3,21 @@
  * 读取文件，
  * 如果是二进制文件，可以对文件进行二进制输出
  */
-
+// TODO 当前 file 类只能处理图片
 const fs = require("fs");
 const md5 = require("md5");
 const fileinfo = require("fileinfo");
-(() => {
-	const fileAPis = require("file-api");
-	Object.assign(global, fileAPis);
-})();
-const STR_BINARY = "binary";
+const { Encoding, Char } = JsConst;
 
+function File (filename /* 带有后缀 */, buffer, isStr, isTxt) {
 
-function File (filename /* 带有后缀 */, buffer) {
+	let tmpObj = isStr ? 
+		fileinfo.fromString(isTxt ? filename : buffer)
+		: fileinfo.fromBuffer(buffer);
 
-	let { mime, extension } = fileinfo.fromBuffer(buffer);
+	let { mime, extension } = tmpObj;
 	const hash = md5(buffer);
-	filename = filename.split("/").pop();
+	filename = filename.split(Char.SLASH).pop();
 
 	if (!String.endsWith(filename, extension)
 		&& (extension === "jpg"
@@ -30,7 +29,7 @@ function File (filename /* 带有后缀 */, buffer) {
 	this.save = (path, name) => {
 		path = path || process.cwd() + `/temp`;
 		name = name || `${hash}.${extension}`;
-		fs.writeFileSync(`${path}/${name}`, buffer, STR_BINARY);
+		fs.writeFileSync(`${path}/${name}`, buffer, String.BINARY);
 	}
 
 	this.getHash = () => {
@@ -46,8 +45,8 @@ function File (filename /* 带有后缀 */, buffer) {
 	};
 
 	this.getBase64Data = () => {
-		let data = buffer.toString("base64");
-		return `${mime};base64,${data}`;
+		let data = buffer.toString(Encoding.BASE64);
+		return `${mime};${Encoding.BASE64},${data}`;
 	}
 
 	this.getMime = () => {
@@ -55,38 +54,57 @@ function File (filename /* 带有后缀 */, buffer) {
 	};
 }
 
+function canAccess (path, method = fs.constants.R_OK) {
+	try {
+		file = fs.accessSync(path, method);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
 module.exports = {
 	isFile: (obj) => {
 		return obj instanceof File;
 	},
-	canAccess: (path, method = fs.constants.R_OK) => {
-		try {
-			fs.accessSync(path, method);
-			return true;
-		} catch {
-			return false;
-		}
+	canAccess,
+	createFromBuffer: ({ filename, contentType, data }) => {
+
 	},
-	create: (input) => {
-
+	create: (input, obj = {isTxt: false, readType: String.BINARY}) => {
 		let filename, buffer;
-
-		if (typeIs(input, "string")) {
-			try {
-				fs.accessSync(input, fs.constants.R_OK);
-
-				filename = input;
-				buffer = fs.readFileSync(input, STR_BINARY);
-			} catch {
-				// 当对象文件不存在或无法处理时，返回 null，而不抛出错误
-				return null;
-			}
+		let isStr = false;
+	
+		if (typeIs(input, String.TYPE_NAME)) {
+	
+			// 当对象文件不存在或无法处理时，返回 null，而不抛出错误
+			if (!canAccess(input)) return null;
+	
+			filename = input;
+			buffer = fs.readFileSync(input, obj.readType);
 		} else {
 			filename = input.filename;
-			buffer = Buffer.from(input.data, STR_BINARY);
+			buffer = input.data;
 		}
-
-		let file = new File(filename, buffer);
-		return file;
+	
+		
+		if (obj.isTxt) {
+			// 暂时还无法处理纯文本
+			isStr = true;
+		} else if (fileinfo.isSVGString(buffer.toString())) {
+			buffer = buffer.toString();
+			isStr = true;
+		} else if (!obj.isTxt) {
+			buffer = Buffer.from(buffer, String.BINARY);
+		}
+	
+		try {
+			let file = new File(filename, buffer, isStr, obj.isTxt);
+			return file;
+		} catch (e) {
+			console.log(e);
+			// 当对象文件不存在或无法处理时，返回 null，而不抛出错误
+			return null;
+		}
 	}
 };

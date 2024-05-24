@@ -1,14 +1,15 @@
 const { controller, file } = mircore;
-const file_name = "/home/waygc/workspace/mircore/demo/res/file/not-exist.png";
+const path = require("path");
+const file_name = path.resolve(__dirname, "./res/file/not-exist.png");
 
 function nonoController() {
 
 	const ctrler = controller();
 
-	ctrler.addAction(() => {
+	ctrler.addAction({ action: () => {
 
 		ctrler.renderFile(file_name);
-	});
+	} });
 
 	return ctrler;
 }

@@ -5,8 +5,7 @@
  * 本类只定义 getRequestRoute 这个最原始的方法，其他方法都要靠子类来实现
  * execute 是个抽象方法，需要其他子类实现
  */
-const AjaxRenderType_JSON = require("../util/public-utils").constants.AjaxRenderType.JSON;
-const STR_CTRLER = "Controller";
+const { Names, AjaxRenderType } = require("./../components/constants");
 
 function baseAction() {
 
@@ -16,7 +15,7 @@ function baseAction() {
 			this.execute(); // 这个方法需要子类覆盖重写
 		},
 		getRequestRoute: function () {
-			return this.controller.getTypeName().replace(STR_CTRLER, String.BLANK);
+			return this.controller.getTypeName().replace(Names.CONTROLLER, String.BLANK);
 		}
 	};
 }
@@ -32,7 +31,7 @@ function ajaxAction() {
 
 	let action = baseAction();
 
-	action.execute = function (renderType = AjaxRenderType_JSON) {
+	action.execute = function (renderType = AjaxRenderType.JSON) {
 		action.renderAjax = action.controller[`render${renderType}`];
 		action.query(); // 这个方法需要子类覆盖重写
 	};

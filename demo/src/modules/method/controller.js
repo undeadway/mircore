@@ -1,7 +1,7 @@
 const { controller, actions } = mircore;
 const { baseAction, ajaxAction } = actions;
 const { splitMark } = mircore.config;
-const { HttpRequestMethod } = Coralian.constants;
+const { HttpRequestMethod } = JsConst;
 const PAGE = "/res/html/method.html"
 
 function indexAction() {
@@ -112,15 +112,31 @@ function deleteAction() {
 	return action;
 }
 
+function postpostFormAction() {
+	const action = ajaxAction();
+
+	action.query = () => {
+		const ctrler = action.controller;
+		console.log(ctrler.getQuery("content"));
+
+		action.renderAjax({});
+	};
+
+	return action;
+}
+
 function methodController() {
 
 	const ctrler = controller();
 
-	ctrler.addAction(indexAction);
-	ctrler.addAction("testreq", getAction, HttpRequestMethod.GET);
-	ctrler.addAction("testreq", postAction, HttpRequestMethod.POST);
-	ctrler.addAction("testreq", putAction, HttpRequestMethod.PUT);
-	ctrler.addAction("testreq", deleteAction, HttpRequestMethod.DELETE);
+	ctrler.addAction({ action: indexAction });
+	ctrler.addAction({ name: "testreq", action: getAction, method: HttpRequestMethod.GET });
+	ctrler.addAction({ name: "testreq", action: postAction, method: HttpRequestMethod.POST });
+	ctrler.addAction({ name: "testreq", action: putAction, method: HttpRequestMethod.PUT });
+	ctrler.addAction({ name: "testreq", action: deleteAction, method: HttpRequestMethod.DELETE });
+
+	
+	ctrler.addAction({ name: "postForm", action: postpostFormAction, method: HttpRequestMethod.POST });
 
 	return ctrler;
 }

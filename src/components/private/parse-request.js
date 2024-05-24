@@ -4,12 +4,19 @@
 
 const url = require("url"), qs = require("querystring");
 const file = require("../public/file");
-const CONTENT_TYPE = "Content-Type";
+const { BINARY, CONTENT_DISPOSITION, CONTENT_TYPE } = require("../constants").Strings;
 
-const { DELETE, PUT, POST, HEAD, OPTIONS, GET, CONNECT, TRACE, PATCH } = Coralian.constants.HttpRequestMethod;
+const { DELETE, PUT, POST, HEAD, OPTIONS, GET, CONNECT, TRACE, PATCH } = JsConst.HttpRequestMethod;
 const unsupportedOperation = Error.unsupportedOperation;
 
+const { Char } = JsConst;
+
+const FILE_NAME_REGX = /Content-Type: (.+?)\r\n/;
+const CONTENT_TYPE_REGX = /Content-Type: (.+?)\r\n/;
+
 function parseFormData (str, parse) {
+
+	console.log(str);
 
 	let query = {}, files = {}; // 全局设置
 
@@ -26,7 +33,7 @@ function parseFormData (str, parse) {
 		if (!name) continue;
 
 		if (String.contains(item, CONTENT_TYPE)) {
-			if (!/filename="(.+?)"/.test(item)) continue; // 没有文件上传的情况则不做任何处理
+			if (!CONTENT_TYPE_REGX.test(item)) continue; // 没有文件上传的情况则不做任何处理
 
 			let rems = [];
 
@@ -40,14 +47,15 @@ function parseFormData (str, parse) {
 			}
 
 			let data = item.slice(rems[3] + 2, item.length - 2);
-			let filename = item.match(/filename="(.+?)"/)[1];
-			let _file =  file.create({ filename, data });
+			let filename = item.match(FILE_NAME_REGX)[1];
+			let contentType = item.match(CONTENT_TYPE_REGX)[1];
+			let _file =  file.create({ filename, contentType, data });
 			if (_file !== null) {
 				files[name] = _file;
 			}
 		} else {
 			let data = item.split("\r\n");
-			query[name] = data[data.length - 2];
+			query[name] = data.slice(2).join(String.BLANK);
 		}
 	}
 
@@ -57,21 +65,20 @@ function parseFormData (str, parse) {
 
 module.exports = () => {
 
-	let chunks = [], size = 0;
+	let chunks = [];
 	let parse = null, method;
 	let req = null, res = null;
 
 	return {
 		init: (_req, _res) => {
 			req = _req, res = _res;
-			req.setEncoding("binary"); // TODO 这里改成 binary 不知道会不会对其他类型的提交造成影响
-			req.url = req.url.replace(/\/{2,}/g, "/");
+			req.setEncoding(BINARY); // TODO 这里改成 binary 不知道会不会对其他类型的提交造成影响
+			req.url = req.url.replace(/\/{2,}/g, Char.SLASH);
 			parse = req.parse = url.parse(req.url, true);
 			method = req.method = req.method.toUpperCase();
 		},
-		push: (chunk) => {
+		append: (chunk) => {
 			chunks.push(chunk);
-			size += chunk.length;
 		},
 		end: (request) => {
 			let str = chunks.join(String.BLANK);
@@ -80,14 +87,34 @@ module.exports = () => {
 				case DELETE: // PUT 、DELETE 都采用和 POST 一样的实现
 				case PUT:
 				case POST:
-					if (String.contains(str, "Content-Disposition")) { // TODO 这里的处理可能还要再分其他情况
+					if (String.contains(str, CONTENT_DISPOSITION)) { // TODO 这里的处理可能还要再分其他情况
 						parseFormData(str, parse);
 					} else {
-						Object.addAll(qs.parse(str), parse.query);
+						try {
+							Object.addAll(JSON.parse(str), parse.query); // 先判断是否是 json 结构
+						} catch (e) {
+							Object.addAll(qs.parse(str), parse.query);
+						}
 					}
+					request(req, res);
+					break;
 				// 因为都要调用 request 方法，所以这里 switch 贯穿掉
 				case HEAD:
 				case OPTIONS: // 这里主要考虑到有跨域请求
+					res.writeHead(204, {
+						//允许所有来源访问
+						"Access-Control-Allow-Origin": Char.ASTERISK,
+						//用于判断request来自ajax还是传统请求
+						"Access-Control-Allow-Headers": Char.ASTERISK,
+						//允许访问的方式
+						"Access-Control-Allow-Methods": "PUT,POST,GET,DELETE,OPTIONS",
+						//修改程序信息与版本
+						"X-Powered-By": " 3.2.1",
+						//内容类型：如果是post请求必须指定这个属性
+						"Content-Type": "application/json;charset=utf-8"
+					});
+					res.end();
+					break;
 				case GET:
 					Object.addAll(qs.parse(str), parse.query);
 					request(req, res);
