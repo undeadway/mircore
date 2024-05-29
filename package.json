@@ -22,7 +22,7 @@
   "bugs": {
     "url": "https://gitee.com/undeadway/mircore/issues"
   },
-  "homepage": "http://codes.waygc.net/project/?mircore",
+  "homepage": "http://codes.waygc.net/projects/?mircore",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
