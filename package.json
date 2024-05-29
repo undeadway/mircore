@@ -1,6 +1,6 @@
 {
   "name": "mircore",
-  "version": "0.0.42",
+  "version": "0.0.43",
   "description": "A web server built by node.js",
   "license": "Apache-2.0",
   "repository": {
@@ -22,7 +22,7 @@
   "bugs": {
     "url": "https://gitee.com/undeadway/mircore/issues"
   },
-  "homepage": "http://codes.waygc.net/project/?mircore",
+  "homepage": "http://codes.waygc.net/projects/?mircore",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
