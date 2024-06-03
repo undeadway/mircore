@@ -11,8 +11,8 @@ const websocket = require("./../websocket/index");
 
 // mircore 的组件
 const Cookies = require("../components/public/cookies");
-const parseRequest = require("../components/private/parse-request"),
-	ClientMap = require("../components/private/client-map");
+const parseRequest = require("../components/private/parse-request");
+const ClientMap = require("../components/private/client-map");
 // 辅助模块
 const { port, appName, mode: { develop }, clusterMode } = require("../util/app-config");
 const { clientDisAccessable } = require("./../util/private-utils");
@@ -127,7 +127,7 @@ function request(req, res) {
  */
 function setClientInfo(req) {
 
-	// ClientMap.newInstance(req);
+	ClientMap.newInstance(req);
 
 	initUserAgendAndOS(req);
 	initClientIp(req);
