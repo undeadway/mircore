@@ -17,8 +17,6 @@ const fs = require("fs");
 const { getExtension } = require("mime");
 const { Strings } = require("../constants");
 const { Encoding } = JsConst;
-// const md5 = require("md5");
-// const fileinfo = require("fileinfo");
 
 function File (filename, extension, mime, buffer) {
 
