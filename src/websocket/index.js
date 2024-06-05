@@ -1,3 +1,6 @@
+/**
+ * 这里是 websocket 的基本服务器
+ */
 const WebSocketServer = require('websocket').server;
 const filter = require("./../core/filter");
 const Cookies = require("../components/public/cookies");

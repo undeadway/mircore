@@ -135,8 +135,7 @@ function controller() {
 			const _render = render(request, response, reqRoute, typeName, actionName, cookies.res, attrs);
 			mergeDescriptors(this, _render);
 		},
-		// TODO
-		// 这个方法或许可以下放到各个子类，
+		// 这个方法的具体逻辑下放到各个子类，
 		//controller 基类默认全部通过
 		judgeExecute: () => {
 			return true;

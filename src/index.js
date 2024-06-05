@@ -1,3 +1,6 @@
+/**
+ * mircore 的入口
+ */
 require("coralian"); // 预载入 coralian
 
 const { Char } = JsConst;
@@ -45,8 +48,8 @@ that.requireConfigs = (... input) => {
 
 that.start = () => {
 
-	that.md5 = require("md5");
-	that.mixin = require("merge-descriptors");
+	// that.md5 = require("md5");
+	// that.mixin = require("merge-descriptors");
 
 	that.controller = require("./core/controller");
 	that.controller.websocket = require("./websocket/controller");
