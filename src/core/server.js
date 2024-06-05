@@ -133,7 +133,7 @@ function setClientInfo(req) {
 	initClientIp(req);
 }
 
-function initUserAgendAndOS({headers, client}) {
+function initUserAgendAndOS({ headers, client, url }) {
 
 	let input = getUserAgent(headers);
 	let userAgent, os;
@@ -180,6 +180,7 @@ function initUserAgendAndOS({headers, client}) {
 	client.put("OS", os);
 
 	Coralian.logger.log("A Request OS : " + os);
+	Coralian.logger.log(" Request url :" + url);
 	Coralian.logger.log("  User Agnet : " + userAgent);
 }
 
