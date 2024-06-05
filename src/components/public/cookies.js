@@ -117,12 +117,11 @@ function cookies() {
  * 调查之后是在 _http_common.js 的 checkInvalidHeaderChar（303-326）函数执行了一个非ASCII字符的检查。
  * 字符串中存在非ASCII字符的时候，会被 判断为非法字符而被 check 出来，
  * 所以在 check 之前增加这样一段代码，将所有字符都转化成 unicode 码 来避开检查。
- * 
- * 至于为什么会有这么一段恶心的检查，鬼才知道
  *
  * [20240605]
- * 查阅新版代码之后，发现处理方式已经修改过了（但没有确认这个问题是否还存在）
- * 但为了保证不会出现类似的问题，所以这个问题不做修改
+ * 从代码的注释来看，似乎是因为最新的 HTTP/1.x RFC 明确规定，头值只能包含 ASCII 或字符 0x80-0xFF（latin1）
+ * https://datatracker.ietf.org/doc/html/rfc7230#section-3.2
+ * 所以，这里的 unicode 变换就智能继续保留了
  */
 function changeToUnicodeCode(val) {
 
