@@ -128,7 +128,7 @@ function changeToUnicodeCode(val) {
 	let output = String.BLANK;
 	for (let i = 0; i < val.length; ++i) {
 		let c = val.charCodeAt(i);
-		if ((c <= 31 && c !== 9) || c > 255 || c === 127) {
+		if (/[^\t\x20-\x7e\x80-\xff]/.test(c)) { // 采用和源代码同样的判断逻辑进行处理
 			output += asUnicodeEndode(c);
 		} else {
 			output += val.charAt(i);
