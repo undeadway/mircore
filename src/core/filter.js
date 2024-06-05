@@ -4,7 +4,6 @@
  * 如果是已注册的路径（可用模块），
  * 则返回请求该路径所对应的 controller ，否则返回 404 。
  */
-
 const file = require("./../components/public/file");
 const { routes } = require("../util/app-config");
 const { getGlobalInspectors } = require("./../util/private-utils");

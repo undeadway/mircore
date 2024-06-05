@@ -3,7 +3,6 @@
  * 这个配制是程序上的配置，不是网站配置
  * 主要是配置网站启动的端口、转发路径等
  */
-
 const config = JSON.parse(require("fs").readFileSync(pathResolve("/res/json/app.json"), "utf-8"));
 const { cache, routes } = config;
 const routesName = Object.keys(routes);

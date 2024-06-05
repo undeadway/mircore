@@ -1,3 +1,6 @@
+/**
+ * websocket 的实现
+ */
 const superCtrler = require("./../core/controller")();
 const mergeDescriptors = require("merge-descriptors");
 
@@ -12,11 +15,11 @@ module.exports = () => {
 		res = response;
 		superCtrler.init(request, response, header);
 	}
-	
+
 	controller.addAction = ({ name, action, inspectors }) => {
 		superCtrler.addAction({name, action, method: "ws", inspectors});
 	}
-	
+
 	controller.render = (type, data) => {
 		res.write(type, data);
 	}

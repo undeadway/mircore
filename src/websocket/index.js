@@ -1,10 +1,10 @@
 const WebSocketServer = require('websocket').server;
 const filter = require("./../core/filter");
 const Cookies = require("../components/public/cookies");
-const fs = require("fs");
 
 function originIsAllowed(origin) {
     // put logic here to detect whether the specified origin is allowed.
+	// 这里可以考虑怎么插入 inspector
     return true;
 }
 

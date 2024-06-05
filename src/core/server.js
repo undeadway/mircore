@@ -8,7 +8,6 @@
 // 系统组件
 const url = require("url");
 const websocket = require("./../websocket/index");
-
 // mircore 的组件
 const Cookies = require("../components/public/cookies");
 const parseRequest = require("../components/private/parse-request");
@@ -26,7 +25,6 @@ const filter = require("./filter");
 const TIMEOUT = 20000,
 	ERROR_ROUTE_FORMAT = "/error/%s";
 let isStarted = false;
-
 
 /*
  * 初始化完毕，执行 listen 函数启动 http 服务器

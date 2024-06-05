@@ -20,7 +20,6 @@ const { unsupportedOperation, unsupportedType } = Error;
 const {  Strings: { INDEX }, Names: { ACTION } } = require("./../components/constants");
 
 function controller() {
-
 	// 全局变量
 	let client, cookies , method, query, files, headers, url;
 	// 这些都要经过 juddeExe 才处理后才会赋值
@@ -186,7 +185,6 @@ function controller() {
 			return Object.isEmpty(query);
 		},
 		setAttr: function (k, v) {
-
 			if (typeIs(k, Function.TYPE_NAME)) {
 				v = k;
 				k = Function.getName(v);
@@ -252,7 +250,6 @@ function controller() {
 		// 添加 action 用的函数
 		// 添加一个对应请求方法的参数，可以 RESTFul 化处理
 		addAction: function ({ name, action, method, inspectors }) {
-
 			name = name || INDEX;
 			method = method || HttpRequestMethod.GET;
 			inspectors = inspectors || [];

@@ -6,7 +6,6 @@
  * 可以让某些模块启用 cache ，某些模块不启用 cache。
  * 从而避免全局配置的 cache 污染。
  */
-
 const Cache = require("cache");
 const { getCacheConfig } = require("../../util/app-config");
 const { unsupportedOperation } = Error;
