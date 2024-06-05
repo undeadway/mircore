@@ -5,7 +5,7 @@ const MAPPING = {};
 const { Char } = JsConst;
 const ERROR_NAME = "/error";
 
-function putContoller(ctrlerName, ctrler) {
+function putController(ctrlerName, ctrler, req) {
 	let instance = ctrler;
 
 	let route = ctrlerName.split(Char.SLASH);
@@ -31,19 +31,19 @@ function putContoller(ctrlerName, ctrler) {
 	return ctrlerWrapper;
 }
 
-function getContoller(ctrlerName) {
+function getController(ctrlerName, req) {
 	let ctrler = MAPPING[ctrlerName];
 	if (ctrlerName === ERROR_NAME && !ctrler) {
-		ctrler = putContoller(ctrlerName, require("../error/controller"))
+		ctrler = putController(ctrlerName, require("../error/controller"), req);
 	}
 	return ctrler;
 }
 
 exports = module.exports = {
-	put: putContoller,
-	get: getContoller,
-	error: () => {
-		return getContoller(ERROR_NAME);
+	put: putController,
+	get: getController,
+	error: (req) => {
+		return getController(ERROR_NAME, req);
 	},
 	"delete": (name) => {
 		let ctrler = MAPPING[name];

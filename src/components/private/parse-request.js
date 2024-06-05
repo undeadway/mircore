@@ -9,6 +9,8 @@ const { BINARY, CONTENT_DISPOSITION, CONTENT_TYPE } = require("../constants").St
 const { DELETE, PUT, POST, HEAD, OPTIONS, GET, CONNECT, TRACE, PATCH } = JsConst.HttpRequestMethod;
 const unsupportedOperation = Error.unsupportedOperation;
 
+const { Char } = JsConst;
+
 const FILE_NAME_REGX = /Content-Type: (.+?)\r\n/;
 const CONTENT_TYPE_REGX = /Content-Type: (.+?)\r\n/;
 
@@ -53,7 +55,7 @@ function parseFormData (str, parse) {
 			}
 		} else {
 			let data = item.split("\r\n");
-			query[name] = data.slice(2).join("");
+			query[name] = data.slice(2).join(String.BLANK);
 		}
 	}
 
@@ -71,7 +73,7 @@ module.exports = () => {
 		init: (_req, _res) => {
 			req = _req, res = _res;
 			req.setEncoding(BINARY); // TODO 这里改成 binary 不知道会不会对其他类型的提交造成影响
-			req.url = req.url.replace(/\/{2,}/g, "/");
+			req.url = req.url.replace(/\/{2,}/g, Char.SLASH);
 			parse = req.parse = url.parse(req.url, true);
 			method = req.method = req.method.toUpperCase();
 		},
@@ -101,15 +103,15 @@ module.exports = () => {
 				case OPTIONS: // 这里主要考虑到有跨域请求
 					res.writeHead(204, {
 						//允许所有来源访问
-						'Access-Control-Allow-Origin': '*',
+						"Access-Control-Allow-Origin": Char.ASTERISK,
 						//用于判断request来自ajax还是传统请求
-						"Access-Control-Allow-Headers": "*",
+						"Access-Control-Allow-Headers": Char.ASTERISK,
 						//允许访问的方式
-						'Access-Control-Allow-Methods': 'PUT,POST,GET,DELETE,OPTIONS',
+						"Access-Control-Allow-Methods": "PUT,POST,GET,DELETE,OPTIONS",
 						//修改程序信息与版本
-						'X-Powered-By': ' 3.2.1',
+						"X-Powered-By": " 3.2.1",
 						//内容类型：如果是post请求必须指定这个属性
-						'Content-Type': 'application/json;charset=utf-8'
+						"Content-Type": "application/json;charset=utf-8"
 					});
 					res.end();
 					break;

@@ -1,4 +1,9 @@
+/**
+ * mircore 的入口
+ */
 require("coralian"); // 预载入 coralian
+
+const { Char } = JsConst;
 
 function pathResolve(name, isFolder) {
 
@@ -43,10 +48,11 @@ that.requireConfigs = (... input) => {
 
 that.start = () => {
 
-	that.md5 = require("md5");
-	that.mixin = require("merge-descriptors");
+	// that.md5 = require("md5");
+	// that.mixin = require("merge-descriptors");
 
 	that.controller = require("./core/controller");
+	that.controller.websocket = require("./websocket/controller");
 	that.actions = require("./core/actions");
 	that.config = require("./util/app-config");
 	that.util = require("./util/public-utils");
@@ -60,8 +66,8 @@ that.start = () => {
 
 	let files = fs.readdirSync(`${__dirname}/components/public`);
 	files.map(file => {
-		modName = file.slice(0, file.length - 3);
-		if (String.contains(modName, "-")) {
+		let modName = file.slice(0, file.length - 3);
+		if (String.contains(modName, Char.HYPHEN)) {
 			modName = String.lowerCamelCase(modName);
 		}
 		that[modName] = require(`./components/public/${file}`);

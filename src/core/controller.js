@@ -12,7 +12,7 @@ const mergeDescriptors = require("merge-descriptors");
 const sessions = require("./../components/public/sessions");
 const render = require("./../components/private/render");
 const { splitMark } = require("../util/app-config");
-const { typeIs } = require("coralian/src/base/common");
+const { typeIs } = require("coralian/src/common/base");
 
 const { HttpStatusCode, HttpRequestMethod, Char } = JsConst;
 const { unsupportedOperation, unsupportedType } = Error;
@@ -20,9 +20,10 @@ const { unsupportedOperation, unsupportedType } = Error;
 const {  Strings: { INDEX }, Names: { ACTION } } = require("./../components/constants");
 
 function controller() {
-
+	// 全局变量
+	let client, cookies , method, query, files, headers, url;
 	// 这些都要经过 juddeExe 才处理后才会赋值
-	let files, method, query, realRoute, reqRoute, typeName, modName, actionName, cookies, client, reqPath;
+	let realRoute, reqRoute, modName, actionName, reqPath, typeName;
 	// 这些都是已经初始化好的值
 	let attrs = {}, actions = {}, paras = null; //, isLogged = false;
 
@@ -34,16 +35,22 @@ function controller() {
 		 * response: 服务器的返回值
 		 * name：controller 的名字
 		 */
-		judgeExecute: function (request, response, header) {
+		init: function (request, response, header) {
+
+			client = request.client,
+			cookies = request.parse.cookies,
+			method = request.method.toLowerCase(),
+			query = request.parse.query,
+			files = request.parse.files,
+			url = request.url,
+			headers = request.headers,
+			typeName = header.type;
 
 			// 初始化设置
-			let parse = request.parse;
-			// 全局变量
-			method = request.method, client = request.client;
-			query = parse.query, cookies = parse.cookies, typeName = header.type, files = parse.files;
-			// 局部变量
-			let { pathname, path, error } = parse;
+			let { pathname, path, error } = request.parse;
 
+			// 因为每个请求都有对应的 controller 和 action
+			// 所以先完成所有 action 和请求参数的预处理
 			/**
 			 * realRoute = name.path 是对应文件物理路径 : [blog,read]
 			 * reqRoute 是浏览器中输入的 url，如果有多层，在取最后一层 : read
@@ -82,7 +89,7 @@ function controller() {
 					url.pop(); // 去掉最后一个空值
 				}
 
-				let reqMethod = method.toLowerCase();
+				let reqMethod = method;
 				let lastUrl = Array.last(url); // 获取 url 中最后一节
 				let lastName = Array.last(realRoute);
 
@@ -127,14 +134,17 @@ function controller() {
 			// 将 render 绑定到 controller
 			const _render = render(request, response, reqRoute, typeName, actionName, cookies.res, attrs);
 			mergeDescriptors(this, _render);
-
+		},
+		// 这个方法的具体逻辑下放到各个子类，
+		//controller 基类默认全部通过
+		judgeExecute: () => {
 			return true;
 		},
 		/*
 		 * 暂时只是对action的处理（包括inspector和之后的执行 action ）
 		 */
 		execute: function () {
-			invokeAction(actions, method.toLowerCase(), actionName, this);
+			invokeAction(actions, method, actionName, this);
 		},
 		// 各种参数处理
 		// 获得数组形式的 para
@@ -157,6 +167,9 @@ function controller() {
 		isEmptyPara: function () {
 			return Object.isEmpty(paras);
 		},
+		getHeader : (key) => {
+			return headers[key];
+		},
 		getQuery: function (key) {
 			if (key) {
 				return !!query ? query[key] : null;
@@ -171,7 +184,6 @@ function controller() {
 			return Object.isEmpty(query);
 		},
 		setAttr: function (k, v) {
-
 			if (typeIs(k, Function.TYPE_NAME)) {
 				v = k;
 				k = Function.getName(v);
@@ -237,7 +249,6 @@ function controller() {
 		// 添加 action 用的函数
 		// 添加一个对应请求方法的参数，可以 RESTFul 化处理
 		addAction: function ({ name, action, method, inspectors }) {
-
 			name = name || INDEX;
 			method = method || HttpRequestMethod.GET;
 			inspectors = inspectors || [];
@@ -304,6 +315,9 @@ function controller() {
 		},
 		getModName: function () {
 			return modName;
+		},
+		getRequestUrl: () => {
+			return url;
 		}
 	};
 

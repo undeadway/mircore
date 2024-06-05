@@ -1,3 +1,5 @@
+const { Names, AjaxRenderType } = require("./../components/constants");
+
 /**
  * 所有 action 的基类
  * 从这个类扩展其他 action 类
@@ -5,10 +7,7 @@
  * 本类只定义 getRequestRoute 这个最原始的方法，其他方法都要靠子类来实现
  * execute 是个抽象方法，需要其他子类实现
  */
-const { Names, AjaxRenderType } = require("./../components/constants");
-
 function baseAction() {
-
 	return {
 		invoke: function (ctrler) {
 			this.controller = ctrler;

@@ -1,27 +1,28 @@
 {
   "name": "mircore",
-  "version": "0.0.42",
+  "version": "0.0.55-2",
   "description": "A web server built by node.js",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://gitee.com/undeadway/mircore.git"
+    "url": "https://github.com/undeadway/mircore.git"
   },
   "main": "./src/index.js",
   "dependencies": {
     "cache": "^2.3.1",
     "cookie": "0.4.0",
-    "coralian": "git+https://gitee.com/undeadway/coralian#dev",
+    "coralian": "0.0.30",
     "fileinfo": "^1.0.4",
-    "jsconst": "git+https://gitee.com/undeadway/jsconst#dev",
+    "jsconst": "0.0.3",
     "md5": "^2.3.0",
     "merge-descriptors": "^1.0.1",
-    "mime": "^2.5.2"
+    "mime": "^2.5.2",
+    "websocket": "^1.0.35"
   },
   "bugs": {
-    "url": "https://gitee.com/undeadway/mircore/issues"
+    "url": "https://github.com/undeadway/mircore/issues"
   },
-  "homepage": "http://codes.waygc.net/project/?mircore",
+  "homepage": "http://codes.waygc.net/projects/?mircore",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

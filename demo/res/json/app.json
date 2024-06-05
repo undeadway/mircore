@@ -1,7 +1,9 @@
 {
 	"port": 9000,
 	"split-mark": ":",
-	"develop-mode": true,
+	"mode": {
+		"develop": true
+	},
 	"app-name": "mircore-demo",
 	"config" : {
 		"mail": {
@@ -12,7 +14,8 @@
 				"user": "",
 				"pass": ""
 			}
-		}
+		},
+		"secrecy": "/src/util/secrecy"
 	},
 	"cache": {
 		"global": {
@@ -31,6 +34,7 @@
 		"/not-exist": "/render/no",
 		"/file": "/file",
 		"/mail": "/mail",
+		"/download": "/websocket",
 		"/*": "/test"
 	}
 }

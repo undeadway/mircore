@@ -5,13 +5,17 @@
  * 也就是说， server 这里要完成的是 nodejs 没有实现，但是整个应用程序却需要的功能
  * 更接近于服务器的设置
  */
+// 系统组件
+const url = require("url");
+const websocket = require("./../websocket/index");
 // mircore 的组件
 const Cookies = require("../components/public/cookies");
-const parseRequest = require("../components/private/parse-request"),
-	Client = require("../components/private/client");
+const parseRequest = require("../components/private/parse-request");
+const ClientMap = require("../components/private/client-map");
 // 辅助模块
-const { port, appName, developMode, clusterMode } = require("../util/app-config");
+const { port, appName, mode: { develop }, clusterMode } = require("../util/app-config");
 const { clientDisAccessable } = require("./../util/private-utils");
+const secrecy = require("../components/public/secrecy"); 
 // 各种常量
 const { HttpStatusCode, Char } = JsConst;
 const { formatString } = Coralian.Formatter;
@@ -31,6 +35,8 @@ function listen(name) {
 	const httpServer = require("http").createServer(router);
 	httpServer.listen(port);
 	Coralian.logger.log(`${name} Server started`);
+
+	websocket.create(httpServer);
 }
 
 /*
@@ -56,7 +62,7 @@ function router(req, res) {
 				__parse.end(request);
 			})
 			.setTimeout(TIMEOUT, function () {
-				if (developMode) return; // 开发模式的情况下，无视各种超时
+				if (develop) return; // 开发模式的情况下，无视各种超时
 				// req 请求超时，网络不稳定
 				// 408 Request Timeout
 				Coralian.logger.err(`request 请求错误: ${HttpStatusCode.REQUEST_TIMEOUT}`);
@@ -67,7 +73,7 @@ function router(req, res) {
 			.on(Error.TYPE_NAME, onError);
 		res.on(Error.TYPE_NAME, onError)
 			.setTimeout(TIMEOUT, function () {
-				if (developMode) return; // 开发模式的情况下，无视各种超时
+				if (develop) return; // 开发模式的情况下，无视各种超时
 				// res 响应超时，服务器无应答
 				// 504 Gateway Timeout
 				Coralian.logger.err(`response 返信错误: ${HttpStatusCode.REQUEST_TIMEOUT}`);
@@ -104,7 +110,7 @@ function router(req, res) {
  */
 function request(req, res) {
 
-	let parse = req.parse,
+	let parse = secrecy.decrypt(req.parse),
 		cookies = Cookies.createRequestCookies();
 	cookies.addFromRequest(req.headers.cookie);
 
@@ -119,13 +125,13 @@ function request(req, res) {
  */
 function setClientInfo(req) {
 
-	Client.newInstance(req);
+	ClientMap.newInstance(req);
 
 	initUserAgendAndOS(req);
 	initClientIp(req);
 }
 
-function initUserAgendAndOS({headers, client}) {
+function initUserAgendAndOS({ headers, client, url }) {
 
 	let input = getUserAgent(headers);
 	let userAgent, os;
@@ -172,6 +178,7 @@ function initUserAgendAndOS({headers, client}) {
 	client.put("OS", os);
 
 	Coralian.logger.log("A Request OS : " + os);
+	Coralian.logger.log(" Request url :" + url);
 	Coralian.logger.log("  User Agnet : " + userAgent);
 }
 
@@ -214,7 +221,7 @@ module.exports = exports = () => {
 		Coralian.logger.err(err);
 	})
 
-	if (clusterMode && !developMode) {
+	if (clusterMode && !develop) {
 		/*
 		 * 这段代码当时是从网上抄来的，据说对服务器稳定有好处
 		 * 但从实际运行来看，好像没什么变化，暂时保留

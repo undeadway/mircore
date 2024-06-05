@@ -12,7 +12,7 @@
  * 2. base64
  * 3. 读取本地文件
  */
-
+// TODO 当前 file 类只能处理图片
 const fs = require("fs");
 const { getExtension } = require("mime");
 const { Strings } = require("../constants");
@@ -61,7 +61,6 @@ function canAccess (path, method = fs.constants.R_OK) {
 		return false;
 	}
 }
-
 
 /* detect via ArrayBuffer */
 function fromBuffer(buffer) {

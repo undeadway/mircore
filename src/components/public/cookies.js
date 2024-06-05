@@ -122,7 +122,7 @@ function cookies() {
  */
 function changeToUnicodeCode(val) {
 
-	let output = "";
+	let output = String.BLANK;
 	for (let i = 0; i < val.length; ++i) {
 		let c = val.charCodeAt(i);
 		if ((c <= 31 && c !== 9) || c > 255 || c === 127) {
