@@ -112,7 +112,7 @@ function cookies() {
 }
 
 /*
- * nodejs 升级到6.10.0之后报下面的错
+ * nodejs 升级到 6.10.0 之后报下面的错
  * TypeError: The header content contains invalid characters
  * 调查之后是在 _http_common.js 的 checkInvalidHeaderChar（303-326）函数执行了一个非ASCII字符的检查。
  * 字符串中存在非ASCII字符的时候，会被 判断为非法字符而被 check 出来，
